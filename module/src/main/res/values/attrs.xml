@@ -22,4 +22,7 @@
         <attr name="initPosition" format="integer"/>
         <attr name="drawItemCount" format="integer"/>
     </declare-styleable>
+    <declare-styleable name="CirclePageIndicator">
+        <attr name="indicator_spacing" format="dimension" />
+    </declare-styleable>
 </resources>

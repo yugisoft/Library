@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -562,7 +563,122 @@ public class yugi
         Log.e("|G|gizPOST/Result",url+ " | "+hata.Data);
         return hata;
     }
+    public static class gizGET extends AsyncTask<String, Void, String> {
+        public static String _JSON = "";
+        public  httpHata myResponse;
+        public static DataTable dataTable= new DataTable("");
+        @Override
+        protected String doInBackground(String... urls) {
+            JSONObject jsonObject;
+            myResponse=GET(urls[0]);
+            String jsonData = myResponse.Data;
+            if(!myResponse.isException)
+            {
+                try {
+                    _JSON = jsonData;
+                    Log.e("|G|JSONDATA", _JSON);
+                    dataTable = new DataTable(_JSON);
+                    if (dataTable.Rows.size() > 0)
+                    {
+                        if (dataTable.get(0, "HataKodu").equals("") || dataTable.get(0, "HataKodu").equals("0")) {
+                            myResponse.isException=false;
+                            return "Success";
+                        }
+                        else
+                        {
+                            myResponse.HataAciklama=dataTable.get(0, "HataAciklama");
+                            myResponse.isException=true;
+                            return dataTable.get(0, "HataAciklama");
+                        }
+                    } else {
+                        return myResponse.HataAciklama;
+                    }
 
+                } catch (Exception e) {
+                    return "";
+                }
+            }
+            else
+            {
+                _JSON="{\n" +
+                        "  \"HatKodu\":\""+myResponse.HataKodu+"\",\n" +
+                        "  \"HataAciklama\":\" "+myResponse.HataAciklama+" \"\n" +
+                        "}";
+                dataTable = new DataTable(_JSON);
+                return myResponse.HataAciklama;
+            }
+        }
+    }
+    public static class gizPOST extends AsyncTask<String, Void, String> {
+        List<PostBody> Hedars;
+        List<PostBody> Bodys = new ArrayList<>();
+        public static  httpHata myResponse;
+        boolean usejson=false;
+        String prmJson;
+        public static String _JSON = "";
+        public static  DataTable dataTable= new DataTable("");
+        public gizPOST(List<PostBody> _Hedars, List<PostBody> _Bodys)
+        {
+            Hedars=_Hedars;
+            Bodys=_Bodys;
+            usejson=false;
+        }
+        public  gizPOST(List<PostBody> _Hedars, String Json)
+        {
+            Hedars=_Hedars;
+            prmJson=Json;
+            usejson=true;
+        }
+        public gizPOST(List<PostBody> _Hedars) {
+            Hedars=_Hedars;
+            usejson=false;
+        }
+        public void addBody(String key, String value)
+        {
+            Bodys.add(new PostBody(key,value));
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+
+            String jsonData;
+
+            if(usejson)
+                myResponse = POST(urls[0], Hedars, prmJson);
+            else
+                myResponse= POST(urls[0],Hedars,Bodys);
+
+            jsonData = myResponse.Data;
+            try {
+                _JSON = jsonData;
+                dataTable = new DataTable(_JSON);
+                if (dataTable.Rows.size() > 0)
+                {
+                    if((dataTable.get(0,"HataKodu").equals("0")||dataTable.get(0,"HataKodu").equals("")) && dataTable.get(0,"error").equals("") )
+                    {
+                        return "Success";
+                    }
+                    else
+                    {
+                        return (dataTable.get(0,"HataAciklama").equals("")?dataTable.get(0,"error_description"):dataTable.get(0,"HataAciklama"));
+                    }
+                }
+                else
+                {
+                    _JSON="{\n" +
+                            "  \"HatKodu\":\""+myResponse.HataKodu+"\",\n" +
+                            "  \"HataAciklama\":\" "+myResponse.HataAciklama+" \"\n" +
+                            "}";
+                    dataTable = new DataTable(_JSON);
+                    return myResponse.HataAciklama;
+                }
+
+            }
+            catch (Exception e) {
+                return "";
+            }
+        }
+    }
     public static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
@@ -625,6 +741,8 @@ public class yugi
         editor.putString("HobiSatis." + Setup_name, String.valueOf(Value));
         editor.commit();
     }
+
+
     //endregion
     //region NUMPAD
     public static class mNumpad implements View.OnClickListener {
