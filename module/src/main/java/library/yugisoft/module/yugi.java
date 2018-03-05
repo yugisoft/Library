@@ -64,7 +64,7 @@ public class yugi
     public static ImageLoader imageLoader;
     public static DisplayImageOptions options;
     public static boolean TestMode = true;
-    //endregion
+    //endregion 
     //region APP
 
     public static class vActivity extends AppCompatActivity {
