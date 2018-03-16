@@ -19,7 +19,7 @@ import java.util.List;
 public class ItemAdapter<T> extends BaseAdapter
 {
 
-
+    public int PageLevel = 1;
     public final Context context;
     private List<ViewItem> Items = new ArrayList<>();
     private View view;

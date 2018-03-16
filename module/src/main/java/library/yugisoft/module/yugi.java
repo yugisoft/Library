@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -82,6 +83,10 @@ public class yugi
             super.onResume();
         }
 
+        public void closeKeyboard()
+        {
+            yugi.closeKeyboard(this);
+        }
         //region ActivityResult
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -363,9 +368,24 @@ public class yugi
         float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return dp;
     }
-    public static void FullScreen(Activity mdı)
-    {
+    public static void FullScreen(Activity mdı) {
         mdı.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+    public static void  closeKeyboard()
+    {
+        closeKeyboard(yugi.activity);
+    }
+    public static void closeKeyboard(Activity activity) {
+        View view =  activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        Log.i("|G|gizModule","closeKeyboard "+ activity.getLocalClassName());
+        // Pos.ActiveContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        //  if(!((InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE)).isAcceptingText())
+        //       ((InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
     //endregion
     //region HTTP

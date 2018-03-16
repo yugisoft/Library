@@ -403,7 +403,12 @@ public class DataTable
         {
             public boolean isMatched(DataRow object, String text)
             {
-                return object.get(PrimaryCell).toLowerCase().contains(String.valueOf(text).toLowerCase());
+                String val =object.get(PrimaryCell).toLowerCase();
+                if(Filterlike)
+                    return val.contains(String.valueOf(text).toLowerCase());
+                else
+                    return val.equals(String.valueOf(text).toLowerCase());
+                //return object.get(PrimaryCell).toLowerCase().contains(String.valueOf(text).toLowerCase());
             }
         };
         Rows = new FilterList().filterList(mRows, filter, filterText);
@@ -669,6 +674,15 @@ public class DataTable
     }
 
     //endregion
+    private boolean Filterlike =true;
+    public boolean isFilterlike() {
+        return Filterlike;
+    }
+
+    public void setFilterlike(boolean filterlike) {
+        Filterlike = filterlike;
+    }
+
     public boolean setValue(int RowIndex, String ColumnName,Object Value) {
         int k=0;
         while(k<Columns.size()) {
