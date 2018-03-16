@@ -43,8 +43,6 @@ public class DataTable
     private String FilterText="";
     private int PrimaryCell=0;
     private String PrimaryCellName = "";
-
-
     //region Constr
     public DataTable() {
     }
@@ -671,9 +669,7 @@ public class DataTable
     }
 
     //endregion
-
-    public boolean setValue(int RowIndex, String ColumnName,Object Value)
-    {
+    public boolean setValue(int RowIndex, String ColumnName,Object Value) {
         int k=0;
         while(k<Columns.size()) {
             if (Columns.get(k).equals(ColumnName))
@@ -688,8 +684,7 @@ public class DataTable
 
 
     }
-    public boolean setValue(int RowIndex, String ColumnName,Object Value,boolean addnew)
-    {
+    public boolean setValue(int RowIndex, String ColumnName,Object Value,boolean addnew) {
         if(addnew)
         {
             if(setValue(RowIndex,ColumnName,Value))

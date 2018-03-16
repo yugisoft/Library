@@ -59,12 +59,11 @@ import static android.util.DisplayMetrics.DENSITY_DEFAULT;
 public class yugi
 {
     //region STATİC
-
     public static vActivity activity = null;
     public static ImageLoader imageLoader;
     public static DisplayImageOptions options;
     public static boolean TestMode = true;
-    //endregion 
+    //endregion
     //region APP
 
     public static class vActivity extends AppCompatActivity {
@@ -363,6 +362,10 @@ public class yugi
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return dp;
+    }
+    public static void FullScreen(Activity mdı)
+    {
+        mdı.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
     //endregion
     //region HTTP
