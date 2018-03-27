@@ -19,6 +19,7 @@ import java.util.List;
 
 public class DataTable
 {
+    private static final long DataTableVersiyon = 18032701;
     public List<DataRow> Rows = new ArrayList<>();
     public List<DataRow> mRows = new ArrayList<>();
     public List<String> Columns = new ArrayList<>();
@@ -57,7 +58,7 @@ public class DataTable
 
     public DataTable(boolean asd, String... columns) {
         for (String s : columns) {
-            Columns.add(s);
+            Columns.add(s.replace(" ",""));
         }
     }
 
@@ -94,7 +95,7 @@ public class DataTable
                             it = ob.keys();
                             while (it.hasNext()) {
                                 String s = it.next().toString();
-                                Columns.add(s);
+                                Columns.add(s.replace(" ",""));
                             }
                         }
 
@@ -148,7 +149,7 @@ public class DataTable
                     col.Oran=c.getInt("Oran");
                     col.Value=c.getString("Value");;
                     cols.add(col);
-                    Columns.add(col.Name);
+                    Columns.add(col.Name.replace(" ",""));
                 }
             }
             catch (Exception e)
@@ -699,6 +700,7 @@ public class DataTable
 
     }
     public boolean setValue(int RowIndex, String ColumnName,Object Value,boolean addnew) {
+        ColumnName=ColumnName.replace(" ","");
         if(addnew)
         {
             if(setValue(RowIndex,ColumnName,Value))
@@ -923,5 +925,7 @@ public class DataTable
             return filterList;
         }
     }
+
+
 
 }
