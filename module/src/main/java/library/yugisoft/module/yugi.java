@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -165,6 +166,7 @@ public class yugi
 
             }
         }
+
         public static  mDialog Loading(Activity activity) {
             mDialog dialog = new mDialog(activity, R.layout.ly_loading,true);
             ImageView im = (ImageView) dialog.view.findViewById(R.id.img_loading);
@@ -442,6 +444,8 @@ public class yugi
 
             httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
             httpPost.setHeader("Authorization","bearer "+getToken());
+            if (addHttpHedaerDeviceInfo && myDevice != null)
+                httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
             //  httpPost.setHeader("host", gzm.TestLink);
             //httpPost.setHeader("Authorization", gzm.Setup.getUserToken());
             HttpResponse httpResponse = httpclient.execute(httpPost);
@@ -501,6 +505,8 @@ public class yugi
             {
                 httpPost.setHeader(hedars.get(i).Name, hedars.get(i).Value);
             }
+            if (addHttpHedaerDeviceInfo && myDevice != null)
+                httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
             HttpResponse httpResponse = httpclient.execute(httpPost);
             StatusLine st= httpResponse.getStatusLine();
             hata = isException(st.getStatusCode());
@@ -551,6 +557,8 @@ public class yugi
 
                 httpPost.setHeader(hedars.get(i).Name, hedars.get(i).Value);
             }
+            if (addHttpHedaerDeviceInfo && myDevice != null)
+                httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
 
             HttpResponse httpResponse = httpclient.execute(httpPost);
             StatusLine st= httpResponse.getStatusLine();
@@ -1001,4 +1009,58 @@ public class yugi
         }
     }
     //endregion
+
+    public static boolean addHttpHedaerDeviceInfo=true;
+
+    public static String DeviceID(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    public static String DeviceNamee() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        } else {
+            return capitalize(manufacturer) + " " + model;
+        }
+    }
+    private static String capitalize(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        char first = s.charAt(0);
+        if (Character.isUpperCase(first)) {
+            return s;
+        } else {
+            return Character.toUpperCase(first) + s.substring(1);
+        }
+    }
+
+
+    public static MobileDevice myDevice;
+
+    public static class  MobileDevice
+    {
+        public  String DeviceID ;
+        public  String DeviceName;
+        public  String FireBaseToken;
+        public  int CarikartID;
+
+
+        public  static MobileDevice Build() {
+            MobileDevice device = new MobileDevice();
+
+            device.DeviceID = DeviceID(yugi.activity);
+            device.DeviceName = DeviceNamee();
+            return device;
+        }
+
+        public String getJson()
+        {
+            return  DataTable.ToTable(this).getJsonData(0);
+        }
+
+
+    }
 }
