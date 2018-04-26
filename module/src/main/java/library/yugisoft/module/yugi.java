@@ -446,6 +446,10 @@ public class yugi
             httpPost.setHeader("Authorization","bearer "+getToken());
             if (addHttpHedaerDeviceInfo && myDevice != null)
                 httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
+            if (ConstHttpHeader != null)
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0));
+            if (TempHttpHeader != null)
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0));
             //  httpPost.setHeader("host", gzm.TestLink);
             //httpPost.setHeader("Authorization", gzm.Setup.getUserToken());
             HttpResponse httpResponse = httpclient.execute(httpPost);
@@ -485,6 +489,7 @@ public class yugi
         // 11. return result
         Log.e("|G|gizGetResult",url+ " | "+hata.Data);
 
+        TempHttpHeader = null;
         return hata;
     }
     public static httpHata POST(String url, List<PostBody> hedars, List<PostBody> bodys) {
@@ -507,6 +512,11 @@ public class yugi
             }
             if (addHttpHedaerDeviceInfo && myDevice != null)
                 httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
+            if (ConstHttpHeader != null)
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0));
+            if (TempHttpHeader != null)
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0));
+
             HttpResponse httpResponse = httpclient.execute(httpPost);
             StatusLine st= httpResponse.getStatusLine();
             hata = isException(st.getStatusCode());
@@ -537,6 +547,7 @@ public class yugi
             Log.d("InputStream", e.getLocalizedMessage());
             Log.e("|G|gizPOST/Result",url+ " | "+hata.HataAciklama);
         }
+        TempHttpHeader=null;
         return hata;
     }
     public static httpHata POST(String url, List<PostBody> hedars, String Json) {
@@ -559,6 +570,10 @@ public class yugi
             }
             if (addHttpHedaerDeviceInfo && myDevice != null)
                 httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
+            if (ConstHttpHeader != null)
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0));
+            if (TempHttpHeader != null)
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0));
 
             HttpResponse httpResponse = httpclient.execute(httpPost);
             StatusLine st= httpResponse.getStatusLine();
@@ -592,6 +607,7 @@ public class yugi
             Log.d("InputStream", e.getLocalizedMessage());
         }
         Log.e("|G|gizPOST/Result",url+ " | "+hata.Data);
+        TempHttpHeader=null;
         return hata;
     }
     public static class gizGET extends AsyncTask<String, Void, String> {
@@ -1063,4 +1079,6 @@ public class yugi
 
 
     }
+
+    public static Object ConstHttpHeader = null,TempHttpHeader = null;
 }
