@@ -447,9 +447,9 @@ public class yugi
             if (addHttpHedaerDeviceInfo && myDevice != null)
                 httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
             if (ConstHttpHeader != null)
-                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0));
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0).replace("\n",""));
             if (TempHttpHeader != null)
-                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0));
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0).replace("\n",""));
             //  httpPost.setHeader("host", gzm.TestLink);
             //httpPost.setHeader("Authorization", gzm.Setup.getUserToken());
             HttpResponse httpResponse = httpclient.execute(httpPost);
@@ -513,9 +513,9 @@ public class yugi
             if (addHttpHedaerDeviceInfo && myDevice != null)
                 httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
             if (ConstHttpHeader != null)
-                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0));
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0).replace("\n",""));
             if (TempHttpHeader != null)
-                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0));
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0).replace("\n",""));
 
             HttpResponse httpResponse = httpclient.execute(httpPost);
             StatusLine st= httpResponse.getStatusLine();
@@ -571,9 +571,9 @@ public class yugi
             if (addHttpHedaerDeviceInfo && myDevice != null)
                 httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
             if (ConstHttpHeader != null)
-                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0));
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0).replace("\n",""));
             if (TempHttpHeader != null)
-                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0));
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0).replace("\n",""));
 
             HttpResponse httpResponse = httpclient.execute(httpPost);
             StatusLine st= httpResponse.getStatusLine();
@@ -1074,7 +1074,7 @@ public class yugi
 
         public String getJson()
         {
-            return  DataTable.ToTable(this).getJsonData(0);
+            return  DataTable.ToTable(this).getJsonData(0).replace("\n","");
         }
 
 
