@@ -137,8 +137,8 @@ public class DatabaseHandler
             Cursor cursor = db.rawQuery(SQL, null);
             if (cursor!=null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 do {
-                    String[] row = new String[cursor.getCount()];
-                    for (int i = 0; i < cursor.getCount(); i++) {
+                    String[] row = new String[cursor.getColumnCount()];
+                    for (int i = 0; i < cursor.getColumnCount(); i++) {
                         row[i] = cursor.getString(i);
                     }
                     dt.add(row);
@@ -156,10 +156,10 @@ public class DatabaseHandler
 
             if (cursor!=null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 do {
-                    String[] row = new String[cursor.getCount()];
-                    col = new String[cursor.getCount()];
+                    String[] row = new String[cursor.getColumnCount()];
+                    col = new String[cursor.getColumnCount()];
 
-                    for (int i = 0; i < cursor.getCount(); i++) {
+                    for (int i = 0; i < cursor.getColumnCount(); i++) {
 
                         if (rowindex == 0) {
                             col[i] = cursor.getColumnName(i);
