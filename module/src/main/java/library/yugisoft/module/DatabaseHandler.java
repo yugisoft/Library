@@ -126,6 +126,7 @@ public class DatabaseHandler
             return mSelect("SELECT * FROM " + TABLENAME);
         }
 
+
         public DataTable Select(String WHERE) {
             return mSelect("SELECT * FROM " + TABLENAME + " WHERE " + WHERE);
         }
@@ -145,7 +146,9 @@ public class DatabaseHandler
             }
             return dt;
         }
-
+        public DataTable SelectCount() {
+            return mSelect("SELECT Count(*) FROM " + TABLENAME);
+        }
 
         public void Insert(Object o)
         {
