@@ -134,7 +134,7 @@ public class DatabaseHandler
             dt.Rows.clear();
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(SQL, null);
-            if (cursor.moveToFirst()) {
+            if (cursor!=null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 do {
                     String[] row = new String[Columns.size()];
                     for (int i = 0; i < Columns.size(); i++) {
