@@ -130,7 +130,7 @@ public class DatabaseHandler
             return mSelect("SELECT * FROM " + TABLENAME + " WHERE " + WHERE);
         }
 
-        private DataTable mSelect(String SQL) {
+        public DataTable mSelect(String SQL) {
             dt.Rows.clear();
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(SQL, null);
