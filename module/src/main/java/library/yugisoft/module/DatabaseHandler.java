@@ -137,8 +137,8 @@ public class DatabaseHandler
             Cursor cursor = db.rawQuery(SQL, null);
             if (cursor!=null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 do {
-                    String[] row = new String[Columns.size()];
-                    for (int i = 0; i < Columns.size(); i++) {
+                    String[] row = new String[cursor.getCount()];
+                    for (int i = 0; i < cursor.getCount(); i++) {
                         row[i] = cursor.getString(i);
                     }
                     dt.add(row);
@@ -146,8 +146,38 @@ public class DatabaseHandler
             }
             return dt;
         }
-        public DataTable SelectCount() {
-            return mSelect("SELECT Count(*) FROM " + TABLENAME);
+        public DataTable pSelect(String SQL) {
+
+            String[] col = new String[1];
+            DataTable dataTable = new DataTable();
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(SQL, null);
+            int rowindex =0 ;
+
+            if (cursor!=null && cursor.getCount() > 0 && cursor.moveToFirst()) {
+                do {
+                    String[] row = new String[cursor.getCount()];
+                    col = new String[cursor.getCount()];
+
+                    for (int i = 0; i < cursor.getCount(); i++) {
+
+                        if (rowindex == 0) {
+                            col[i] = cursor.getColumnName(i);
+                        }
+                        row[i] = cursor.getString(i);
+                    }
+                    if (rowindex == 0)
+                    {
+                            dataTable = new DataTable(true,col);
+                        rowindex++;
+                    }
+                    dt.add(row);
+                } while (cursor.moveToNext());
+            }
+            return dt;
+        }
+        public int SelectCount() {
+            return pSelect("SELECT Count(*) FROM " + TABLENAME).getInt(0,0);
         }
 
         public void Insert(Object o)
