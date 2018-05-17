@@ -352,8 +352,10 @@ public class yugi
         nf.setMinimumFractionDigits(bas);      // Burada virgülden sonra minimum 2 karakter olacağı belirtiliyor.
         String s = nf.format(d);
 
-        if (Replace)
+        if (Replace && culture_Ondalik_ayrac.equals("."))
             return  s.replace(".","").replace(",",".");
+        else if (Replace && culture_Ondalik_ayrac.equals(","))
+            return  s.replace(",","").replace(".",",");
         else
             return  s;
 
@@ -995,9 +997,9 @@ public class yugi
                     .build();
             imageLoader = ImageLoader.getInstance();
         }
-        switch (Locale.getDefault().getDisplayLanguage())
+        switch (Locale.getDefault().getLanguage().toLowerCase())
         {
-            case "English":
+            case "en":
                 culture_Ondalik_ayrac=",";
                 break;
             default:
