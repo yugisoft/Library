@@ -51,6 +51,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static android.util.DisplayMetrics.DENSITY_DEFAULT;
 
@@ -65,6 +66,7 @@ public class yugi
     public static ImageLoader imageLoader;
     public static DisplayImageOptions options;
     public static boolean TestMode = true;
+    public static String culture_Ondalik_ayrac=".";
     //endregion
     //region APP
 
@@ -979,11 +981,9 @@ public class yugi
     }
     //endregion
     //region ImageLoader
-    public static   void setConfig(vActivity a)
-    {
-        activity =a;
-        if(imageLoader==null|| options==null)
-        {
+    public static   void setConfig(vActivity a) {
+        activity = a;
+        if (imageLoader == null || options == null) {
             imageLoader = ImageLoader.getInstance();
             ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
             options = new DisplayImageOptions.Builder()
@@ -994,6 +994,15 @@ public class yugi
                     .cacheOnDisk(true)
                     .build();
             imageLoader = ImageLoader.getInstance();
+        }
+        switch (Locale.getDefault().getDisplayLanguage())
+        {
+            case "English":
+                culture_Ondalik_ayrac=",";
+                break;
+            default:
+                culture_Ondalik_ayrac=".";
+                break;
         }
     }
     //endregion
