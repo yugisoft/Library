@@ -1,5 +1,6 @@
 package library.yugisoft.module;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -19,7 +20,9 @@ import java.util.List;
 
 public class SlideView extends LinearLayout {
 
+    private boolean RollSlide = false;
     //region CONST
+    @SuppressLint("NewApi")
     public SlideView(Context context) {
         super(context);
         Init();
@@ -42,12 +45,37 @@ public class SlideView extends LinearLayout {
     }
     public int animUp = R.anim.right_in;
     public int animDown = R.anim.left_out;
+    View v = null;
     public void ScaleFrame(final View view) {
 
         for (int i = 0; i < this.getChildCount(); i++)
         {
-            View v = null;
-            if (this.getChildAt(i).getVisibility() == View.VISIBLE) {
+            v=this.getChildAt(i);
+
+            if (v.getVisibility() == View.VISIBLE && !RollSlide) {
+
+                Animation scaleDown = AnimationUtils.loadAnimation(getContext().getApplicationContext(), animDown);
+                final int finalI = i;
+                scaleDown.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        SlideView.this.getChildAt(finalI).setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                this.getChildAt(i).startAnimation(scaleDown);
+            }
+            else if (RollSlide)
+            {
 
                 Animation scaleDown = AnimationUtils.loadAnimation(getContext().getApplicationContext(), animDown);
                 final int finalI = i;
@@ -153,6 +181,14 @@ public class SlideView extends LinearLayout {
 
     public void setScaleType(ScaleType scaleType) {
         this.scaleType = scaleType;
+    }
+
+    public boolean isRollSlide() {
+        return RollSlide;
+    }
+
+    public void setRollSlide(boolean rollSlide) {
+        RollSlide = rollSlide;
     }
     //endregion
 

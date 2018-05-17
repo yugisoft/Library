@@ -776,6 +776,7 @@ public class DataTable
 
         return  dt;
     }
+
     public void ToClass(Object ob, int index) {
         Class c = ob.getClass();
         String classname = c.getSimpleName().toLowerCase();
@@ -842,8 +843,9 @@ public class DataTable
                                 break;
 
                             default:
-
-                                fi.set(ob, this.get(index,colindex));
+                                String value = this.get(index,colindex);
+                                if(value.equals("null")) value="";
+                                fi.set(ob, value);
                                 break;
                         }
 
@@ -866,6 +868,7 @@ public class DataTable
             //endregion
         }
     }
+
     private int getColumnIndex(String name) {
         for (int i =0 ;i<this.Columns.size();i++)
             if(this.Columns.get(i).equals(name))
@@ -873,6 +876,7 @@ public class DataTable
         return  -1;
 
     }
+
     public Object getClass(Class cl,int position) {
         Object o = null;
         try {
@@ -887,6 +891,7 @@ public class DataTable
         this.ToClass(o,position);
         return  o;
     }
+
     public void ToClass(Object ob) {
         Class c = ob.getClass();
         String classname = c.getSimpleName().toLowerCase();
@@ -908,9 +913,11 @@ public class DataTable
             ob = list;
         }
     }
+
     interface Filter<T,E> {
         public boolean isMatched(T object, E text);
     }
+
     public class FilterList<E> {
         public  <T> List filterList(List<T> originalList, Filter filter, E text)
         {
