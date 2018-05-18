@@ -169,10 +169,10 @@ public class DataTable
                     while(it.hasNext())
                     {
                         DataColumn cl = new DataColumn();
-                        cl.Oran=cols.get(i).Oran;
-                        cl.Format=cols.get(i).Format;
-                        cl.gravity=cols.get(i).gravity;
-                        cl.Name=cols.get(i).Name;
+                        cl.Oran=cols.get(kolon).Oran;
+                        cl.Format=cols.get(kolon).Format;
+                        cl.gravity=cols.get(kolon).gravity;
+                        cl.Name=cols.get(kolon).Name;
                         cl.Value=ob.getString(it.next().toString());
                         row.Cells.add(cl);
                         kolon++;
@@ -437,8 +437,10 @@ public class DataTable
     //endregion
     //endregion
     //region Alt Class
-    public  class DataRow
-    {
+    public class DataRow {
+
+
+
         int Primary=0;
         public List<DataColumn> Cells = new ArrayList<>();
         //region GET
@@ -933,6 +935,6 @@ public class DataTable
         }
     }
 
-
+    
 
 }
