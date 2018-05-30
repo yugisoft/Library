@@ -81,9 +81,9 @@ public class DataTable
                 try {
 
 
-                    JSONObject job = (Key.length() > 0 ? new JSONObject(str) : null);
+                    JSONArray job =  new JSONArray(str);
 
-                    JSONArray json = (Key.length() > 0 ? job.getJSONArray(Key) : new JSONArray(str));
+                    JSONArray json = (Key.length() > 0 ? job.getJSONObject(0).getJSONArray(Key) : new JSONArray(str));
 
                     for (int k = 0; k < json.length(); k++) {
                         DataRow row = new DataRow();
@@ -935,6 +935,6 @@ public class DataTable
         }
     }
 
-    
+
 
 }
