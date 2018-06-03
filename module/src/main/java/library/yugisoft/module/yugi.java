@@ -1065,7 +1065,7 @@ public class yugi
     }
 
 
-    public static MobileDevice myDevice;
+    public static MobileDevice myDevice = new MobileDevice();
 
     public static class  MobileDevice
     {
