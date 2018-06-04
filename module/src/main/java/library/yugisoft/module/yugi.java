@@ -906,11 +906,11 @@ public class yugi
                 switch (v.getTag().toString())
                 {
                     case "artipara":
-                        Ucret+=Double.parseDouble(((TextView)view).getText().toString());
+                        Ucret+=Double.parseDouble(((TextView)v).getText().toString());
                         UcretToString();
                         break;
                     case "numpad":
-                        String s = ((TextView)view).getText().toString();
+                        String s = ((TextView)v).getText().toString();
                         if (virgul)
                         {
                             if(p2.equals("0"))p2=s;
