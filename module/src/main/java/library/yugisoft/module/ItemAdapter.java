@@ -91,17 +91,17 @@ public class ItemAdapter<T> extends BaseAdapter
     }
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        final View parentview=layoutInflater.inflate(contentView,null);
-        if(parentview!=null)
+        view=layoutInflater.inflate(contentView,null);
+        if(view!=null)
         {
             if (Items.size()>0)
             {
                 for (ViewItem item:Items) {
-                    item.setViewRun(parentview,list.get(i));
+                    item.setViewRun(view,list.get(i));
                 }
             }
         }
-        return parentview;
+        return view;
     }
 
 

@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import static android.util.DisplayMetrics.DENSITY_DEFAULT;
 
@@ -292,10 +293,15 @@ public class yugi
             int day = mcurrentTime.get(Calendar.DAY_OF_MONTH);
             if(defdate.length()==10)
             {
-                String[] s =defdate.split(dateSeparator);
-                day= Integer.parseInt(s[0]);
-                month=(Integer.parseInt(s[1])-1);
-                year= Integer.parseInt(s[2]);
+                try
+                {
+                    String[] s =defdate.split(Pattern.quote(dateSeparator));
+                    day= Integer.parseInt(s[0]);
+                    month=(Integer.parseInt(s[1])-1);
+                    year= Integer.parseInt(s[2]);
+                }catch (Exception e){ year = mcurrentTime.get(Calendar.YEAR);
+                    month = mcurrentTime.get(Calendar.MONTH);
+                    day = mcurrentTime.get(Calendar.DAY_OF_MONTH);}
             }
             DatePickerDialog datePicker;
             datePicker = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
