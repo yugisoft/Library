@@ -47,7 +47,11 @@ public class ItemAdapter<T> extends BaseAdapter
     //region list
     protected List<T> list = new ArrayList<>();
 
-    public void setList(List<T> list) {
+    public void setList(List<T> list)
+    {
+
+        this.list.clear();
+        this.notifyDataSetChanged();
         this.list=list;
         this.notifyDataSetChanged();
     }

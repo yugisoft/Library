@@ -53,7 +53,7 @@ public class DateTextView extends android.support.v7.widget.AppCompatTextView im
         {
             a= yugi.activity;
         }
-        yugi.Tarih.Date(new yugi.OnDateSelectedListener() {
+        yugi.Tarih.Date(this.getText().toString(), new yugi.OnDateSelectedListener() {
             @Override
             public void onDataSelectedListener(String Date) {
                 DateTextView.this.setText(Date);
