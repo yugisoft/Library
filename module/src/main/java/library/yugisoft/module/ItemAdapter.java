@@ -1,6 +1,7 @@
 package library.yugisoft.module;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,13 +48,18 @@ public class ItemAdapter<T> extends BaseAdapter
     //region list
     protected List<T> list = new ArrayList<>();
 
-    public void setList(List<T> list)
+    public void setList(final List<T> listt)
     {
 
-        this.list.clear();
+        this.list = new ArrayList<>();
         this.notifyDataSetChanged();
-        this.list=list;
-        this.notifyDataSetChanged();
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                ItemAdapter. this.list=listt;
+                ItemAdapter.this.notifyDataSetChanged();
+            }
+        }, 500);
+
     }
 
     public List<T> getList()
