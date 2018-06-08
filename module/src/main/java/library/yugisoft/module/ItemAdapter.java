@@ -90,11 +90,19 @@ public class ItemAdapter<T> extends BaseAdapter
             return  -99;
         }
     }
+
+    boolean isNew(View v,int i)
+    {
+        return  (v==null || v.getTag()==null || !v.getTag().equals(getItem(i)));
+    }
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        view=layoutInflater.inflate(contentView,null);
-        if(view!=null)
+    public View getView(int i, View view, ViewGroup viewGroup)
+    {
+
+        if (isNew(view,i))
         {
+            view=layoutInflater.inflate(contentView,null);
+            view.setTag(getItem(i));
             if (Items.size()>0)
             {
                 for (ViewItem item:Items) {
