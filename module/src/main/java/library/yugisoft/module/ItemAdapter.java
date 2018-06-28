@@ -30,8 +30,7 @@ public class ItemAdapter<T> extends BaseAdapter
     public LayoutInflater getLayoutInflater() {
         return layoutInflater;
     }
-    public ItemAdapter(Context context)
-    {
+    public ItemAdapter(Context context) {
         this.context = context;
         layoutInflater =(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -91,7 +90,7 @@ public class ItemAdapter<T> extends BaseAdapter
         }
     }
 
-    boolean isNew(View v,int i)
+    public boolean isNew(View v,int i)
     {
         return  (v==null || v.getTag()==null || !v.getTag().equals(getItem(i)));
     }

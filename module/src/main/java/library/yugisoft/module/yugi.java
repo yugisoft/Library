@@ -867,6 +867,7 @@ public class yugi
             npTotal.setOnClickListener(this);
             npBack.setOnClickListener(this);
             npOk.setOnClickListener(this);
+            lu_kapat.setOnClickListener(this);
 
 
 
@@ -973,6 +974,10 @@ public class yugi
                     if (mlistener != null) mlistener.onResultOK(totalUcret, Ucret);
                     dialog.dialog.dismiss();
 
+                }
+                else if(i==R.id.ly_kapat)
+                {
+                    dialog.dialog.dismiss();
                 }
             }
         }

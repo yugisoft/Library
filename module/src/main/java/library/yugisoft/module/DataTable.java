@@ -1,6 +1,8 @@
 package library.yugisoft.module;
 
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 
@@ -68,6 +70,9 @@ public class DataTable
         vLoad(str, "");
     }
 
+
+    int column = 0;
+    @TargetApi(Build.VERSION_CODES.N)
     public void vLoad(String str, String Key) {
         try {
             if (!str.equals("[]") && str != null)
@@ -85,6 +90,8 @@ public class DataTable
 
                     JSONArray json = (Key.length() > 0 ? job.getJSONObject(0).getJSONArray(Key) : new JSONArray(str));
 
+                    List<Integer> ignoreCols = new ArrayList<Integer>();
+
                     for (int k = 0; k < json.length(); k++) {
                         DataRow row = new DataRow();
                         JSONObject ob = ((JSONObject) json.get(k));
@@ -95,13 +102,18 @@ public class DataTable
                             it = ob.keys();
                             while (it.hasNext()) {
                                 String s = it.next().toString();
-                                Columns.add(s.replace(" ",""));
+                                if (s.indexOf("x_")>-1 || s.indexOf("lang_")>-1)
+                                    ignoreCols.add(k);
+                                else
+                                    Columns.add(s.replace(" ",""));
                             }
                         }
 
                         it = ob.keys();
-                        int column = 0;
-                        while (it.hasNext()) {
+                        column = 0;
+                        while (it.hasNext())
+                        {
+                            int ignoreindex = ignoreCols.stream().filter(p-> p == column).findFirst().get();
                             row.Cells.add(new DataColumn(Columns.get(column), ob.getString(it.next().toString())));
                             column++;
                         }
@@ -436,6 +448,8 @@ public class DataTable
 
     //endregion
     //endregion
+
+
     //region Alt Class
     public class DataRow {
 
@@ -677,6 +691,9 @@ public class DataTable
     }
 
     //endregion
+
+
+
     private boolean Filterlike =true;
     public boolean isFilterlike() {
         return Filterlike;
