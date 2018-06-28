@@ -102,9 +102,6 @@ public class DataTable
                             it = ob.keys();
                             while (it.hasNext()) {
                                 String s = it.next().toString();
-                                if (s.indexOf("x_")>-1 || s.indexOf("lang_")>-1)
-                                    ignoreCols.add(k);
-                                else
                                     Columns.add(s.replace(" ",""));
                             }
                         }
@@ -113,7 +110,7 @@ public class DataTable
                         column = 0;
                         while (it.hasNext())
                         {
-                            int ignoreindex = ignoreCols.stream().filter(p-> p == column).findFirst().get();
+
                             row.Cells.add(new DataColumn(Columns.get(column), ob.getString(it.next().toString())));
                             column++;
                         }
