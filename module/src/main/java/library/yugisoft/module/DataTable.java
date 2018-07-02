@@ -934,7 +934,7 @@ public class DataTable
         public boolean isMatched(T object, E text);
     }
 
-    public class FilterList<E> {
+    public static class FilterList<E> {
         public  <T> List filterList(List<T> originalList, Filter filter, E text)
         {
             List<T> filterList = new ArrayList<T>();

@@ -984,7 +984,7 @@ public class yugi
         public void Show() {
             npTotal.setText(yugi.NF2Replace(totalUcret)+" "+Currency);
             UcretToString();
-            dialog.DialogMax();
+
             dialog.dialog.show();
         }
 
