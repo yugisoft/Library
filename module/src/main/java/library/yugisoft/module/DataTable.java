@@ -22,15 +22,16 @@ import java.util.List;
 public class DataTable
 {
     private static final long DataTableVersiyon = 18032701;
-    public List<DataRow> Rows = new ArrayList<>();
-    public List<DataRow> mRows = new ArrayList<>();
-    public List<String> Columns = new ArrayList<>();
+    public List<DataRow> Rows = new SmartList<DataRow>();
+    public List<DataRow> mRows = new SmartList<DataRow>();
+    public List<String> Columns = new SmartList<String>();
     public void add(String... values) {
         DataRow row = new DataRow();
         for (int i = 0; i < values.length; i++)
         {
             try
             {
+
                 DataColumn col = new DataColumn();
                 col.Name = Columns.get(i);
                 col.Value = values[i];
@@ -39,7 +40,7 @@ public class DataTable
             catch (Exception e){}
         }
         this.mRows.add(row);
-        if(getFilterText().equals("")) Rows =mRows;
+        if(getFilterText().equals("")) Rows =SmartList.Copy(mRows);
         else
             setFilterText(getFilterText());
     }
@@ -689,17 +690,13 @@ public class DataTable
 
     //endregion
 
-
-
     private boolean Filterlike =true;
     public boolean isFilterlike() {
         return Filterlike;
     }
-
     public void setFilterlike(boolean filterlike) {
         Filterlike = filterlike;
     }
-
     public boolean setValue(int RowIndex, String ColumnName,Object Value) {
         int k=0;
         while(k<Columns.size()) {
@@ -732,7 +729,6 @@ public class DataTable
         else
             return setValue(RowIndex,ColumnName,Value);
     }
-
     public static DataTable ToTable(Object ob) {
         DataTable dt = new DataTable();
         Class c = ob.getClass();
@@ -792,7 +788,6 @@ public class DataTable
 
         return  dt;
     }
-
     public void ToClass(Object ob, int index) {
         Class c = ob.getClass();
         String classname = c.getSimpleName().toLowerCase();
@@ -884,7 +879,6 @@ public class DataTable
             //endregion
         }
     }
-
     private int getColumnIndex(String name) {
         for (int i =0 ;i<this.Columns.size();i++)
             if(this.Columns.get(i).equals(name))
@@ -892,7 +886,6 @@ public class DataTable
         return  -1;
 
     }
-
     public Object getClass(Class cl,int position) {
         Object o = null;
         try {
@@ -907,7 +900,6 @@ public class DataTable
         this.ToClass(o,position);
         return  o;
     }
-
     public void ToClass(Object ob) {
         Class c = ob.getClass();
         String classname = c.getSimpleName().toLowerCase();
@@ -930,9 +922,12 @@ public class DataTable
         }
     }
 
+
+
     interface Filter<T,E> {
         public boolean isMatched(T object, E text);
     }
+
 
     public static class FilterList<E> {
         public  <T> List filterList(List<T> originalList, Filter filter, E text)
@@ -947,6 +942,54 @@ public class DataTable
             }
             return filterList;
         }
+    }
+
+
+
+    String col="",value = "";
+    public List<DataRow> Where(String pWhere)
+    {
+        List<List<DataRow>> results = new SmartList<>();
+        for (String veya :pWhere.split("\\|"))
+        {
+            List<DataRow> tList = SmartList.Copy(mRows);
+            for (String item: veya.split("&&"))
+            {
+
+                boolean like = false;
+                String[] ops = {"==","%%","||"};
+
+                for (String s: ops) {
+                    if(item.indexOf(s)>0)
+                    {
+                        col = item.split(s)[0];
+                        value = item.split(s)[1];
+                        Filterlike = !s.equals("==");
+                        break;
+                    }
+                }
+
+
+                Filter<DataRow,String> filter = new Filter<DataRow,String>()
+                {
+                    public boolean isMatched(DataRow object, String text)
+                    {
+                        String val =object.get(col).toLowerCase();
+                        if(Filterlike)
+                            return val.contains(String.valueOf(text).toLowerCase());
+                        else
+                            return val.equals(String.valueOf(text).toLowerCase());
+                    }
+                };
+                tList = new FilterList().filterList(tList, filter, value);
+                results.add(tList);
+            }
+        }
+        List tList = new SmartList();
+        for (List l :results) {
+            tList=  SmartList.Marge(tList,l,true);
+        }
+        return  tList;
     }
 
 
