@@ -3,9 +3,8 @@ package library.yugisoft.library;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.List;
-
 import library.yugisoft.module.DataTable;
+import library.yugisoft.module.yugi;
 
 public class yugiTest extends AppCompatActivity {
 
@@ -14,8 +13,9 @@ public class yugiTest extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<DataTable.DataRow> list2 = dataTable.Where("c1==v1|c1==v3");
-        String s = list2.get(0).get(0);
+
+
+        yugi.MessageBox.ShowLoading(this);
     }
 
 

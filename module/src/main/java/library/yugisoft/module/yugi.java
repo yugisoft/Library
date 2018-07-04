@@ -172,9 +172,9 @@ public class yugi
 
         public static  mDialog Loading(Activity activity) {
             mDialog dialog = new mDialog(activity, R.layout.ly_loading,true);
-            ImageView im = (ImageView) dialog.view.findViewById(R.id.img_loading);
-            final AnimationDrawable animationDrawable = (AnimationDrawable) im.getDrawable();
-            animationDrawable.start();
+           ImageView im = (ImageView) dialog.view.findViewById(R.id.img_loading);
+           final AnimationDrawable animationDrawable = (AnimationDrawable) im.getDrawable();
+           animationDrawable.start();
             return dialog;
         }
     }
@@ -1000,9 +1000,9 @@ public class yugi
             imageLoader = ImageLoader.getInstance();
             ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
             options = new DisplayImageOptions.Builder()
-                    .showImageOnLoading(R.drawable.loading2)
-                    .showImageForEmptyUri(R.drawable.loading2)
-                    .showImageOnFail(R.drawable.loading2)
+                    .showImageOnLoading(R.drawable.loading)
+                    .showImageForEmptyUri(R.drawable.loading)
+                    .showImageOnFail(R.drawable.loading)
                     .cacheInMemory(true)
                     .cacheOnDisk(true)
                     .build();
