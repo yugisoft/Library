@@ -36,6 +36,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -73,12 +74,20 @@ public class yugi
 
     public static class vActivity extends AppCompatActivity {
 
+        public static boolean LoadMainConfig  = false;
+
         public  boolean isLoad=false;
+
         @Override
         protected void onCreate(@Nullable Bundle savedInstanceState) {
             setConfig(this);
             super.onCreate(savedInstanceState);
             isLoad=false;
+            if (!LoadMainConfig)
+            {
+                LocaleManager.setLocale(this);
+                LoadMainConfig=true;
+            }
         }
 
         @Override
@@ -502,6 +511,7 @@ public class yugi
         TempHttpHeader = null;
         return hata;
     }
+
     public static httpHata POST(String url, List<PostBody> hedars, List<PostBody> bodys) {
         InputStream inputStream = null;
         httpHata hata=null;
@@ -569,6 +579,68 @@ public class yugi
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);
             Log.e("|G|POSTJSON",Json.toString());
+            StringEntity se = new StringEntity(Json.toString(), HTTP.UTF_8);
+            se.setContentType("application/json");
+            httpPost.setEntity(se);
+            for(int i =0;i<hedars.size();i++)
+            {
+
+                httpPost.setHeader(hedars.get(i).Name, hedars.get(i).Value);
+            }
+            if (addHttpHedaerDeviceInfo && myDevice != null)
+                httpPost.setHeader("ziraDeviceInfo",myDevice.getJson());
+            if (ConstHttpHeader != null)
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(ConstHttpHeader).getJsonData(0).replace("\n",""));
+            if (TempHttpHeader != null)
+                httpPost.setHeader("ConstHttpHeader",DataTable.ToTable(TempHttpHeader).getJsonData(0).replace("\n",""));
+
+            HttpResponse httpResponse = httpclient.execute(httpPost);
+            StatusLine st= httpResponse.getStatusLine();
+            hata = isException(st.getStatusCode());
+            if(!hata.isException || st.getStatusCode()==400) {
+                inputStream = httpResponse.getEntity().getContent();
+                if(inputStream != null)
+                {
+                    hata.Data = convertInputStreamToString(inputStream);
+                    if (st.getStatusCode() == 400)
+                    {
+                        DataTable dt = new DataTable(hata.Data);
+                        hata.HataAciklama = (dt.get(0, "Message").equals("")?dt.get(0, "error_description"):dt.get(0, "Message"));
+                    }
+                    Log.e("|G|gizPOST/Result",url+ " | "+hata.Data);
+                }
+                else
+                    hata.Data = "Beklenmeyen Bir Hata Oluştu!";
+            }
+
+        }
+        catch (Exception e)
+        {
+
+            hata = new httpHata();
+            hata.HataAciklama = "Beklenmeyen Bir Hata Oluştu!";
+            hata.Data="{\n" +
+                    "  \"HatKodu\":\""+600+"\",\n" +
+                    "  \"HataAciklama\":\" Beklenmeyen Bir Hata Oluştu! : \n "+e.getMessage()+" \"\n" +
+                    "}";
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+        Log.e("|G|gizPOST/Result",url+ " | "+hata.Data);
+        TempHttpHeader=null;
+        return hata;
+    }
+
+    public static httpHata DELETE(String url, List<PostBody> hedars, String Json) {
+        InputStream inputStream = null;
+        String result = "";
+        httpHata hata=null;
+        try {
+
+            HttpClient httpclient = new DefaultHttpClient();
+
+
+            HttpPost httpPost = new HttpPost(url);
+            Log.e("|G|POSTJSON",Json.toString());
             JSONObject job = new JSONObject();
             StringEntity se = new StringEntity(Json.toString(), HTTP.UTF_8);
             se.setContentType("application/json");
@@ -620,6 +692,9 @@ public class yugi
         TempHttpHeader=null;
         return hata;
     }
+
+
+
     public static class gizGET extends AsyncTask<String, Void, String> {
         public static String _JSON = "";
         public  httpHata myResponse;
@@ -780,16 +855,19 @@ public class yugi
         return  GetSetup(activity,"Token");
     }
     public static String GetSetup(Context context, Object Setup_name) {
+        return GetSetup(context,Setup_name,"");
+    }
+    public static String GetSetup(Context context, Object Setup_name,String Defult) {
         try {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
             String str;
             str = sharedPreferences.getString("HobiSatis." + Setup_name, null);
-            if (str.isEmpty())
-                return "";
+            if (str.isEmpty() || str.length()==0)
+                return Defult;
             else return str;
         } catch (Exception e) {
-            return "";
+            return Defult;
         }
     }
     public static void SetSetup(Context context,String Setup_name, Object Value) {
