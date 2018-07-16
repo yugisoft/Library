@@ -3,6 +3,8 @@ package library.yugisoft.module;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
@@ -36,7 +38,7 @@ public class http
         public boolean isException;
     }
     public static class Headers {
-        public static String DeviceInfoKey = "ziraDeviceInfo";
+        public static String DeviceInfoKey = "ziraDeviceInfo",ConstInfoKey="Config";
 
 
         public static void urlencoded(HttpRequestBase req) {
@@ -52,54 +54,86 @@ public class http
         }
 
         private static void DeviceInfo(HttpRequestBase req) {
-            if (yugi.addHttpHedaerDeviceInfo && yugi.myDevice != null)
-                req.setHeader(DeviceInfoKey, yugi.myDevice.getJson());
+            try
+            {
+                if (yugi.addHttpHedaerDeviceInfo && yugi.myDevice != null)
+                    req.setHeader(DeviceInfoKey, yugi.myDevice.getJson());
+            }
+            catch (Exception ex)
+            {}
         }
 
         private static void ConstHttpHeader(HttpRequestBase req) {
-            if (yugi.ConstHttpHeader != null)
-                req.setHeader("ConstHttpHeader", DataTable.ToTable(yugi.ConstHttpHeader).getJsonData(0).replace("\n", ""));
+            try
+            {
+                if (yugi.ConstHttpHeader != null)
+                    req.setHeader(ConstInfoKey, DataTable.ToTable(yugi.ConstHttpHeader).getJsonData(0).replace("\n", ""));
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         private static void TempHttpHeader(HttpRequestBase req) {
-            if (yugi.TempHttpHeader != null)
-                req.setHeader("TempHttpHeader", DataTable.ToTable(yugi.TempHttpHeader).getJsonData(0).replace("\n", ""));
+            try
+            {
+                if (yugi.TempHttpHeader != null)
+                    req.setHeader("TempHttpHeader", DataTable.ToTable(yugi.TempHttpHeader).getJsonData(0).replace("\n", ""));
+            }
+            catch (Exception ex)
+            {}
         }
 
         public static void Add(HttpRequestBase req, Hashtable headers) {
-            Iterator<String> keys = headers.keySet().iterator();
-            while (keys.hasNext()) {
-                String key = keys.next();
+            if (headers==null)return;;
+            try
+            {
+                Iterator<String> keys = headers.keySet().iterator();
+                while (keys.hasNext()) {
+                    String key = keys.next();
 
-                req.setHeader(key, headers.get(key).toString());
+                    req.setHeader(key, headers.get(key).toString());
+                }
             }
+            catch (Exception ex)
+            {}
         }
 
 
     }
     public static class Bodys {
         public static void Add(HttpEntityEnclosingRequestBase req, Hashtable bodys) {
-            Iterator<String> keys = bodys.keySet().iterator();
-
-            String body = "";
-            int i = 0;
-            while (keys.hasNext())
+            if (bodys==null)return;;
+            try
             {
-                String key = keys.next();
-                if (i > 0) body += "&";
-                body += key + "=" + bodys.get(key).toString();
-                i++;
+                Iterator<String> keys = bodys.keySet().iterator();
+
+                String body = "";
+                int i = 0;
+                while (keys.hasNext())
+                {
+                    String key = keys.next();
+                    if (i > 0) body += "&";
+                    body += key + "=" + bodys.get(key).toString();
+                    i++;
+                }
+                StringEntity se = null;
+                try {
+                    se = new StringEntity(body, HTTP.UTF_8);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                req.setEntity(se);
             }
-            StringEntity se = null;
-            try {
-                se = new StringEntity(body, HTTP.UTF_8);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            catch (Exception Ex)
+            {
+
             }
-            req.setEntity(se);
         }
 
         public static void Add(HttpEntityEnclosingRequestBase req, String bodys) {
+
             try
             {
                 StringEntity se = new StringEntity(bodys.toString(), HTTP.UTF_8);
@@ -114,7 +148,6 @@ public class http
 
 
     }
-
     public static Response GET(String url, Hashtable headers) {
         Response response = null;
         HttpGet httpGet = new HttpGet(url);
@@ -128,7 +161,6 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
-
     public static Response DELETE(String url, Hashtable headers) {
         Response response = null;
         HttpDelete httpDelete = new HttpDelete(url);
@@ -142,8 +174,6 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
-
-
     public static Response POST(String url,Hashtable body,Hashtable headers) {
         Response response = null;
         HttpPost httpPost = new HttpPost(url);
@@ -198,7 +228,6 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
-
     public static Response PUT(String url,Hashtable body,Hashtable headers) {
         Response response = null;
         HttpPut httpPut = new HttpPut(url);
@@ -253,9 +282,6 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
-
-
-
     private static Response httpExecute(HttpRequestBase httpGet) {
         Response response =null;
         try
@@ -293,14 +319,12 @@ public class http
         }
         return  response;
     }
-
     public interface OnHttpResponse {
         void onResponse(Response response);
     }
     public interface OnHttpResponseTable {
         void onResponse(DataTable response);
     }
-
     //region Private
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -355,7 +379,6 @@ public class http
         return Hata;
     }
     //endregion
-
     public static class httpGET extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
@@ -422,7 +445,6 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
-
     public static class httpDELETE extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
@@ -487,7 +509,6 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
-
     public static class httpPOST extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
@@ -592,7 +613,6 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
-
     public static class httpPUT extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
@@ -695,6 +715,27 @@ public class http
             super.onPostExecute(response);
             if (onHttpResponseTable!=null)
                 onHttpResponseTable.onResponse(response);
+        }
+    }
+
+    public static String ToJsonString(Object object)
+    {
+        Gson gson = new Gson();
+        return  gson.toJson(object);
+    }
+
+   public static <T> T JsonToClass(T t,String Json)
+    {
+        try
+        {
+            Object o = Class.forName(t.getClass().getName()).newInstance();
+            Gson gson = new Gson();
+            o = gson.fromJson(Json, t.getClass());
+            return (T)o;
+        }
+        catch (Exception ex)
+        {
+            return  null;
         }
     }
 
