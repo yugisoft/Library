@@ -5,15 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import org.json.JSONObject;
-import org.json.JSONStringer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import library.yugisoft.library.Models.CartModel.Cart;
-import library.yugisoft.library.Models.ConfigModel;
 import library.yugisoft.module.DataTable;
 import library.yugisoft.module.ItemAdapter;
 import library.yugisoft.module.JSON;
@@ -28,21 +20,24 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-    }
-
-
-    public class  MDL
-    {
-        public String STR1,STR2;
-        public MD md ;
-        public List<MD> lmd;
-    }
-
-    public class MD
-    {
-
-        public String STR1,STR2;
+       // ConfigModel.DEMO();
+       // String json = "{\"Barcode\":\"1\",\"IsIncreasing\":\"true\",\"Quantity\":\"1\"}";
+//
+       // http.httpPOST post = new http.httpPOST(new http.OnHttpResponse() {
+       //     @Override
+       //     public void onResponse(http.Response response) {
+       //         yugi.MessageBox.Close();
+       //         if (response.isException)
+       //             yugi.MessageBox.Show(yugi.activity,response.HataAciklama,true);
+       //         else
+       //         {
+//
+       //         }
+//
+       //     }
+       // }, json);
+       // post.execute("http://10.34.41.58/IstePosAPI/api/CartProduct");
+       // yugi.MessageBox.ShowLoading();
     }
 
     @Override

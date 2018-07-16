@@ -9,4 +9,14 @@
         <item name="android:windowEnterAnimation">@anim/pop_win_content_fade_in</item>
         <item name="android:windowExitAnimation">@anim/pop_win_content_fade_out</item>
     </style>
+
+    <declare-styleable name="NumericPicker">
+        <attr name="Value" format="float" />
+        <attr name="MaxValue" format="float" />
+        <attr name="MinValue" format="float" />
+        <attr name="ButtonGravity" format="enum">
+            <enum name="Horizantal" value="0"/>
+            <enum name="Vertical" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>

@@ -283,6 +283,7 @@ public class http
         return response;
     }
     private static Response httpExecute(HttpRequestBase httpGet) {
+        String LOG ="httpExecuteResponse \n";
         Response response =null;
         try
         {
@@ -294,7 +295,8 @@ public class http
             StatusLine st = httpResponse.getStatusLine();
 
             response = isException(st.getStatusCode());
-
+            LOG+= "HttpURL : "+httpGet.getURI().toURL()+"\n";
+            LOG+= "HttpReponseStatusCode : "+st.getStatusCode()+"\n";
             if (!response.isException || st.getStatusCode() == 400)
             {
                 inputStream = httpResponse.getEntity().getContent();
@@ -309,6 +311,8 @@ public class http
                 } else
                     response.Data = "Beklenmeyen Bir Hata Oluştu!";
             }
+            LOG += "Response : "+response.Data;
+            yugi.Print("I", "httpExecuteResponse", LOG);
             return  response;
         }
         catch (Exception ex)
@@ -317,6 +321,7 @@ public class http
             response.isException = true;
             response.HataAciklama=ex.getMessage();
         }
+        yugi.Print("I", "httpExecuteResponse", response.Data);
         return  response;
     }
     public interface OnHttpResponse {
@@ -338,7 +343,7 @@ public class http
 
     }
     private static Response isException(int statusCode) {
-        yugi.Print("I", "HttpReponseStatusCode", String.valueOf(statusCode));
+
         Response Hata = new Response();
         Hata.HataKodu = statusCode;
         switch (statusCode) {
@@ -526,12 +531,14 @@ public class http
             onHttpResponse=pOnHttpResponseTable;
             sbody=pBodys;
             headers=pheaders;
+            Json=true;
         }
 
         public httpPOST(OnHttpResponse pOnHttpResponse,String pBodys)
         {
             onHttpResponse=pOnHttpResponse;
             sbody=pBodys;
+            Json=true;
         }
 
         public httpPOST(OnHttpResponse pOnHttpResponseTable,Hashtable pBodys,Hashtable pheaders) {
@@ -584,12 +591,14 @@ public class http
             onHttpResponseTable=pOnHttpResponseTable;
             sbody=pBodys;
             headers=pheaders;
+            Json=true;
         }
 
         public httpPOSTTable(OnHttpResponseTable pOnHttpResponse,String pBodys)
         {
             onHttpResponseTable=pOnHttpResponse;
             sbody=pBodys;
+            Json=true;
         }
 
         @Override
@@ -630,12 +639,14 @@ public class http
             onHttpResponse=pOnHttpResponseTable;
             sbody=pBodys;
             headers=pheaders;
+            Json=true;
         }
 
         public httpPUT(OnHttpResponse pOnHttpResponse,String pBodys)
         {
             onHttpResponse=pOnHttpResponse;
             sbody=pBodys;
+            Json=true;
         }
 
         public httpPUT(OnHttpResponse pOnHttpResponseTable,Hashtable pBodys,Hashtable pheaders) {
@@ -688,12 +699,14 @@ public class http
             onHttpResponseTable=pOnHttpResponseTable;
             sbody=pBodys;
             headers=pheaders;
+            Json=true;
         }
 
         public httpPUTTable(OnHttpResponseTable pOnHttpResponse,String pBodys)
         {
             onHttpResponseTable=pOnHttpResponse;
             sbody=pBodys;
+            Json=true;
         }
 
         @Override
@@ -718,25 +731,6 @@ public class http
         }
     }
 
-    public static String ToJsonString(Object object)
-    {
-        Gson gson = new Gson();
-        return  gson.toJson(object);
-    }
 
-   public static <T> T JsonToClass(T t,String Json)
-    {
-        try
-        {
-            Object o = Class.forName(t.getClass().getName()).newInstance();
-            Gson gson = new Gson();
-            o = gson.fromJson(Json, t.getClass());
-            return (T)o;
-        }
-        catch (Exception ex)
-        {
-            return  null;
-        }
-    }
 
 }
