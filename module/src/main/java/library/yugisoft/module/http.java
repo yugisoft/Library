@@ -156,8 +156,7 @@ public class http
         Headers.TempHttpHeader(httpGet);
         Headers.DeviceInfo(httpGet);
         Headers.Add(httpGet, headers);
-        response = httpExecute(httpGet);
-        yugi.Print("I","http-GET",response.Data);
+        response = httpExecute(httpGet,"http-GET");
         yugi.TempHttpHeader = null;
         return response;
     }
@@ -169,8 +168,7 @@ public class http
         Headers.TempHttpHeader(httpDelete);
         Headers.DeviceInfo(httpDelete);
         Headers.Add(httpDelete, headers);
-        response = httpExecute(httpDelete);
-        yugi.Print("I","http-DELETE",response.Data);
+        response = httpExecute(httpDelete,"http-DELETE");
         yugi.TempHttpHeader = null;
         return response;
     }
@@ -196,8 +194,7 @@ public class http
         //Body'e eklenmesi gereken bilgiler eklendi.
         Bodys.Add(httpPost,body);
 
-        response = httpExecute(httpPost);
-        yugi.Print("I","http-POST",response.Data);
+        response = httpExecute(httpPost,"http-POST");
         yugi.TempHttpHeader = null;
         return response;
     }
@@ -223,8 +220,7 @@ public class http
         //Body'e eklenmesi gereken bilgiler eklendi.
         Bodys.Add(httpPost,body);
 
-        response = httpExecute(httpPost);
-        yugi.Print("I","http-POST",response.Data);
+        response = httpExecute(httpPost,"http-POST");
         yugi.TempHttpHeader = null;
         return response;
     }
@@ -250,8 +246,8 @@ public class http
         //Body'e eklenmesi gereken bilgiler eklendi.
         Bodys.Add(httpPut,body);
 
-        response = httpExecute(httpPut);
-        yugi.Print("I","http-PUT",response.Data);
+        response = httpExecute(httpPut,"http-PUT");
+
         yugi.TempHttpHeader = null;
         return response;
     }
@@ -277,12 +273,12 @@ public class http
         //Body'e eklenmesi gereken bilgiler eklendi.
         Bodys.Add(httpPut,body);
 
-        response = httpExecute(httpPut);
-        yugi.Print("I","http-PUT",response.Data);
+        response = httpExecute(httpPut,"http-PUT");
+
         yugi.TempHttpHeader = null;
         return response;
     }
-    private static Response httpExecute(HttpRequestBase httpGet) {
+    private static Response httpExecute(HttpRequestBase httpGet,String log) {
         String LOG ="httpExecuteResponse \n";
         Response response =null;
         try
@@ -296,6 +292,7 @@ public class http
 
             response = isException(st.getStatusCode());
             LOG+= "HttpURL : "+httpGet.getURI().toURL()+"\n";
+            LOG+=log+"\n";
             LOG+= "HttpReponseStatusCode : "+st.getStatusCode()+"\n";
             if (!response.isException || st.getStatusCode() == 400)
             {
@@ -321,7 +318,7 @@ public class http
             response.isException = true;
             response.HataAciklama=ex.getMessage();
         }
-        yugi.Print("I", "httpExecuteResponse", response.Data);
+        yugi.Print("I", "httpExecute", response.Data);
         return  response;
     }
     public interface OnHttpResponse {

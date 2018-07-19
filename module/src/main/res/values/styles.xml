@@ -19,4 +19,13 @@
             <enum name="Vertical" value="1"/>
         </attr>
     </declare-styleable>
+
+    <attr name="focusedDrawable" format="color|reference" />
+    <attr name="unFocusedDrawable" format="color|reference" />
+
+    <declare-styleable name="InputLayout">
+        <attr name="focusedDrawable" />
+        <attr name="unFocusedDrawable" />
+    </declare-styleable>
+
 </resources>
