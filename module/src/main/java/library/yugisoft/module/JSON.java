@@ -2,9 +2,7 @@ package library.yugisoft.module;
 
 import com.google.gson.Gson;
 
-import library.yugisoft.module.GenericFolder.GenericClass;
-
-public class JSON<T extends GenericClass> {
+public class JSON<T> {
     public JSON()
     {
     }
