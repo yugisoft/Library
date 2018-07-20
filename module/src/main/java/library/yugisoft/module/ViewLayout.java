@@ -104,7 +104,6 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
         this.view.setOnFocusChangeListener(this::onFocusChange);
         if (getDrawable()==null)
             setDrawable(editText.getBackground());
-
         //region Spinner
         if (editText instanceof CustomSpinner)
         {
@@ -121,6 +120,7 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
                     setFocus(sp,false);
                 }
             });
+            setFocus(editText,sp.hasBeenOpened());
         }
         //endregion
         //region DEFAULT
@@ -130,6 +130,7 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
             setFocus(editText,editText.isFocused());
         }
         //endregion
+
 
     }
     public View getView() {

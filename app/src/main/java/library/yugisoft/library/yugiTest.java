@@ -2,6 +2,7 @@ package library.yugisoft.library;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 import library.yugisoft.module.yugi;
 
@@ -14,7 +15,8 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
 
-
+        EditText editText = (EditText)findViewById(R.id.editText);
+        editText.getBackground();
      //  Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
      //  ArrayAdapter<String> spinnerArrayAdapter2 = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, colors);
      //  spinnerArrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
