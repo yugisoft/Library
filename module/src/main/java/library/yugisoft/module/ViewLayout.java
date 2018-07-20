@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class ViewLayout extends LinearLayout implements View.OnFocusChangeListener
@@ -57,7 +56,7 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
     }
     private View textClear;
     private View view;
-    private ImageView imageView;
+
     private Drawable drawable;
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
