@@ -65,6 +65,7 @@ public class InputLayout extends LinearLayout implements View.OnFocusChangeListe
 
             if (v instanceof EditText)
                     setEditText((EditText)v);
+
             else if (v instanceof ImageView)
                 setImageView((ImageView)v);
 
@@ -77,10 +78,7 @@ public class InputLayout extends LinearLayout implements View.OnFocusChangeListe
         }
     }
 
-
-
-void setFocus(View v,boolean hasFocus)
-{
+    void setFocus(View v,boolean hasFocus) {
 
     if (hasFocus)
     {
@@ -100,6 +98,7 @@ void setFocus(View v,boolean hasFocus)
         textClear.setVisibility( hasFocus ? VISIBLE : GONE);
     }
 }
+
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
 
@@ -112,12 +111,6 @@ void setFocus(View v,boolean hasFocus)
         editText.setText("");
     }
 
-
-
-
-
-
-
     public void setEditText(EditText editText) {
         this.editText = editText;
         //this.editText.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1));
@@ -127,8 +120,6 @@ void setFocus(View v,boolean hasFocus)
         this.editText.setBackground(null);
         setFocus(editText,editText.isFocused());
     }
-
-
 
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;

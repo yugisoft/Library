@@ -22,10 +22,16 @@
 
     <attr name="focusedDrawable" format="color|reference" />
     <attr name="unFocusedDrawable" format="color|reference" />
-
+    <attr name="viewID" format="reference" />
     <declare-styleable name="InputLayout">
         <attr name="focusedDrawable" />
         <attr name="unFocusedDrawable" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewLayout">
+        <attr name="focusedDrawable" />
+        <attr name="unFocusedDrawable"  />
+        <attr name="viewID"  />
     </declare-styleable>
 
 </resources>
