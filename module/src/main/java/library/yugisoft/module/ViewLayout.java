@@ -2,6 +2,9 @@ package library.yugisoft.module;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -12,6 +15,17 @@ import android.widget.LinearLayout;
 public class ViewLayout extends LinearLayout implements View.OnFocusChangeListener
 {
     Drawable focused,unfocused;
+    private String hint = "";
+
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        if (hint==null || hint.length()==0 ) hint = "";
+        this.hint = hint;
+    }
+
     int viewid =0;
     public ViewLayout(Context context) {
         this(context,null,0);
@@ -42,6 +56,8 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
             setDrawable(a.getDrawable(R.styleable.ViewLayout_unFocusedDrawable));
             if (focused==null)
                 focused = getContext().getResources().getDrawable(R.drawable.input_border_blue);
+
+            setHint(a.getString(R.styleable.ViewLayout_hint));
 
         }
 
@@ -140,5 +156,26 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
     }
     public void setDrawable(Drawable drawable) {
         this.drawable = drawable;
+    }
+
+
+    @Override
+    protected void onDraw(Canvas canvas)
+    {
+        super.onDraw(canvas);
+
+        try {
+            String text = getHint();
+            Paint paint = new Paint();
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+            int x = getPaddingLeft()+view.getLeft()+8;
+            int y =getPaddingTop() + 14;
+            paint.setColor(Color.RED);
+            canvas.drawText(text, x, y, paint);
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 }
