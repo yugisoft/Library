@@ -123,8 +123,17 @@ public class InputLayout extends LinearLayout implements View.OnFocusChangeListe
         if (this.editText==null)
         {
             this.editText = editText;
-            this.setHint(editText.getHint().toString());
+            try {
+                this.setHint(editText.getHint().toString());
+            }
+            catch (Exception ex)
+            {
+
+            }
             this.editText.setHint("");
+            int l = this.editText.getPaddingLeft();
+            int r = this.editText.getPaddingRight();
+            this.editText.setPaddingRelative(l,5,r,0);
             //this.editText.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1));
 
             this.editText.setOnFocusChangeListener(this::onFocusChange);

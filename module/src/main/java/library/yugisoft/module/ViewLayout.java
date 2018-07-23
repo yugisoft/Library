@@ -6,7 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -112,9 +114,13 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
                 setView(v);
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void setView(View editText) {
 
         this.view = editText;
+        int l = this.view.getPaddingLeft();
+        int r = this.view.getPaddingRight();
+        this.view.setPaddingRelative(l,5,r,0);
         //this.editText.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1));
         this.view.setOnFocusChangeListener(this::onFocusChange);
         if (getDrawable()==null)

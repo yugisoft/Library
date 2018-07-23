@@ -133,6 +133,7 @@ public class DatabaseHandler
 
         public DataTable mSelect(String SQL) {
             dt.Rows.clear();
+            dt.mRows.clear();
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(SQL, null);
             if (cursor!=null && cursor.getCount() > 0 && cursor.moveToFirst()) {

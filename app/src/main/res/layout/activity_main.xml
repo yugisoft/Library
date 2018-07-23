@@ -9,53 +9,5 @@
     android:padding="20dp"
     tools:context="library.yugisoft.library.yugiTest">
 
-    <library.yugisoft.module.ViewLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hint="Name"
-        app:viewID="@id/editText">
-
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:tint="@android:color/holo_red_dark"
-            app:srcCompat="@drawable/ic_right" />
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-
-            android:inputType="textPersonName" />
-
-    </library.yugisoft.module.ViewLayout>
-
-    <library.yugisoft.module.InputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:viewID="@id/editText">
-
-
-        <ImageView
-
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:tint="@android:color/holo_red_dark"
-            app:srcCompat="@drawable/ic_right" />
-
-        <EditText
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Name"
-            android:inputType="textPersonName" />
-
-    </library.yugisoft.module.InputLayout>
 
 </LinearLayout>
