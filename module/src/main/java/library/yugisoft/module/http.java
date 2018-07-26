@@ -1,9 +1,6 @@
 package library.yugisoft.module;
 
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -14,18 +11,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -296,17 +290,24 @@ public class http
             LOG+= "HttpReponseStatusCode : "+st.getStatusCode()+"\n";
             if (!response.isException || st.getStatusCode() == 400)
             {
-                inputStream = httpResponse.getEntity().getContent();
-                if (inputStream != null)
+                try
                 {
-                    response.Data = convertInputStreamToString(inputStream);
-                    if (st.getStatusCode() == 400)
+                    inputStream = httpResponse.getEntity().getContent();
+                    if (inputStream != null)
                     {
-                        DataTable dt = new DataTable(response.Data);
-                        response.HataAciklama = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
-                    }
-                } else
-                    response.Data = "Beklenmeyen Bir Hata Oluştu!";
+                        response.Data = convertInputStreamToString(inputStream);
+                        if (st.getStatusCode() == 400)
+                        {
+                            DataTable dt = new DataTable(response.Data);
+                            response.HataAciklama = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
+                        }
+                    } else
+                        response.Data = "Beklenmeyen Bir Hata Oluştu!";
+                }
+                catch (Exception Ex)
+                {
+
+                }
             }
             LOG += "Response : "+response.Data;
             yugi.Print("I", "httpExecuteResponse", LOG);
