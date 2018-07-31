@@ -788,97 +788,7 @@ public class DataTable
 
         return  dt;
     }
-    public void ToClass(Object ob, int index) {
-        Class c = ob.getClass();
-        String classname = c.getSimpleName().toLowerCase();
-        if (classname.contains("SmartList"))
-        {
-            SmartList list = (SmartList)ob;
 
-            for (int ds =0 ;ds<this.Rows.size();ds++)
-            {
-                try
-                {
-                    Object o = Class.forName(list.ParentClas.getName()).newInstance();
-                    this.ToClass(o,ds);
-                    list.add(o);
-                }
-                catch (Exception e)
-                {}
-            }
-            ob = list;
-        }
-        else
-        {
-            //region Fields
-            Field[] f = c.getFields();
-            String name="";
-            int colindex= -1;
-            for (Field fi : f) {
-                try {
-                    fi.setAccessible(true);
-                    String simlename = fi.getType().getSimpleName().toLowerCase();
-
-                    name = fi.getName();
-
-                        colindex=this.getColumnIndex(name);
-
-                    if (colindex!=-1)
-                        switch (simlename) {
-                            case "int":
-                                fi.setInt(ob, this.getInt(index,colindex));
-                                break;
-                            case "long":
-                                fi.setLong(ob, this.getLong(index,colindex));
-                                break;
-                            case "double":
-                                fi.setDouble(ob, this.getDouble(index,colindex));
-                                break;
-                            case "boolean":
-                                fi.setBoolean(ob, this.getBool(index,colindex));
-                                break;
-                            case "datatable":
-                                fi.set(ob, new DataTable(this.get(index,colindex)));
-                                break;
-                            case "list":
-                                SmartList list = (SmartList)fi.get(ob);
-
-                                DataTable dtlist =new DataTable(this.get(index,colindex));
-                                for (int ds =0 ;ds<dtlist.Rows.size();ds++)
-                                {
-                                    Object o = Class.forName(list.ParentClas.getName()).newInstance();
-                                    dtlist.ToClass(o,ds);
-                                    list.add(o);
-                                }
-                                fi.set(ob,list);
-                                break;
-
-                            default:
-                                String value = this.get(index,colindex);
-                                if(value.equals("null")) value="";
-                                fi.set(ob, value);
-                                break;
-                        }
-
-                } catch (Exception e)
-                {
-                    String ex = e.getMessage();
-
-                    try
-                    {
-                        Object o = fi.get(ob);
-                        new DataTable(this.get(index,name)).ToClass(o,index);
-                        fi.set(ob, o);
-                    }
-                    catch (Exception ee)
-                    {
-                        ex = e.getMessage();
-                    }
-                }
-            }
-            //endregion
-        }
-    }
     private int getColumnIndex(String name) {
         for (int i =0 ;i<this.Columns.size();i++)
             if(this.Columns.get(i).equals(name))
@@ -900,6 +810,101 @@ public class DataTable
         this.ToClass(o,position);
         return  o;
     }
+
+    public void ToClass(Object ob, int index)
+    {
+        Class obClass = ob.getClass();
+        String obClassname = obClass.getSimpleName().toLowerCase();
+        if (obClassname.contains("SmartList"))
+        {
+            SmartList list = (SmartList)ob;
+            for (int ds =0 ;ds<this.Rows.size();ds++)
+            {
+                try
+                {
+                    Object o = Class.forName(list.ParentClas.getName()).newInstance();
+                    this.ToClass(o,ds);
+                    list.add(o);
+                }
+                catch (Exception e)
+                {}
+            }
+            ob = list;
+        }
+        else
+        {
+            Field[] fields = obClass.getFields();
+            for (Field fi:fields) {
+                String name = fi.getName();
+                int cellIndex = this.getColumnIndex(name);
+                if (cellIndex==-1)return;
+                vSetFiled(ob,fi,this.get(index,cellIndex));
+            }
+        }
+    }
+
+    public void vSetFiled(Object object,Field field,Object value)
+    {
+        field.setAccessible(true);
+        String TypeName= field.getType().getSimpleName().toLowerCase();
+
+
+        Object filedObject = null; try { filedObject = Class.forName(field.getType().getName()).newInstance(); } catch (Exception e) { e.printStackTrace(); }
+
+        try
+        {
+            switch (TypeName) {
+                case "int":
+                    field.setInt(object, Integer.parseInt(value.toString()));
+                    break;
+                case "long":
+                    field.setLong(object, Long.parseLong(value.toString()));
+                    break;
+                case "double":
+                    field.setDouble(object, Double.parseDouble(value.toString()));
+                    break;
+                case "boolean":
+                    field.setBoolean(object, Boolean.parseBoolean(value.toString()));
+                    break;
+                case "datatable":
+                    field.set(object, new DataTable(value.toString()));
+                    break;
+                case "list":
+                    SmartList list = (SmartList)field.get(object);
+                    DataTable dtlist =new DataTable(value.toString());
+                    for (int ds =0 ;ds<dtlist.Rows.size();ds++)
+                    {
+                        Object o = Class.forName(list.ParentClas.getName()).newInstance();
+                        dtlist.ToClass(o,ds);
+                        list.add(o);
+                    }
+                    field.set(object,list);
+                    break;
+                default:
+                    if(value.equals("null")) value="";
+                    field.set(object, value);
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+
+                new DataTable(value.toString()).ToClass(filedObject,0);
+                field.set(object, filedObject);
+            }
+            catch (Exception ee)
+            {
+                String ecx = ee.getMessage();
+            }
+        }
+
+
+
+    }
+
+
     public void ToClass(Object ob) {
         Class c = ob.getClass();
         String classname = c.getSimpleName().toLowerCase();
