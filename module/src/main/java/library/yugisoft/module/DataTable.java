@@ -925,6 +925,10 @@ public class DataTable
             }
             ob = list;
         }
+        else
+        {
+            this.ToClass(ob,0);
+        }
     }
 
 
