@@ -837,7 +837,7 @@ public class DataTable
             for (Field fi:fields) {
                 String name = fi.getName();
                 int cellIndex = this.getColumnIndex(name);
-                if (cellIndex==-1)return;
+                if (cellIndex==-1)continue;
                 vSetFiled(ob,fi,this.get(index,cellIndex));
             }
         }
