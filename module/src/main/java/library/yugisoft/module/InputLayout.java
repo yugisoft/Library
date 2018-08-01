@@ -91,13 +91,13 @@ public class InputLayout extends LinearLayout implements View.OnFocusChangeListe
     if (hasFocus)
     {
         InputLayout.this.setBackground(focused);
-        ((EditText)v).setTextSize(((EditText)v).getTextSize()+2);
+        ((EditText)v).setTextSize(yugi.convertPixelToDp(((EditText)v).getTextSize()+2,getContext()));
 
     }
     else
     {
         InputLayout.this.setBackground(drawable);//(getContext().getResources().getDrawable(R.drawable.input_border_default));
-        ((EditText)v).setTextSize(((EditText)v).getTextSize()-2);
+        ((EditText)v).setTextSize(yugi.convertPixelToDp(((EditText)v).getTextSize()-2,getContext()));
 
     }
 

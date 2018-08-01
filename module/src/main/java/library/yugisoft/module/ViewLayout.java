@@ -89,14 +89,15 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
             ViewLayout.this.setBackground(focused);
 
             if (v instanceof EditText)
-                ((EditText)v).setTextSize(((EditText)v).getTextSize()+2);
+                ((EditText)v).setTextSize(yugi.convertPixelToDp(((EditText)v).getTextSize()+2,getContext()));
+
 
         }
         else
         {
             ViewLayout.this.setBackground(drawable);//(getContext().getResources().getDrawable(R.drawable.input_border_default));
             if (v instanceof EditText)
-                ((EditText)v).setTextSize(((EditText)v).getTextSize()-2);
+                ((EditText)v).setTextSize(yugi.convertPixelToDp(((EditText)v).getTextSize()-2,getContext()));
         }
 
         if (this.textClear!=null)
