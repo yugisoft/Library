@@ -1,5 +1,6 @@
 package library.yugisoft.module;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -115,7 +116,7 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
                 setView(v);
         }
     }
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void setView(View editText) {
 
         this.view = editText;
@@ -178,7 +179,9 @@ public class ViewLayout extends LinearLayout implements View.OnFocusChangeListen
             int x = getPaddingLeft()+view.getLeft()+8;
             int y =getPaddingTop() + 14;
             paint.setColor(Color.RED);
+            paint.setTextSize(yugi.convertDpToPixel(14,getContext()));
             canvas.drawText(text, x, y, paint);
+
         }
         catch (Exception ex)
         {

@@ -205,6 +205,9 @@ public class InputLayout extends LinearLayout implements View.OnFocusChangeListe
             paint.getTextBounds(text, 0, text.length(), bounds);
             if (editText.getText().length()==0)
                 paint.setTextSize(editText.getTextSize());
+            else
+                paint.setTextSize(editText.getTextSize() > 14 ? yugi.convertDpToPixel(14,getContext()) : editText.getTextSize());
+            Float size = paint.getTextSize();
             int height = bounds.height();
             int x = getPaddingLeft()+editText.getLeft()+8;
             //int x = getPaddingLeft()+(imageView != null  ? imageView.getWidth() : 0)+8;
