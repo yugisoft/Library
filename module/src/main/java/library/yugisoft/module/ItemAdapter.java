@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Yusuf on 16.02.2018.
  */
 
-public class ItemAdapter<T> extends BaseAdapter
+public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapter
 {
 
     public int PageLevel = 1;
@@ -118,7 +118,12 @@ public class ItemAdapter<T> extends BaseAdapter
     }
 
 
-
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        if (onAdapterDataLoad!=null)
+            onAdapterDataLoad.onLoad(list);
+    }
 
     public void setItems(List<ViewItem> items) {
         Items = items;
@@ -132,6 +137,17 @@ public class ItemAdapter<T> extends BaseAdapter
         Items.add(item);
     }
 
+    private INTERFACES.OnAdapterDataLoad<T> onAdapterDataLoad;
+
+    @Override
+    public void setOnAdapterDataLoad(INTERFACES.OnAdapterDataLoad li) {
+        onAdapterDataLoad = li;
+    }
+
+    @Override
+    public INTERFACES.OnAdapterDataLoad<T> getOnAdapterDataLoad() {
+        return onAdapterDataLoad;
+    }
 
 
     public enum ItemType {

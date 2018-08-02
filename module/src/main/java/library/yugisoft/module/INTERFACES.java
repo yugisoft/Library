@@ -2,6 +2,8 @@ package library.yugisoft.module;
 
 import android.support.annotation.Nullable;
 
+import java.util.List;
+
 
 /**
  * Created by Yusuf on 26.10.2017.
@@ -50,8 +52,7 @@ public class INTERFACES
     }
 
     //endregion
-    public interface OnNumpadListener
-    {
+    public interface OnNumpadListener {
         void onResultOK(double Before, double After);
     }
     //region CLASSINTERFACE
@@ -59,5 +60,17 @@ public class INTERFACES
         void onLoad();
     }
     //endregion
+
+
+
+    public interface IitemAdapter<T>
+    {
+        void setOnAdapterDataLoad(OnAdapterDataLoad<T> li);
+        OnAdapterDataLoad<T> getOnAdapterDataLoad();
+    }
+    public interface OnAdapterDataLoad<T>
+    {
+        void onLoad(List<T> data);
+    }
 
 }
