@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -37,7 +37,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -101,6 +100,7 @@ public class yugi
         {
             yugi.closeKeyboard(this);
         }
+
         //region ActivityResult
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -123,6 +123,81 @@ public class yugi
             void onvActivityResult(int requestCode, int resultCode, Intent data);
         }
         //endregion
+
+        @Override
+        public void setContentView(int layoutResID) {
+            super.setContentView(layoutResID);
+            View v = findViewById(android.R.id.content);
+            v.setOnTouchListener(new View.OnTouchListener()
+            {
+                @Override
+                public boolean onTouch(View view, MotionEvent ev)
+                {
+                    hideKeyboard(view);
+                    return false;
+                }
+            });
+        }
+
+        public void hideKeyboard()
+        {
+            InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            in.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+        public void hideKeyboard(View view)
+        {
+            InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+
+        public Object get(String key) {
+            try
+            {
+                Bundle extras = getIntent().getExtras();
+                return  extras.getString(key);
+            } catch (Exception ex) {
+                this.finish();
+            }
+            return  "";
+        }
+        public int getInt(String key)
+        {
+            return  getInt(key,0);
+        }
+        public int getInt(String key,int def) {
+            try
+            {
+                return Integer.parseInt(getString(key).replace(".0",""));
+            }
+            catch (Exception ex)
+            {
+                return def;
+            }
+        }
+        public String getString(String key) {
+            try
+            {
+                return String.valueOf(get(key));
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+        public long getLong(String key)
+        {
+            return  getLong(key,0);
+        }
+        public long getLong(String key,long def) {
+            try
+            {
+                return Long.parseLong(getString(key).replace(".0",""));
+            }
+            catch (Exception ex)
+            {
+                return def;
+            }
+        }
     }
 
     //endregion
