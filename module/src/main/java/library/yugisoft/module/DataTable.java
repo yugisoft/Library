@@ -880,6 +880,13 @@ public class DataTable
                     }
                     field.set(object,list);
                     break;
+                case "datetime":
+                    boolean Iso8601 = value.toString().indexOf("T")>0;
+                    if (Iso8601)
+                        field.set(object, DateTime.fromISO8601UTC(value.toString()));
+                    else
+                        field.set(object, DateTime.fromDateTime(value.toString()));
+                    break;
                 default:
                     if(value.equals("null")) value="";
                     field.set(object, value);

@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Module</string>
     <string name="testText">TURKISH</string>
+    <string name="kaydet">Kaydet</string>
+    <string name="iptal">İptal</string>
 </resources>

@@ -6,15 +6,15 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-
+import library.yugisoft.module.popwindow.DatePickerPopWin;
 
 
 /**
  * Created by Yusuf on 26.10.2017.
  */
 
-public class DateTextView extends android.support.v7.widget.AppCompatTextView implements View.OnClickListener
-{
+public class DateTextView extends android.support.v7.widget.AppCompatTextView implements View.OnClickListener, DatePickerPopWin.OnDatePickedListener {
+    DateTime dateTime = null;
     INTERFACES.OnDateSelectedListener onDateSelectedListener;
     public void setOnDateSelectedListener(INTERFACES.OnDateSelectedListener onDateSelectedListener) {
         this.onDateSelectedListener = onDateSelectedListener;
@@ -35,10 +35,12 @@ public class DateTextView extends android.support.v7.widget.AppCompatTextView im
     void init()
     {
         this.setOnClickListener(this);
-        if(this.getText().length()==0)
+        if(this.getText().length()==0 || dateTime == null)
         {
-            this.setText(yugi.Tarih.getDate());
-            if(onDateSelectedListener!=null)onDateSelectedListener.onDataSelectedListener(yugi.Tarih.getDate());
+            dateTime = DateTime.Now();
+            dateTime.setOnDatePickedListener(this);
+            this.setText(dateTime.toString());
+            if(onDateSelectedListener!=null)onDateSelectedListener.onDataSelectedListener(dateTime.toString());
         }
     }
 
@@ -53,13 +55,12 @@ public class DateTextView extends android.support.v7.widget.AppCompatTextView im
         {
             a= yugi.activity;
         }
-        yugi.Tarih.Date(this.getText().toString(), new yugi.OnDateSelectedListener() {
-            @Override
-            public void onDataSelectedListener(String Date) {
-                DateTextView.this.setText(Date);
-                if(onDateSelectedListener!=null)onDateSelectedListener.onDataSelectedListener(Date);
-            }
-        });
+        dateTime.showDatePopup(a);
+    }
 
+    @Override
+    public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
+        this.setText(dateTime.toString());
+        if(onDateSelectedListener!=null)onDateSelectedListener.onDataSelectedListener(dateTime.toString());
     }
 }

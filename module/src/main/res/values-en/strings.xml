@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">Module</string>
     <string name="testText">ENGLISH</string>
+    <string name="kaydet">Confirm</string>
+    <string name="iptal">Cancel</string>
 </resources>

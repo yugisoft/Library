@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import library.yugisoft.module.DateTime;
 import library.yugisoft.module.LoopView;
 import library.yugisoft.module.R;
 
@@ -290,7 +291,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
         if (!TextUtils.isEmpty(dateStr)) {
 
             long milliseconds = getLongFromyyyyMMdd(dateStr);
-            Calendar calendar = Calendar.getInstance(Locale.CHINA);
+            Calendar calendar = Calendar.getInstance();
 
             if (milliseconds != -1) {
 
@@ -373,9 +374,9 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                 StringBuffer sb = new StringBuffer();
 
                 sb.append(String.valueOf(year));
-                sb.append("-");
+                sb.append(DateTime.getDateSeparator());
                 sb.append(format2LenStr(month));
-                sb.append("-");
+                sb.append(DateTime.getDateSeparator());
                 sb.append(format2LenStr(day));
                 mListener.onDatePickCompleted(year, month, day, sb.toString());
             }
@@ -391,7 +392,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
      * @return
      */
     public static long getLongFromyyyyMMdd(String date) {
-        SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat mFormat = new SimpleDateFormat("yyyy"+DateTime.getDateSeparator()+"MM"+DateTime.getDateSeparator()+"dd", Locale.getDefault());
         Date parse = null;
         try {
             parse = mFormat.parse(date);
@@ -406,7 +407,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
     }
 
     public static String getStrDate() {
-        SimpleDateFormat dd = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        SimpleDateFormat dd = new SimpleDateFormat("yyyy"+DateTime.getDateSeparator()+"MM"+DateTime.getDateSeparator()+"dd", Locale.CHINA);
         return dd.format(new Date());
     }
 

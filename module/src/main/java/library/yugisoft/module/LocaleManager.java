@@ -1,10 +1,8 @@
 package library.yugisoft.module;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
 import android.util.DisplayMetrics;
 
 import java.util.Locale;
@@ -28,6 +26,7 @@ public class LocaleManager {
       Configuration conf = res.getConfiguration();
       conf.locale = myLocale;
       res.updateConfiguration(conf, dm);
+      yugi.SetSetup(c,"Language",getLanguage(c));
     }
     public static String getLanguage(Context c) {
         return c.getResources().getConfiguration().locale.getLanguage();

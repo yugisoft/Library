@@ -69,6 +69,7 @@ public class yugi
     public static DisplayImageOptions options;
     public static boolean TestMode = true;
     public static String culture_Ondalik_ayrac=".";
+    public static FloatingNumPadView floatingNumPadView;
     //endregion
     //region APP
 

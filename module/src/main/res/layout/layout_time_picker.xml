@@ -67,14 +67,6 @@
                     app:textSize="25sp"
                     app:canLoop="false"/>
 
-                <library.yugisoft.module.LoopView
-                    android:id="@+id/picker_meridian"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1dp"
-                    android:layout_weight="1"
-                    app:textSize="25sp"
-                    app:canLoop="false"/>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

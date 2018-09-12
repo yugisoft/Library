@@ -29,13 +29,12 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
     private Button confirmBtn;
     private LoopView hourLoopView;
     private LoopView minuteLoopView;
-    private LoopView meridianLoopView;
     private View pickerContainerV;
     private View contentView;
 
-    private int hourPos = 0;
-    private int minutePos = 0;
-    private int meridianPos = 0;
+    private int hourPos = -1;
+    private int minutePos = -1;
+
 
     private Context mContext;
     private String textCancel;
@@ -47,7 +46,7 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
 
     List<String> hourList = new ArrayList();
     List<String> minList = new ArrayList();
-    List<String> meridianList = new ArrayList();
+
 
 
     public static class Builder {
@@ -67,6 +66,7 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
         private int colorConfirm = Color.parseColor("#303F9F");
         private int btnTextSize = 16;//text btnTextsize of cancel and confirm button
         private int viewTextSize = 25;
+        private int hour,minute;
 
         public Builder textCancel(String textCancel){
             this.textCancel = textCancel;
@@ -101,6 +101,24 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
         public TimePickerPopWin build(){
             return new TimePickerPopWin(this);
         }
+
+        public Builder setHour(int hour) {
+            this.hour = hour;
+            return  this;
+        }
+
+        public Builder setMinute(int minute) {
+            this.minute = minute;
+            return  this;
+        }
+
+        public int getHour() {
+            return hour;
+        }
+
+        public int getMinute() {
+            return minute;
+        }
     }
 
     public TimePickerPopWin(Builder builder){
@@ -112,6 +130,8 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
         this.colorConfirm = builder.colorConfirm;
         this.btnTextsize = builder.btnTextSize;
         this.viewTextSize = builder.viewTextSize;
+        this.hourPos = builder.getHour();
+        this.minutePos= builder.getMinute();
         initView();
     }
 
@@ -127,7 +147,7 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
         confirmBtn.setTextSize(btnTextsize);
         hourLoopView = (LoopView) contentView.findViewById(R.id.picker_hour);
         minuteLoopView = (LoopView) contentView.findViewById(R.id.picker_minute);
-        meridianLoopView = (LoopView) contentView.findViewById(R.id.picker_meridian);
+
         pickerContainerV = contentView.findViewById(R.id.container_picker);
 
 
@@ -145,12 +165,6 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
             }
         });
 
-        meridianLoopView.setLoopListener(new LoopView.LoopScrollListener() {
-            @Override
-            public void onItemSelect(int item) {
-                meridianPos=item;
-            }
-        });
 
         initPickerViews();  // init hour and minute loop view
 
@@ -177,13 +191,18 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
         setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
+
+
     private void initPickerViews(){
 
-        hourPos = Calendar.getInstance().get(Calendar.HOUR)-1;
-        minutePos= Calendar.getInstance().get(Calendar.MINUTE);
-        meridianPos=Calendar.getInstance().get(Calendar.AM_PM);
+        if (hourPos<0 || minutePos < 0)
+        {
+            hourPos = Calendar.getInstance().get(Calendar.HOUR);
+            minutePos= Calendar.getInstance().get(Calendar.MINUTE);
+        }
 
-        for (int i = 1; i <=12; i++) {
+
+        for (int i = 0; i <=23; i++) {
             hourList.add(format2LenStr(i));
         }
 
@@ -191,8 +210,7 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
             minList.add(format2LenStr(j));
         }
 
-        meridianList.add("AM");
-        meridianList.add("PM");
+
 
         hourLoopView.setDataList(hourList);
         hourLoopView.setInitPosition(hourPos);
@@ -200,8 +218,7 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
         minuteLoopView.setDataList( minList);
         minuteLoopView.setInitPosition(minutePos);
 
-        meridianLoopView.setDataList(meridianList);
-        meridianLoopView.setInitPosition(meridianPos);
+
     }
 
 
@@ -213,14 +230,13 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
         } else if (v == confirmBtn) {
 
             if (null != mListener) {
-                String amPm=meridianList.get(meridianPos);
+
 
                 StringBuffer sb = new StringBuffer();
                 sb.append(String.valueOf(hourList.get(hourPos)));
                 sb.append(":");
                 sb.append(String.valueOf(minList.get(minutePos)));
-                sb.append(amPm);
-                mListener.onTimePickCompleted(hourPos+1,minutePos,amPm,sb.toString());
+                mListener.onTimePickCompleted(hourPos,minutePos,sb.toString());
             }
             dismissPopWin();
         }
@@ -298,6 +314,6 @@ public class TimePickerPopWin extends PopupWindow implements View.OnClickListene
          *
          * @param time
          */
-         void onTimePickCompleted(int hour, int minute, String AM_PM, String time);
+         void onTimePickCompleted(int hour, int minute,  String time);
     }
 }
