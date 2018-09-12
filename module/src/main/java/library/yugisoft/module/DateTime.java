@@ -20,12 +20,17 @@ public class DateTime extends Date {
     private static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     private static String
+            _popupFormat="yyyy[]MM[]dd",
             _dateFormat="dd[]MM[]yyyy",
             _shortDateTimeFormat="dd[]MM[]yyyy HH:mm",
             _longDateTimeFormat="dd[]MM[]yyyy HH:mm:ss",
             _timeFormat ="HH:mm",
             _longTimeFormat ="HH:mm:ss";
 
+
+    public static String getPopupFormat() {
+        return _popupFormat.replace("[]",getDateSeparator());
+    }
 
     public static String getDateFormat() {
         return _dateFormat.replace("[]",getDateSeparator());
@@ -181,46 +186,41 @@ public class DateTime extends Date {
 
     public void showDatePopup(Activity context,boolean time)
     {
-        DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(context, new DatePickerPopWin.OnDatePickedListener() {
+        showDatePopup(context, this.getFormat(getPopupFormat()), new DatePickerPopWin.OnDatePickedListener() {
             @Override
             public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
+                new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
 
-                int h = DateTime.this.getHours();
-                int m = DateTime.this.getMinutes();
+                        int h = DateTime.this.getHours();
+                        int m = DateTime.this.getMinutes();
 
-                long milliseconds = DatePickerPopWin.getLongFromyyyyMMdd(year+DateTime.getDateSeparator()+month+DateTime.getDateSeparator()+day);
-                Calendar calendar = Calendar.getInstance();
-                if (milliseconds != -1) {
+                        long milliseconds = DatePickerPopWin.getLongFromyyyyMMdd(year+DateTime.getDateSeparator()+month+DateTime.getDateSeparator()+day);
+                        Calendar calendar = Calendar.getInstance();
+                        if (milliseconds != -1) {
 
-                    calendar.setTimeInMillis(milliseconds);
-                    DateTime.this.setDateTime(calendar.getTime());
-                    DateTime.this.setHours(h);
-                    DateTime.this.setMinutes(m);
-                }
-                if (!time) {
-                    if (onDatePickedListener != null)
-                        onDatePickedListener.onDatePickCompleted(year, month, day, DateTime.this.toShortDateString());
-                }
-                else
-                {
-                    showTimePopup(context);
-                }
+                            calendar.setTimeInMillis(milliseconds);
+                            DateTime.this.setDateTime(calendar.getTime());
+                            DateTime.this.setHours(h);
+                            DateTime.this.setMinutes(m);
+                        }
+                        if (!time) {
+                            if (onDatePickedListener != null)
+                                onDatePickedListener.onDatePickCompleted(year, month, day, DateTime.this.toShortDateString());
+                        }
+                        else
+                        {
+                            showTimePopup(context);
+                        }
+                    }
+                };
             }
-        }).textConfirm(context.getResources().getString(R.string.kaydet)) //text of confirm button
-                .textCancel(context.getResources().getString(R.string.iptal)) //text of cancel button
-                .btnTextSize(16) // button text size
-                .viewTextSize(25) // pick view text size
-                .colorCancel(Color.parseColor("#999999")) //color of cancel button
-                .colorConfirm(Color.parseColor("#009900"))//color of confirm button
-                .minYear(1990) //min year in loop
-                .maxYear(2550) // max year in loop
-                .dateChose(this.getFormat("yyyy"+DateTime.getDateSeparator()+"MM"+DateTime.getDateSeparator()+"dd"))//"2013-11-11") // date chose when init popwindow
-                .build();
-        pickerPopWin.showPopWin(context);
+        });
     }
     public void showTimePopup(Activity context)
     {
-        TimePickerPopWin timePickerPopWin=new TimePickerPopWin.Builder(context, new TimePickerPopWin.OnTimePickListener() {
+        showTimePopup(context, getTimes(), new TimePickerPopWin.OnTimePickListener() {
             @Override
             public void onTimePickCompleted(int hour, int minute, String time) {
                 DateTime.this.setHours(hour);
@@ -228,16 +228,7 @@ public class DateTime extends Date {
                 if (onDatePickedListener!=null)
                     onDatePickedListener.onDatePickCompleted(DateTime.this.getYear(),DateTime.this.getMonth(),DateTime.this.getDay(),DateTime.this.toShortDateTimeString());
             }
-        }).textConfirm(context.getResources().getString(R.string.kaydet)) //text of confirm button
-                .textCancel(context.getResources().getString(R.string.iptal)) //text of cancel button
-                .btnTextSize(16)
-                .viewTextSize(25)
-                .setMinute(this.getMinutes())
-                .setHour(this.getHours())
-                .colorCancel(Color.parseColor("#999999"))
-                .colorConfirm(Color.parseColor("#009900"))
-                .build();
-        timePickerPopWin.showPopWin(context);
+        });
     }
 
     public DatePickerPopWin.OnDatePickedListener getOnDatePickedListener() {
@@ -246,5 +237,48 @@ public class DateTime extends Date {
 
     public void setOnDatePickedListener(DatePickerPopWin.OnDatePickedListener onDatePickedListener) {
         this.onDatePickedListener = onDatePickedListener;
+    }
+
+    public int[] getTimes()
+    {
+        String[] sTime = this.toLongDateTimeString().split(":");
+        int[] time = { Integer.parseInt(sTime[0]),Integer.parseInt(sTime[1]),Integer.parseInt(sTime[2]) };
+        return  time;
+    }
+
+    public static void showDatePopup(Activity context, DatePickerPopWin.OnDatePickedListener listener)
+    {
+        showDatePopup(context,DateTime.Now().getFormat("yyyy"+DateTime.getDateSeparator()+"MM"+DateTime.getDateSeparator()+"dd"),listener);
+    }
+    public static void showDatePopup(Activity context,String date, DatePickerPopWin.OnDatePickedListener listener)
+    {
+        DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(context,listener).textConfirm(context.getResources().getString(R.string.kaydet)) //text of confirm button
+                .textCancel(context.getResources().getString(R.string.iptal)) //text of cancel button
+                .btnTextSize(16) // button text size
+                .viewTextSize(25) // pick view text size
+                .colorCancel(Color.parseColor("#999999")) //color of cancel button
+                .colorConfirm(Color.parseColor("#009900"))//color of confirm button
+                .minYear(1990) //min year in loop
+                .maxYear(2550) // max year in loop
+                .dateChose(date)//"2013-11-11") // date chose when init popwindow
+                .build();
+        pickerPopWin.showPopWin(context);
+    }
+    public static void showTimePopup(Activity context, TimePickerPopWin.OnTimePickListener listener)
+    {
+        showTimePopup(context,DateTime.Now().getTimes(),listener);
+    }
+    public static void showTimePopup(Activity context,int[] t, TimePickerPopWin.OnTimePickListener listener)
+    {
+        TimePickerPopWin timePickerPopWin=new TimePickerPopWin.Builder(context, listener).textConfirm(context.getResources().getString(R.string.kaydet)) //text of confirm button
+                .textCancel(context.getResources().getString(R.string.iptal)) //text of cancel button
+                .btnTextSize(16)
+                .viewTextSize(25)
+                .setMinute(t[1])
+                .setHour(t[0])
+                .colorCancel(Color.parseColor("#999999"))
+                .colorConfirm(Color.parseColor("#009900"))
+                .build();
+        timePickerPopWin.showPopWin(context);
     }
 }
