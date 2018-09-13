@@ -731,30 +731,7 @@ public class DataTable
     }
     public static DataTable ToTable(Object ob)
     {
-        DataTable dt = new DataTable();
-
-          Class c = ob.getClass();
-
-          String classname = c.getSimpleName().toLowerCase();
-          if (classname.equals("list")||classname.equals("smartlist") )
-          {
-              DataTable dt2 = new DataTable();
-              List list = (List)ob;
-              for (Object ol:list)
-              {
-                  dt.add(fieldTo(ol,dt2,ol.getClass()));
-              }
-
-          }
-          else
-          {
-              dt.add(fieldTo(ob,dt,c));
-        }
-
-
-
-
-        return  dt;
+        return  JSON.DataTable(ob);
     }
 
     public static String[] fieldTo(Object ob,DataTable dt,Class c)
