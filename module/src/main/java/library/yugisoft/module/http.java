@@ -26,6 +26,8 @@ import java.util.Iterator;
 
 public class http
 {
+
+
     public static class Response {
         public int HataKodu;
         public String HataAciklama, Data;
@@ -285,6 +287,8 @@ public class http
             StatusLine st = httpResponse.getStatusLine();
 
             response = isException(st.getStatusCode());
+            if (onAuthenticationFailed!=null && response.HataKodu == 401)
+                onAuthenticationFailed.onFailed(response,httpGet.getURI().toURL().toString());
             LOG+= "HttpURL : "+httpGet.getURI().toURL()+"\n";
             LOG+=log+"\n";
             LOG+= "HttpReponseStatusCode : "+st.getStatusCode()+"\n";
@@ -322,12 +326,26 @@ public class http
         yugi.Print("I", "httpExecute", response.Data);
         return  response;
     }
+
+
+    public interface OnAuthenticationFailed {
+        void onFailed(Response response,String url);
+    }
     public interface OnHttpResponse {
         void onResponse(Response response);
     }
     public interface OnHttpResponseTable {
         void onResponse(DataTable response);
     }
+
+    private static OnAuthenticationFailed onAuthenticationFailed;
+    public static OnAuthenticationFailed getOnAuthenticationFailed() {
+        return onAuthenticationFailed;
+    }
+    public static void setOnAuthenticationFailed(OnAuthenticationFailed AuthenticationFailed) {
+        onAuthenticationFailed = AuthenticationFailed;
+    }
+
     //region Private
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -342,46 +360,51 @@ public class http
     }
     private static Response isException(int statusCode) {
 
-        Response Hata = new Response();
-        Hata.HataKodu = statusCode;
-        switch (statusCode) {
-            case 400:
-                Hata.isException = true;
-                Hata.HataAciklama = "Sunucuya Yapılan İstek Hatalıdır";
-                break;
-            case 401:
-                Hata.isException = true;
-                Hata.HataAciklama = "Oturumunuzun Süresi Dolmuş! Lütfen Tekrar Giriş Yapınız.";
-                break;
-            case 404:
-                Hata.isException = true;
-                Hata.HataAciklama = "İstek Yapılan Kaynak Veya Sayfa Bulunamadı! Lütfen Server Adresini Doğru Girdiğinizden Emin Olun!";
-                break;
-            case 408:
-                Hata.isException = true;
-                Hata.HataAciklama = "İstek Zaman Aşımına Uğradı! Lütfen İnternet Bağlantınızı Kontrol Edin.";
-                break;
-            case 410:
-                Hata.isException = true;
-                Hata.HataAciklama = "Ulaşmaya Çalıştığınız Sayfa Veya Kaynak Artık Mevcut Değil!";
-                break;
-            case 413:
-                Hata.isException = true;
-                Hata.HataAciklama = "İsteğin boyutu çok büyük olduğu için işlenemedi!";
-                break;
-            case 414:
-                Hata.isException = true;
-                Hata.HataAciklama = "İstek Adresi Fazla Uzun!";
-                break;
-            default:
-                Hata.isException = false;
-                Hata.HataAciklama = "Success";
-                Hata.HataKodu = 0;
-                break;
-        }
-        return Hata;
+        Response response = new Response();
+        response.HataKodu = statusCode;
+        response.isException = statusCode >= 200 && statusCode < 300;
+
+
+       // switch (statusCode) {
+       //     case 400:
+       //         Hata.isException = true;
+       //         Hata.HataAciklama = "Sunucuya Yapılan İstek Hatalıdır";
+       //         break;
+       //     case 401:
+       //         Hata.isException = true;
+       //         Hata.HataAciklama = "Oturumunuzun Süresi Dolmuş! Lütfen Tekrar Giriş Yapınız.";
+       //         break;
+       //     case 404:
+       //         Hata.isException = true;
+       //         Hata.HataAciklama = "İstek Yapılan Kaynak Veya Sayfa Bulunamadı! Lütfen Server Adresini Doğru Girdiğinizden Emin Olun!";
+       //         break;
+       //     case 408:
+       //         Hata.isException = true;
+       //         Hata.HataAciklama = "İstek Zaman Aşımına Uğradı! Lütfen İnternet Bağlantınızı Kontrol Edin.";
+       //         break;
+       //     case 410:
+       //         Hata.isException = true;
+       //         Hata.HataAciklama = "Ulaşmaya Çalıştığınız Sayfa Veya Kaynak Artık Mevcut Değil!";
+       //         break;
+       //     case 413:
+       //         Hata.isException = true;
+       //         Hata.HataAciklama = "İsteğin boyutu çok büyük olduğu için işlenemedi!";
+       //         break;
+       //     case 414:
+       //         Hata.isException = true;
+       //         Hata.HataAciklama = "İstek Adresi Fazla Uzun!";
+       //         break;
+       //     default:
+       //         Hata.isException = false;
+       //         Hata.HataAciklama = "Success";
+       //         Hata.HataKodu = 0;
+       //         break;
+       // }
+        return response;
     }
     //endregion
+
+
     public static class httpGET extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
