@@ -377,7 +377,7 @@ public class http
 
         Response response = new Response();
         response.HataKodu = statusCode;
-        response.isException = statusCode >= 200 && statusCode < 300;
+        response.isException = !(statusCode >= 200 && statusCode < 300);
 
 
        // switch (statusCode) {
