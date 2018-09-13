@@ -316,6 +316,8 @@ public class http
                         {
                             DataTable dt = new DataTable(response.Data);
                             response.HataAciklama = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
+                            if (response.HataAciklama.length()==0)
+                                response.HataAciklama = dt.get(0, "error");
                         }
                     } else
                         response.Data = "Beklenmeyen Bir Hata Oluştu!";
