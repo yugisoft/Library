@@ -28,10 +28,22 @@ public class http
 {
 
 
-    public static class Response {
+    public static class Response
+    {
         public int HataKodu;
         public String HataAciklama, Data;
         public boolean isException;
+
+        @Override
+        public String toString() {
+            return Data;
+        }
+
+        public String getMessage()
+        {
+            return HataKodu < 0 ? "Server Bağlantısı Kurulumadı." : HataAciklama;
+        }
+
     }
     public static class Headers {
         public static String DeviceInfoKey = "ziraDeviceInfo",ConstInfoKey="Config";
@@ -320,6 +332,7 @@ public class http
         catch (Exception ex)
         {
             response = new Response();
+            response.HataKodu = -999;
             response.isException = true;
             response.HataAciklama=ex.getMessage();
         }
