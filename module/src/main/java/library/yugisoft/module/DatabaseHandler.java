@@ -196,6 +196,7 @@ public class DatabaseHandler
                 {
                     fi.setAccessible(true);
                     String simlename = fi.getType().getSimpleName().toLowerCase();
+
                     name = fi.getName();
                     if(name.equals("$change") || name.equals("serialVersionUID"))
                     {
@@ -215,8 +216,12 @@ public class DatabaseHandler
                             SQL=SQL.replace("{"+name+"}",fi.getBoolean(o)?"1":"0");
                             break;
                         case "string":
-                            SQL=      SQL.replace("{"+name+"}","'"+fi.get(o).toString()+"'");
+                            SQL=SQL.replace("{"+name+"}","'"+fi.get(o).toString()+"'");
                             break;
+                            default:
+                                SQL=SQL.replace("{"+name+"}","'"+JSON.DataTable(fi.get(o)).getJsonData()+"'");
+                                break;
+
                     }
                 } catch (Exception e)
                 {

@@ -729,9 +729,36 @@ public class DataTable
         else
             return setValue(RowIndex,ColumnName,Value);
     }
-    public static DataTable ToTable(Object ob) {
+    public static DataTable ToTable(Object ob)
+    {
         DataTable dt = new DataTable();
-        Class c = ob.getClass();
+
+          Class c = ob.getClass();
+
+          String classname = c.getSimpleName().toLowerCase();
+          if (classname.equals("list")||classname.equals("smartlist") )
+          {
+              DataTable dt2 = new DataTable();
+              List list = (List)ob;
+              for (Object ol:list)
+              {
+                  dt.add(fieldTo(ol,dt2,ol.getClass()));
+              }
+
+          }
+          else
+          {
+              dt.add(fieldTo(ob,dt,c));
+        }
+
+
+
+
+        return  dt;
+    }
+
+    public static String[] fieldTo(Object ob,DataTable dt,Class c)
+    {
         Field[] fields = c.getFields();
         String[] s = new String[fields.length];
         int i =0;
@@ -783,10 +810,7 @@ public class DataTable
                 i++;
             }
         }
-        dt.add(s);
-
-
-        return  dt;
+        return  s;
     }
 
     private int getColumnIndex(String name) {
@@ -815,7 +839,8 @@ public class DataTable
     {
         Class obClass = ob.getClass();
         String obClassname = obClass.getSimpleName().toLowerCase();
-        if (obClassname.contains("SmartList"))
+
+        if (obClassname.equals("list")||obClassname.equals("smartlist") )
         {
             SmartList list = (SmartList)ob;
             for (int ds =0 ;ds<this.Rows.size();ds++)
