@@ -1,12 +1,10 @@
 package library.yugisoft.library;
 
 import android.os.Bundle;
-import android.view.View;
 
 import library.yugisoft.module.yugi;
 
-public class yugiTest extends yugi.vActivity implements View.OnClickListener {
-
+public class yugiTest extends yugi.vActivity {
 
 
 
@@ -16,16 +14,6 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
     }
-
-    @Override
-    public void onClick(View view) {
-
-       // dateTime.showDateTimePoup(this);
-
-
-    }
-
-
 
 
 

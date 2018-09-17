@@ -446,8 +446,6 @@ public class DataTable
 
     //endregion
     //endregion
-
-
     //region Alt Class
     public class DataRow {
 
@@ -689,7 +687,6 @@ public class DataTable
     }
 
     //endregion
-
     private boolean Filterlike =true;
     public boolean isFilterlike() {
         return Filterlike;
@@ -733,7 +730,6 @@ public class DataTable
     {
         return  JSON.DataTable(ob);
     }
-
     public static String[] fieldTo(Object ob,DataTable dt,Class c)
     {
         Field[] fields = c.getFields();
@@ -789,7 +785,6 @@ public class DataTable
         }
         return  s;
     }
-
     private int getColumnIndex(String name) {
         for (int i =0 ;i<this.Columns.size();i++)
             if(this.Columns.get(i).equals(name))
@@ -811,7 +806,6 @@ public class DataTable
         this.ToClass(o,position);
         return  o;
     }
-
     public void ToClass(Object ob, int index)
     {
         Class obClass = ob.getClass();
@@ -844,7 +838,6 @@ public class DataTable
             }
         }
     }
-
     public void vSetFiled(Object object,Field field,Object value)
     {
         field.setAccessible(true);
@@ -872,15 +865,15 @@ public class DataTable
                     field.set(object, new DataTable(value.toString()));
                     break;
                 case "list":
-                    SmartList list = (SmartList)field.get(object);
-                    DataTable dtlist =new DataTable(value.toString());
+                    List l = new ArrayList();
+                   DataTable dtlist =new DataTable(value.toString());
                     for (int ds =0 ;ds<dtlist.Rows.size();ds++)
                     {
-                        Object o = Class.forName(list.ParentClas.getName()).newInstance();
+                        Object o = Generic.getGenericInstance(field);
                         dtlist.ToClass(o,ds);
-                        list.add(o);
+                        l.add(o);
                     }
-                    field.set(object,list);
+                    field.set(object,l);
                     break;
                 case "datetime":
                     boolean Iso8601 = value.toString().indexOf("T")>0;
@@ -912,8 +905,6 @@ public class DataTable
 
 
     }
-
-
     public void ToClass(Object ob) {
         Class c = ob.getClass();
         String classname = c.getSimpleName().toLowerCase();
@@ -939,14 +930,9 @@ public class DataTable
             this.ToClass(ob,0);
         }
     }
-
-
-
     interface Filter<T,E> {
         public boolean isMatched(T object, E text);
     }
-
-
     public static class FilterList<E> {
         public  <T> List filterList(List<T> originalList, Filter filter, E text)
         {
@@ -961,12 +947,8 @@ public class DataTable
             return filterList;
         }
     }
-
-
-
     String col="",value = "";
-    public List<DataRow> Where(String pWhere)
-    {
+    public List<DataRow> Where(String pWhere) {
         List<List<DataRow>> results = new SmartList<>();
         for (String veya :pWhere.split("\\|"))
         {
@@ -1009,7 +991,5 @@ public class DataTable
         }
         return  tList;
     }
-
-
 
 }

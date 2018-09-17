@@ -8,27 +8,20 @@ import android.view.View;
 
 public class Permissions
 {
-    public static void RequestPermissions(View view, final String permission, final int requestID) {
-        RequestPermissions(view,permission,requestID);
+    public static boolean RequestPermissions(View view, final String permission, final int requestID) {
+      return   RequestPermissions(view,permission,requestID);
     }
     public static void RequestPermissions(View view, final String[] permission, final int requestID) {
         RequestPermissions(view,permission,requestID);
         }
-    public static void RequestPermissions(final Activity activity, View view, final String permission, final int requestID) {
+    public static boolean RequestPermissions(final Activity activity, View view, final String permission, final int requestID) {
 
         if ((ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED)) {
-
-            if ((ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)))
-            {
-
-
-            }
-            else
-            {
-                ActivityCompat.requestPermissions(activity, new String[]{permission},requestID);
-            }
-
+            ActivityCompat.requestPermissions(activity, new String[]{permission},requestID);
+            return false;
         }
+            return true;
+
 
 
 
@@ -50,6 +43,8 @@ public class Permissions
                 }
 
             }
+
+
         }
 
 

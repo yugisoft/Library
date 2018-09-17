@@ -9,16 +9,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Yusuf on 28.02.2018.
- */
-
-public class DatabaseHandler
+public class YgSql
 {
-
     public static String DATABASE_NAME = "GPOS";
     private static final int DATABASE_VERSION = 1;
     public static class DBColumn {
+
         private String ColumnName="",DataType="",Lenght="",DefaultValue="";
 
         public DBColumn(){}
@@ -81,23 +77,17 @@ public class DatabaseHandler
             DefaultValue = defaultValue;
         }
     }
-    public static class DBTABLE extends SQLiteOpenHelper {
+    private static class DBTABLE<T> extends SQLiteOpenHelper implements IGeneric {
+
         DataTable dt = new DataTable();
         public String TABLENAME;
-            public List<DBColumn> Columns = new ArrayList<>();
+        public List<DBColumn> Columns = new ArrayList<>();
 
-        public DBTABLE(Context context, String tablename) {
+        public DBTABLE(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
-            TABLENAME = tablename;
+            TABLENAME = getGenericClass().getName();
         }
 
-        public DBTABLE(Context context, String tablename, String... columns) {
-            this(context, tablename);
-            for (String s : columns) {
-                Columns.add(new DBColumn(s));
-            }
-            CREATE();
-        }
 
         public void CREATE() {
             try {
@@ -106,7 +96,7 @@ public class DatabaseHandler
                 db.execSQL(SQL);
                 db.close();
             } catch (Exception ex) {
-                yugi.Print("e", "DatabaseHandler | DBTABLE | CREATE | " + TABLENAME, ex.getMessage());
+                yugi.Print("e", " | DBTABLE | CREATE | " + TABLENAME, ex.getMessage());
             }
             try {
                 dt = new DataTable();
@@ -168,7 +158,7 @@ public class DatabaseHandler
                     }
                     if (rowindex == 0)
                     {
-                            dataTable = new DataTable(true,col);
+                        dataTable = new DataTable(true,col);
                         rowindex++;
                     }
                     dt.add(row);
@@ -217,9 +207,9 @@ public class DatabaseHandler
                         case "string":
                             SQL=SQL.replace("{"+name+"}","'"+fi.get(o).toString()+"'");
                             break;
-                            default:
-                                SQL=SQL.replace("{"+name+"}","'"+JSON.DataTable(fi.get(o)).getJsonData()+"'");
-                                break;
+                        default:
+                            SQL=SQL.replace("{"+name+"}","'"+JSON.DataTable(fi.get(o)).getJsonData()+"'");
+                            break;
 
                     }
                 } catch (Exception e)
@@ -228,7 +218,7 @@ public class DatabaseHandler
                 }
 
             }
-            yugi.Print("i","DatabaseHandler | DBTABLE | Insert | insertSQL ",SQL);
+            yugi.Print("i"," | DBTABLE | Insert | insertSQL ",SQL);
 
             SQLiteDatabase db = this.getWritableDatabase();
             db.execSQL(SQL);
@@ -279,32 +269,16 @@ public class DatabaseHandler
         }
     }
     public static class TABLE<T> extends DBTABLE {
-        Class<?> mClass=null;
-        public TABLE(Context context,Class<?> mclassl, String tablename) {
-            super(context, tablename);
-            mClass = mclassl;
+
+
+        public TABLE(Context context,Class<?> mclassl) {
+            super(context);
             CreateForClass();
         }
-        public TABLE(Context context,Class<?> mclassl, String tablename, String... columns) {
-            super(context,tablename,columns);
-            mClass = mclassl;
-        }
-        public List<T> getList() {
-            DataTable dt = super.Select();
-            List<T> list = new SmartList(mClass);
-            dt.ToClass(list);
-            return  list;
-        }
-        public List<T> getList(String WHERE) {
-            DataTable dt = super.Select(WHERE);
-            List<T> list = new SmartList(mClass);
-            dt.ToClass(list);
-            return  list;
-        }
-        public void CreateForClass() {
+        private void CreateForClass() {
             try
             {
-                Object o = Class.forName(mClass.getName()).newInstance();
+                Object o = getGenecericInstance();
                 //region Fields
 
                 Field[] f = o.getClass().getFields();
@@ -325,25 +299,25 @@ public class DatabaseHandler
                             continue;
                         }
                         col.ColumnName=name;
-                            switch (simlename) {
-                                case "int":
-                                    col.DataType = "INT";
-                                    break;
-                                case "long":
-                                    col.DataType = "BIGINT";
-                                    break;
-                                case "double":
-                                    col.DataType = "FLOAT";
-                                    break;
-                                case "boolean":
-                                    col.DataType = "BIT";
-                                    break;
-                                case "string":
-                                    col.DataType = "TEXT";
+                        switch (simlename) {
+                            case "int":
+                                col.DataType = "INT";
+                                break;
+                            case "long":
+                                col.DataType = "BIGINT";
+                                break;
+                            case "double":
+                                col.DataType = "FLOAT";
+                                break;
+                            case "boolean":
+                                col.DataType = "BIT";
+                                break;
+                            case "string":
+                                col.DataType = "TEXT";
 
-                                    break;
-                            }
-                            this.Columns.add(col);
+                                break;
+                        }
+                        this.Columns.add(col);
 
                     } catch (Exception e)
                     {
@@ -355,8 +329,24 @@ public class DatabaseHandler
             }
             catch (Exception e)
             {
-                    yugi.Print("e","DatabaseHandler | TABLE | CreateForClass : Error",e.getMessage());
+                yugi.Print("e"," | TABLE | CreateForClass : Error",e.getMessage());
             }
         }
+
+        public List<T> getList()
+        {
+            DataTable dt = super.Select();
+            List<T> list = new ArrayList();
+            dt.ToClass(list);
+            return  list;
+        }
+        public List<T> getList(String WHERE) {
+            DataTable dt = super.Select(WHERE);
+            List<T> list = new ArrayList();
+            dt.ToClass(list);
+            return  list;
+        }
+
+        
     }
 }
