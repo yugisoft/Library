@@ -9,10 +9,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class YgSql
+public abstract class YgSql
 {
+    public abstract Context context();
+
     public static String DATABASE_NAME = "GPOS";
-    private static final int DATABASE_VERSION = 1;
+    private  static final int DATABASE_VERSION = 1;
     public static class DBColumn {
 
         private String ColumnName="",DataType="",Lenght="",DefaultValue="";
@@ -271,8 +273,12 @@ public class YgSql
     public static class TABLE<T> extends DBTABLE {
 
 
-        public TABLE(Context context,Class<?> mclassl) {
+        public TABLE(Context context) {
             super(context);
+            CreateForClass();
+        }
+        public TABLE(YgSql context) {
+            super(context.context());
             CreateForClass();
         }
         private void CreateForClass() {
