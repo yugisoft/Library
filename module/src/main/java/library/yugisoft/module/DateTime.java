@@ -3,7 +3,7 @@ package library.yugisoft.module;
 import android.app.Activity;
 import android.graphics.Color;
 
-import com.google.gson.internal.bind.util.ISO8601Utils;
+//import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -71,13 +71,7 @@ public class DateTime extends Date {
             dateTime.setDateTime(df.parse(dateStr));
         }
         catch (Exception e) {
-            try
-            {
-                dateTime.setDateTime(ISO8601Utils.parse(dateStr,position));
-            }
-            catch (Exception x) {
 
-            }
         }
 
         return dateTime;
