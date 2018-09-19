@@ -850,7 +850,7 @@ public class DataTable
         {
             switch (TypeName) {
                 case "int":
-                    field.setInt(object, Integer.parseInt(value.toString()));
+                    field.setInt(object, Integer.parseInt(value.toString().replace(".0","").replace(",0","")));
                     break;
                 case "long":
                     field.setLong(object, Long.parseLong(value.toString()));
