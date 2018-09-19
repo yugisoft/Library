@@ -1,7 +1,5 @@
 package library.yugisoft.module;
 
-import com.google.gson.Gson;
-
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -11,16 +9,19 @@ public class JSON<T> {
     }
 
     public static String ToString(Object object) {
-        Gson gson = new Gson();
-        return gson.toJson(object);
+
+        return ToString(object,0);
+    }
+
+    private static String ToString(Object object, int i) {
+        return DataTable.ToTable(object).getJsonData(i);
     }
 
     public <E> T JsonToClass(Class<E> t, String Json) {
 
         try {
-            Object o = null;
-            Gson gson = new Gson();
-            o = gson.fromJson(Json, t);
+            Object o = t.newInstance();
+            new DataTable(Json).ToClass(o);
             return (T) o;
         } catch (Exception ex) {
             return null;

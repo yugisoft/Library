@@ -176,6 +176,26 @@ public class DatabaseHandler
             }
             return dt;
         }
+
+        public void TRUNCATE()
+        {
+            mSelect("TRUNCATE TABLE "+TABLENAME);
+        }
+
+        public void DROP()
+        {
+            mSelect("DROP TABLE "+TABLENAME);
+        }
+
+        public void DELETE()
+        {
+            mSelect("DELETE FROM "+TABLENAME);
+        }
+        public void DELETE(String Kosul)
+        {
+            mSelect("DELETE FROM "+TABLENAME+" WHERE "+Kosul);
+        }
+
         public int SelectCount() {
             return pSelect("SELECT Count(*) FROM " + TABLENAME).getInt(0,0);
         }

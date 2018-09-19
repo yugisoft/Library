@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,10 @@ public abstract class YgSql
             DefaultValue = defaultValue;
         }
     }
-    private static class DBTABLE<T> extends SQLiteOpenHelper implements IGeneric {
+
+
+
+    public static class DBTABLE<T> extends SQLiteOpenHelper implements IGeneric<T> {
 
         DataTable dt = new DataTable();
         public String TABLENAME;
@@ -269,8 +273,18 @@ public abstract class YgSql
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         }
+
+        @Override
+        public Class<T> getGenericClass() {
+            return new Generic<T>().getGenericClass();
+        }
+
+        @Override
+        public T getGenecericInstance() {
+            return new Generic<T>().getGenecericInstance();
+        }
     }
-    public static class TABLE<T> extends DBTABLE {
+    public static class TABLE<T> extends DBTABLE<T> {
 
 
         public TABLE(Context context) {
@@ -353,6 +367,35 @@ public abstract class YgSql
             return  list;
         }
 
+
+        @Override
+        public Class<T> getGenericClass() {
+
+            Class<T> genericClass = null;
+            try
+            {
+                genericClass = (Class<T>)((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
+            }
+            catch (Exception ex)
+            {
+                yugi.Print("e","genericClass Can Not be Created! : in Constructer");
+            }
+            return genericClass;
+        }
+
+        @Override
+        public T getGenecericInstance() {
+            try
+            {
+                return  getGenericClass().newInstance();
+            }
+            catch (Exception ex)
+            {
+                yugi.Print("e","genericClass Can Not be Created! : "+ex.getMessage());
+                return  null;
+            }
+        }
         
     }
 }

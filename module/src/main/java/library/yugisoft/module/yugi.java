@@ -1153,11 +1153,11 @@ public class yugi
         activity = a;
         if (imageLoader == null || options == null) {
             imageLoader = ImageLoader.getInstance();
-            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(activity));
+            ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(activity).defaultDisplayImageOptions(options).imageDownloader(new AuthDownloader(activity)).build());
             options = new DisplayImageOptions.Builder()
                     .showImageOnLoading(R.drawable.loading)
-                    .showImageForEmptyUri(R.drawable.loading)
-                    .showImageOnFail(R.drawable.loading)
+                    .showImageForEmptyUri(null)
+                    .showImageOnFail(null)
                     .cacheInMemory(true)
                     .cacheOnDisk(true)
                     .build();
