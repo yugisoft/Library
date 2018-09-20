@@ -3,17 +3,18 @@ package library.yugisoft.module;
 import android.app.Activity;
 import android.graphics.Color;
 
-//import com.google.gson.internal.bind.util.ISO8601Utils;
-
 import java.text.DateFormat;
-import java.text.ParsePosition;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import library.yugisoft.module.popwindow.DatePickerPopWin;
 import library.yugisoft.module.popwindow.TimePickerPopWin;
+
+//import com.google.gson.internal.bind.util.ISO8601Utils;
 
 public class DateTime extends Date {
 
@@ -59,28 +60,18 @@ public class DateTime extends Date {
     }
 
     public static DateTime fromISO8601UTC(String dateStr) {
-        DateTime dateTime = new DateTime();
-        ParsePosition position = new ParsePosition(0);
-
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat(ISO8601);
-        df.setTimeZone(tz);
-
-        try
-        {
-            dateTime.setDateTime(df.parse(dateStr));
-        }
-        catch (Exception e) {
-
-        }
-
-        return dateTime;
+        return fromDateTime(dateStr,ISO8601,"yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     }
+
+
     public static DateTime fromDateTime(String dateStr) {
+        return fromDateTime(dateStr,getShortDateTimeFormat());
+    }
+    public static DateTime fromDateTime(String dateStr,String Format) {
         DateTime dateTime = new DateTime();
 
         TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat(getShortDateTimeFormat());
+        DateFormat df = new SimpleDateFormat(Format);
         df.setTimeZone(tz);
         try
         {
@@ -88,6 +79,25 @@ public class DateTime extends Date {
         }
         catch (Exception e) {
             e.printStackTrace();
+        }
+        return dateTime;
+    }
+    public static DateTime fromDateTime(String dateStr,String Format,String Format2) {
+        DateTime dateTime = new DateTime();
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat(Format);
+        df.setTimeZone(tz);
+        try
+        {
+            dateTime.setDateTime(df.parse(dateStr));
+        }
+        catch (Exception e) {
+            try {
+                df = new SimpleDateFormat(Format2);
+                dateTime.setDateTime(df.parse(dateStr));
+            } catch (ParseException e1) {
+
+            }
         }
         return dateTime;
     }
@@ -140,7 +150,8 @@ public class DateTime extends Date {
     }
 
     public String getFormat(String Format) {
-        DateFormat dateFormat = new SimpleDateFormat(Format);
+        tz = TimeZone.getTimeZone("UTC");
+        DateFormat dateFormat = new SimpleDateFormat(Format, Locale.getDefault());
         dateFormat.setTimeZone(tz);
         String nowAsISO = dateFormat.format(this);
         return nowAsISO;
