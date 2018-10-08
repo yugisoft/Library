@@ -3,4 +3,7 @@
     <string name="testText">TURKISH</string>
     <string name="kaydet">Kaydet</string>
     <string name="iptal">İptal</string>
+    <string name="yil">YIL</string>
+    <string name="ay">AY</string>
+    <string name="gun">GÜN</string>
 </resources>

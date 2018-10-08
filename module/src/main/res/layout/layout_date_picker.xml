@@ -49,31 +49,72 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <library.yugisoft.module.LoopView
-                    android:id="@+id/picker_year"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    app:textSize="25sp"
-                    app:canLoop="false"/>
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                <library.yugisoft.module.LoopView
-                    android:id="@+id/picker_month"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1dp"
-                    android:layout_weight="1"
-                    app:textSize="25sp"
-                    app:canLoop="false"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/yil" />
 
-                <library.yugisoft.module.LoopView
-                    android:id="@+id/picker_day"
+                    <library.yugisoft.module.LoopView
+                        android:id="@+id/picker_year"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:canLoop="false"
+                        app:textSize="25sp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    app:textSize="25sp"
-                    app:canLoop="false"/>
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ay" />
+
+                    <library.yugisoft.module.LoopView
+                        android:id="@+id/picker_month"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="1dp"
+                        android:layout_weight="1"
+                        app:canLoop="false"
+                        app:textSize="25sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gun" />
+
+                    <library.yugisoft.module.LoopView
+                        android:id="@+id/picker_day"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="1dp"
+                        android:layout_weight="1"
+                        app:canLoop="false"
+                        app:textSize="25sp" />
+                </LinearLayout>
+
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

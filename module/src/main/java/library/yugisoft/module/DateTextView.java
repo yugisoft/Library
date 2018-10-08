@@ -40,7 +40,7 @@ public class DateTextView extends android.support.v7.widget.AppCompatTextView im
             dateTime = DateTime.Now();
             dateTime.setOnDatePickedListener(this);
             this.setText(dateTime.toString());
-            if(onDateSelectedListener!=null)onDateSelectedListener.onDataSelectedListener(dateTime.toString());
+            if(onDateSelectedListener!=null)onDateSelectedListener.onDataSelectedListener(dateTime.toShortDateString());
         }
     }
 
@@ -61,6 +61,6 @@ public class DateTextView extends android.support.v7.widget.AppCompatTextView im
     @Override
     public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
         this.setText(dateTime.toString());
-        if(onDateSelectedListener!=null)onDateSelectedListener.onDataSelectedListener(dateTime.toString());
+        if(onDateSelectedListener!=null)onDateSelectedListener.onDataSelectedListener(dateTime.toShortDateString());
     }
 }

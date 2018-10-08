@@ -103,7 +103,7 @@ public class DataTable
                             it = ob.keys();
                             while (it.hasNext()) {
                                 String s = it.next().toString();
-                                    Columns.add(s.replace(" ",""));
+                                Columns.add(s.replace(" ",""));
                             }
                         }
 
@@ -866,7 +866,7 @@ public class DataTable
                     break;
                 case "list":
                     List l = new ArrayList();
-                   DataTable dtlist =new DataTable(value.toString());
+                    DataTable dtlist =new DataTable(value.toString());
                     for (int ds =0 ;ds<dtlist.Rows.size();ds++)
                     {
                         Object o = Generic.getGenericInstance(field);
@@ -948,6 +948,7 @@ public class DataTable
         }
     }
     String col="",value = "";
+
     public List<DataRow> Where(String pWhere) {
         List<List<DataRow>> results = new SmartList<>();
         for (String veya :pWhere.split("\\|"))
@@ -991,5 +992,17 @@ public class DataTable
         }
         return  tList;
     }
+
+    public DataRow WhereFirst(String pWhere) {
+        List<DataRow> rows = Where(pWhere);
+
+        if (rows.size() > 0)
+            return rows.get(0);
+
+        return null;
+    }
+
+
+
 
 }
