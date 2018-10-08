@@ -194,32 +194,26 @@ public class DateTime extends Date {
         showDatePopup(context, this.getFormat(getPopupFormat()), new DatePickerPopWin.OnDatePickedListener() {
             @Override
             public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
-                new DatePickerPopWin.OnDatePickedListener() {
-                    @Override
-                    public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
+                int h = DateTime.this.getHours();
+                int m = DateTime.this.getMinutes();
 
-                        int h = DateTime.this.getHours();
-                        int m = DateTime.this.getMinutes();
+                long milliseconds = DatePickerPopWin.getLongFromyyyyMMdd(year+DateTime.getDateSeparator()+month+DateTime.getDateSeparator()+day);
+                Calendar calendar = Calendar.getInstance();
+                if (milliseconds != -1) {
 
-                        long milliseconds = DatePickerPopWin.getLongFromyyyyMMdd(year+DateTime.getDateSeparator()+month+DateTime.getDateSeparator()+day);
-                        Calendar calendar = Calendar.getInstance();
-                        if (milliseconds != -1) {
-
-                            calendar.setTimeInMillis(milliseconds);
-                            DateTime.this.setDateTime(calendar.getTime());
-                            DateTime.this.setHours(h);
-                            DateTime.this.setMinutes(m);
-                        }
-                        if (!time) {
-                            if (onDatePickedListener != null)
-                                onDatePickedListener.onDatePickCompleted(year, month, day, DateTime.this.toShortDateString());
-                        }
-                        else
-                        {
-                            showTimePopup(context);
-                        }
-                    }
-                };
+                    calendar.setTimeInMillis(milliseconds);
+                    DateTime.this.setDateTime(calendar.getTime());
+                    DateTime.this.setHours(h);
+                    DateTime.this.setMinutes(m);
+                }
+                if (!time) {
+                    if (onDatePickedListener != null)
+                        onDatePickedListener.onDatePickCompleted(year, month, day, DateTime.this.toShortDateString());
+                }
+                else
+                {
+                    showTimePopup(context);
+                }
             }
         });
     }
@@ -257,7 +251,7 @@ public class DateTime extends Date {
     }
     public static void showDatePopup(Activity context,String date, DatePickerPopWin.OnDatePickedListener listener)
     {
-        DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(context,listener).textConfirm(context.getResources().getString(R.string.kaydet)) //text of confirm button
+        DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(context, listener).textConfirm(context.getResources().getString(R.string.kaydet)) //text of confirm button
                 .textCancel(context.getResources().getString(R.string.iptal)) //text of cancel button
                 .btnTextSize(16) // button text size
                 .viewTextSize(25) // pick view text size

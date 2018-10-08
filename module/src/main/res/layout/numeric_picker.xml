@@ -30,4 +30,6 @@
         android:layout_height="match_parent"
         android:background="@drawable/ripple1"
         android:src="@drawable/ic_right" />
+
+
 </LinearLayout>
