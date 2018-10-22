@@ -1203,6 +1203,18 @@ public class yugi
     }
     //endregion
 
+    public static String Join(String string , Object... params) {
+        try
+        {
+            for (int i = 0 ; i< params.length;i++)
+            {
+                string = string.replace("{"+i+"}",String.valueOf(params[i]));
+            }
+        }
+        catch (Exception ex){}
+        return string;
+    }
+
     public static boolean addHttpHedaerDeviceInfo=true;
 
     public static String DeviceID(Context context) {

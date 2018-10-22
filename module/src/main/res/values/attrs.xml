@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <attr name="contentView" format="reference|integer" />
+
+
     <declare-styleable name="MaskedEditText"><attr format="string" name="mask"/><attr format="string" name="allowed_chars"/><attr format="string" name="denied_chars"/><attr format="string" name="char_representation"/><attr format="boolean" name="keep_hint"/></declare-styleable>
     <declare-styleable name="myViews">
+
+
         <attr name="baslik" format="string" />
         <attr name="fontsize" format="dimension" />
-        <attr name="image_w" format="dimension" />
-        <attr name="image_h" format="dimension" />
+        <attr name="image_w" format="integer" />
+        <attr name="image_h" format="integer" />
         <attr name="forecolor" format="color" />
         <attr name="image" format="color|reference" />
         <attr name="backgroundimage" format="color|reference" />
         <attr name="TintColor" format="color|reference" />
         <attr name="padding_r" format="integer"/>
         <attr name="yon" format="integer"/>
+        <attr name="contentView"/>
     </declare-styleable>
     <declare-styleable name="LoopView">
         <attr name="lineColor" format="color"/>
@@ -25,4 +32,6 @@
     <declare-styleable name="CirclePageIndicator">
         <attr name="indicator_spacing" format="dimension" />
     </declare-styleable>
+
+
 </resources>
