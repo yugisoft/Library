@@ -110,14 +110,9 @@ public class CustomImageButton extends myViews {
             setFontSize(yugi.convertPixelToDp(typedArray.getDimension(R.styleable.myViews_fontsize,(int)yugi.convertDpToPixel(12,context)),getContext()));
             setTextColor(typedArray.getColor(R.styleable.myViews_forecolor,Color.BLACK));
             cib_baslik.setPadding(5,0,0,0);
-
-
             setImage_w(typedArray.getInteger(R.styleable.myViews_image_w,50));
             setImage_h(typedArray.getInteger(R.styleable.myViews_image_h,50));
             setImage(typedArray.getDrawable(R.styleable.myViews_image));
-
-            this.setBackground(typedArray.getDrawable(R.styleable.myViews_backgroundimage));
-
             setTintColor(typedArray.getColor(R.styleable.myViews_TintColor,-1));
 
         }
