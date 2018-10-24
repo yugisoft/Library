@@ -24,6 +24,7 @@ public class DataTable
     private static final long DataTableVersiyon = 18032701;
     public List<DataRow> Rows = new SmartList<DataRow>();
     public List<DataRow> mRows = new SmartList<DataRow>();
+    public List<String> Captions = new SmartList<String>();
     public List<String> Columns = new SmartList<String>();
     public void add(String... values) {
         DataRow row = new DataRow();
@@ -62,6 +63,7 @@ public class DataTable
     public DataTable(boolean asd, String... columns) {
         for (String s : columns) {
             Columns.add(s.replace(" ",""));
+            Captions.add(s);
         }
     }
 
@@ -104,6 +106,7 @@ public class DataTable
                             while (it.hasNext()) {
                                 String s = it.next().toString();
                                 Columns.add(s.replace(" ",""));
+                                Captions.add(s);
                             }
                         }
 
@@ -160,6 +163,7 @@ public class DataTable
                     col.Value=c.getString("Value");;
                     cols.add(col);
                     Columns.add(col.Name.replace(" ",""));
+                    Captions.add(col.Name);
                 }
             }
             catch (Exception e)
@@ -710,6 +714,7 @@ public class DataTable
 
     }
     public boolean setValue(int RowIndex, String ColumnName,Object Value,boolean addnew) {
+        String caption = ColumnName;
         ColumnName=ColumnName.replace(" ","");
         if(addnew)
         {
@@ -719,6 +724,7 @@ public class DataTable
             {
 
                 Columns.add(ColumnName);
+                Captions.add(caption);
                 Rows.get(0).Cells.add(new DataColumn());
                 return   setValue(0,ColumnName,Value);
             }
@@ -744,6 +750,7 @@ public class DataTable
                     if(i<(fields.length))
                     {
                         dt.Columns.add(f.getName());
+                        dt.Captions.add(f.getName());
                         String simlename = f.getType().getSimpleName().toLowerCase();
                         String name = f.getName();
                         switch (simlename)
