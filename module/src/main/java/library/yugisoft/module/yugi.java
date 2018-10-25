@@ -963,7 +963,7 @@ public class yugi
         Activity activity;
         public String p1="0",p2="0",p3="0",Currency="";
         public Double Ucret=0.0,totalUcret=0.0;
-        boolean virgul=false;
+        boolean virgul=false,clear = true;
 
         public View view;
         TextView txt_ucret;
@@ -1030,15 +1030,21 @@ public class yugi
         }
         public INTERFACES.OnNumpadListener mlistener;
 
-        public  mNumpad(Activity ma) {
+        public  mNumpad(Activity ma,int contentID) {
             activity=ma;
-            dialog = new Dialog.mDialog(activity,R.layout.ly_numpad,false);
+            dialog = new Dialog.mDialog(activity,contentID,false);
             view=dialog.view;
             Init();
         }
+        public  mNumpad(Activity ma) {
+            this(ma,R.layout.ly_numpad);
+        }
 
         public  mNumpad(Activity ma,INTERFACES.OnNumpadListener listener) {
-            this(ma);
+            this(ma,R.layout.ly_numpad,listener);
+        }
+        public  mNumpad(Activity ma,int contentID,INTERFACES.OnNumpadListener listener) {
+            this(ma,contentID);
             mlistener=listener;
         }
 
@@ -1062,7 +1068,13 @@ public class yugi
         @Override
         public void onClick(View v)
         {
-
+                if (clear)
+                {
+                    p1="0";
+                    p2=p1;
+                    p3=p1;
+                    clear=false;
+                }
             try
             {
                 switch (v.getTag().toString())
