@@ -26,7 +26,7 @@ public class DataTable
     public List<DataRow> mRows = new SmartList<DataRow>();
     public List<String> Captions = new SmartList<String>();
     public List<String> Columns = new SmartList<String>();
-    public void add(String... values) {
+    public void add(Object... values) {
         DataRow row = new DataRow();
         for (int i = 0; i < values.length; i++)
         {
@@ -35,7 +35,7 @@ public class DataTable
 
                 DataColumn col = new DataColumn();
                 col.Name = Columns.get(i);
-                col.Value = values[i];
+                col.Value = values[i].toString();
                 row.Cells.add(col);
             }
             catch (Exception e){}
