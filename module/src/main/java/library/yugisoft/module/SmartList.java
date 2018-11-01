@@ -100,6 +100,22 @@ public class SmartList<T> extends ArrayList
     }
 
 
+    public  static <T> List<T> Filter(List<T> list,Object filter) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            return list.stream().filter(p -> p.equals(filter)).collect(Collectors.toList());
+        }
+        else
+        {
+            List<T> col = new ArrayList<T>();
+            for (int i = 0 ; i < list.size() ; i++)
+                if (list.get(i).equals(filter))
+                    col.add(list.get(i));
+            return col;
+        }
+    }
+
     public static  <T> List<T> Filter(List<T> list, Pre<T,Boolean> pre) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -113,6 +129,54 @@ public class SmartList<T> extends ArrayList
                 if (pre.get(list.get(i)))
                     col.add(list.get(i));
             return col;
+        }
+    }
+
+    //region int
+    public static  int Sum(List<Integer> list) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            return list.stream().mapToInt(p->p).sum();
+        }
+        else
+        {
+            int total = 0;
+            for (int i = 0 ; i < list.size() ; i++)
+                total += list.get(i);
+            return total;
+        }
+    }
+    public static  int Max(List<Integer> list) {
+        if (list.size()==0)return 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            return list.stream().mapToInt(p->p).max().getAsInt();
+        }
+        else
+        {
+            int total = 0;
+            for (int i = 0 ; i < list.size() ; i++)
+                if (list.get(i)> total)
+                total = list.get(i);
+            return total;
+        }
+    }
+    public static  int Min(List<Integer> list) {
+
+        if (list.size()==0)return 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            return list.stream().mapToInt(p->p).min().getAsInt();
+        }
+        else
+        {
+
+            int total = list.get(0);
+            for (int i = 0 ; i < list.size() ; i++)
+                if (list.get(i)> total)
+                    total = list.get(i);
+            return total;
         }
     }
 
@@ -130,7 +194,56 @@ public class SmartList<T> extends ArrayList
             return total;
         }
     }
+    public static  <T> int Max(List<T> list,Pre<T,Integer> pre) {
 
+        if (list.size()==0)return 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            return list.stream().mapToInt(p->pre.get(p)).max().getAsInt();
+        }
+        else
+        {
+            int total = 0;
+            for (int i = 0 ; i < list.size() ; i++)
+                if (pre.get(list.get(i))> total)
+                    total = pre.get(list.get(i));
+            return total;
+        }
+    }
+    public static  <T> int Min(List<T> list,Pre<T,Integer> pre) {
+
+        if (list.size()==0)return 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            return list.stream().mapToInt(p->pre.get(p)).min().getAsInt();
+        }
+        else
+        {
+
+            int total = pre.get(list.get(0));
+            for (int i = 0 ; i < list.size() ; i++)
+                if (pre.get(list.get(i))> total)
+                    total = pre.get(list.get(i));
+            return total;
+        }
+    }
+    //endregion
+
+    //region Double
+    public static  double SumDouble(List<Double> list ) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            return list.stream().mapToDouble(p->p).sum();
+        }
+        else
+        {
+            double total = 0;
+            for (int i = 0 ; i < list.size() ; i++)
+                total += list.get(i);
+            return total;
+        }
+    }
     public static  <T> double SumDouble(List<T> list, Pre<T,Double> pre) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -145,6 +258,7 @@ public class SmartList<T> extends ArrayList
             return total;
         }
     }
+    //endregion
 
     //endregion
 
