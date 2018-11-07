@@ -299,7 +299,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
 
     //endregion
 
-    
+
 
     @Override
     public void onClick(View v) {

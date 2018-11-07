@@ -252,12 +252,12 @@ public class vList<E>  implements List<E>{
             item.item = list.stream().mapToInt(p -> p).max().getAsInt();
             item.value = item.item;
         } else {
-            int total = 0;
+            item.item = 0;
+            item.value = 0;
             for (int i = 0; i < list.size(); i++)
-                if (list.get(i) > total) {
-                    total = list.get(i);
-                    item.item = total;
-                    item.value = total;
+                if (list.get(i) > item.value) {
+                    item.value= list.get(i);
+                    item.item = item.value;
                 }
 
         }
@@ -274,13 +274,14 @@ public class vList<E>  implements List<E>{
             item.value = item.item;
         } else {
 
-            int total = list.get(0);
+            item.value = list.get(0);
+            item.item = item.value;
             for (int i = 0; i < list.size(); i++)
-                if (list.get(i) > total)
+                if (list.get(i) > item.value)
                 {
-                    total = list.get(i);
-                    item.item = total;
-                    item.value = total;
+                    item.value = list.get(i);
+                    item.item = item.value;
+
                 }
 
         }
@@ -311,13 +312,16 @@ public class vList<E>  implements List<E>{
             item.item  = list.stream().max(comp).get();
             item.value = pre.get(item.item);
 
-        } else {
-            int total = 0;
+        }
+        else
+            {
+                try{item.item = list.get(0);}catch (Exception ex){}
+                item.value = 0;
             for (int i = 0; i < list.size(); i++)
-                if (pre.get(list.get(i)) > total) {
-                    total = pre.get(list.get(i));
+                if (pre.get(list.get(i)) > item.value) {
+                    item.value = pre.get(list.get(i));
                     item.item = list.get(i);
-                    item.value = total;
+
                 }
 
         }
@@ -335,12 +339,15 @@ public class vList<E>  implements List<E>{
             item.value = pre.get(item.item);
 
         } else {
-            int total = pre.get(list.get(0));
+
+
+            item.item = list.get(0);
+            item.value = pre.get(list.get(0));
             for (int i = 0; i < list.size(); i++)
-                if (pre.get(list.get(i)) < total) {
-                    total = pre.get(list.get(i));
+                if (pre.get(list.get(i)) < item.value) {
+                    item.value= pre.get(list.get(i));
                     item.item = list.get(i);
-                    item.value = total;
+
                 }
 
         }
@@ -373,12 +380,12 @@ public class vList<E>  implements List<E>{
             item.item = list.stream().mapToDouble(p -> p).max().getAsDouble();
             item.value = item.item;
         } else {
-            double total = 0;
+            item.item = 0.0;
+            item.value = 0.0;
             for (int i = 0; i < list.size(); i++)
-                if (list.get(i) > total) {
-                    total = list.get(i);
-                    item.item = total;
-                    item.value = total;
+                if (list.get(i) > item.value) {
+                    item.value= list.get(i);
+                    item.item = item.value;
                 }
 
         }
@@ -395,13 +402,13 @@ public class vList<E>  implements List<E>{
             item.value = item.item;
         } else {
 
-            double total = list.get(0);
+            item.value = list.get(0);
+            item.item = item.value;
             for (int i = 0; i < list.size(); i++)
-                if (list.get(i) > total)
+                if (list.get(i) > item.value)
                 {
-                    total = list.get(i);
-                    item.item = total;
-                    item.value = total;
+                    item.value= list.get(i);
+                    item.item = item.value;
                 }
 
         }
@@ -432,12 +439,12 @@ public class vList<E>  implements List<E>{
             item.value = pre.get(item.item);
 
         } else {
-            double total = 0;
+            item.value = pre.get(list.get(0));
+            item.item = list.get(0);
             for (int i = 0; i < list.size(); i++)
-                if (pre.get(list.get(i)) > total) {
-                    total = pre.get(list.get(i));
+                if (pre.get(list.get(i)) > item.value) {
+                    item.value= pre.get(list.get(i));
                     item.item = list.get(i);
-                    item.value = total;
                 }
 
         }
@@ -455,12 +462,12 @@ public class vList<E>  implements List<E>{
             item.value = pre.get(item.item);
 
         } else {
-            double total = pre.get(list.get(0));
+            item.value = pre.get(list.get(0));
+            item.item = list.get(0);
             for (int i = 0; i < list.size(); i++)
-                if (pre.get(list.get(i)) < total) {
-                    total = pre.get(list.get(i));
+                if (pre.get(list.get(i)) < item.value) {
+                    item.value= pre.get(list.get(i));
                     item.item = list.get(i);
-                    item.value = total;
                 }
 
         }
