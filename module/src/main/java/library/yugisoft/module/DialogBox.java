@@ -19,7 +19,9 @@ public class DialogBox {
     public static void showYESNO(Activity activity ,String mesaj,IDialogResult result) {showResult(activity,mesaj,EDialogButtons.YESNO,result);}
 
     public static void showRESULTTEXT(String mesaj,IDialogResult result) {showRESULTTEXT(yugi.activity,mesaj,result);}
-    public static void showRESULTTEXT(Activity activity ,String mesaj,IDialogResult result) {showResult(activity,mesaj,EDialogButtons.RESULTTEXT,result);}
+    public static void showRESULTTEXT(Activity activity ,String mesaj,IDialogResult result) {
+        showResult(activity,mesaj,EDialogButtons.RESULTTEXT,result);
+    }
 
     public static void showResult(Activity activity, String mesaj, EDialogButtons buttons, IDialogResult result) {
 

@@ -4,23 +4,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-  <library.yugisoft.module.ComboBox
-      android:id="@+id/cmb1"
+
+  <library.yugisoft.module.Data.DataGridView
+      android:id="@+id/dataGrid"
       android:layout_width="match_parent"
-      android:layout_height="40dp"
-      android:gravity="center_vertical|center_horizontal"></library.yugisoft.module.ComboBox>
-
-
-  <library.yugisoft.module.ComboBox
-      android:id="@+id/cmb2"
-      android:layout_width="match_parent"
-      android:layout_height="40dp"
-      android:gravity="center_vertical|center_horizontal"></library.yugisoft.module.ComboBox>
-
-  <library.yugisoft.module.ComboBox
-      android:id="@+id/cmb3"
-      android:layout_width="match_parent"
-      android:layout_height="40dp"
-      android:gravity="center_vertical|center_horizontal"></library.yugisoft.module.ComboBox>
-
+      android:layout_height="match_parent"
+      android:background="@drawable/dotted"
+      android:fillViewport="true"
+      app:showFilter="false" />
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +22,8 @@ import java.util.List;
 
 public class DataTable
 {
+
+
     private static final long DataTableVersiyon = 18032701;
     public List<DataRow> Rows = new SmartList<DataRow>();
     public List<DataRow> mRows = new SmartList<DataRow>();
@@ -957,6 +960,7 @@ public class DataTable
     String col="",value = "";
 
     public List<DataRow> Where(String pWhere) {
+        if (pWhere.equals("")) return  Rows;
         List<List<DataRow>> results = new SmartList<>();
         for (String veya :pWhere.split("\\|"))
         {
@@ -970,8 +974,12 @@ public class DataTable
                 for (String s: ops) {
                     if(item.indexOf(s)>0)
                     {
-                        col = item.split(s)[0];
-                        value = item.split(s)[1];
+                        col = item.split(s)[0].replace(" ","");
+                        try
+                        {
+                            value = item.split(s)[1];
+                        }
+                        catch (Exception ex){value="";}
                         Filterlike = !s.equals("==");
                         break;
                     }
@@ -990,8 +998,9 @@ public class DataTable
                     }
                 };
                 tList = new FilterList().filterList(tList, filter, value);
-                results.add(tList);
+
             }
+            results.add(tList);
         }
         List tList = new SmartList();
         for (List l :results) {
@@ -1008,6 +1017,9 @@ public class DataTable
 
         return null;
     }
+
+
+    public View Parent;
 
 
 

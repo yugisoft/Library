@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -152,6 +153,9 @@ public class vList<E>  implements List<E>{
     public interface Pre<T, R> {
         R get(T item);
     }
+    public interface PreTwice<T, R> {
+        R get(T t1,T t2);
+    }
 
     public vList<E> Filter(Pre<E,Boolean> filter) {
         return Filter(this.list, filter);
@@ -206,6 +210,18 @@ public class vList<E>  implements List<E>{
 
             for (int i = 0; i < list.size(); i++)
                 if (list.get(i).equals(filter))
+                    vlist.list.add(list.get(i));
+        }
+        return vlist;
+    }
+    public static <T> vList<T> Filter(List<T> list, Pre<T,Boolean> filter) {
+        vList<T> vlist = new vList<T>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            vlist.list = list.stream().filter(p -> filter.get(p)).collect(Collectors.toList());
+        } else {
+
+            for (int i = 0; i < list.size(); i++)
+                if (filter.get(list.get(i)))
                     vlist.list.add(list.get(i));
         }
         return vlist;
@@ -460,12 +476,17 @@ public class vList<E>  implements List<E>{
     //endregion
 
 
+    public static <T> List<T>  Sort(List<T> list , PreTwice<T,Integer> preTwice)
+    {
+        Collections.sort(list,(p1,p2)-> preTwice.get(p1,p2));
+        return list;
+    }
+
+
     //endregion
 
     public static class vListItem<V,VT>
     {
-
-
         public V item = null;
         public VT value = null;
     }

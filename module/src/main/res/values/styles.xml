@@ -38,4 +38,18 @@
         <attr name="hint" />
     </declare-styleable>
 
+
+    <attr name="showHeader" format="boolean" />
+    <attr name="showFilter" format="boolean" />
+
+    <declare-styleable name="DataGridView">
+
+        <attr name="showHeader" />
+        <attr name="showFilter" />
+        <attr name="textSize"   />
+        <attr name="textColor"   />
+
+
+    </declare-styleable>
+
 </resources>
