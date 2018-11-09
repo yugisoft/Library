@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import java.util.ArrayList;
 import java.util.List;
 
+import library.yugisoft.module.DataTable;
 import library.yugisoft.module.INTERFACES;
 import library.yugisoft.module.R;
 
@@ -89,11 +90,11 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
 
     }
 
-    public DataGridAdapter getDataGridAdapter() {
+    private DataGridAdapter getDataGridAdapter() {
         return dataGridAdapter;
     }
 
-    public void setDataGridAdapter(DataGridAdapter dataGridAdapter) {
+    private void setDataGridAdapter(DataGridAdapter dataGridAdapter) {
         this.dataGridAdapter = dataGridAdapter;
         dataGridAdapter.setOnAdapterDataLoad(this);
         //listView.setAdapter(getDataGridAdapter());
@@ -285,5 +286,12 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         }
 
 
+    }
+
+
+    public void setData(DataTable data)
+    {
+        getDataGridAdapter().setParentWidth(0);
+        getDataGridAdapter().setData(data);
     }
 }
