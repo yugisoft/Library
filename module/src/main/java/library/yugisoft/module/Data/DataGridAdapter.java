@@ -32,7 +32,24 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         @Override
         public void onClick(View v)
         {
-                int index = Integer.parseInt(v.getTag().toString());
+            boolean intt = false;
+            if (v instanceof DataGridTextView)
+            {
+                DataGridTextView textView = (DataGridTextView) v;
+                intt = textView.getType() == 1 || textView.getType() == 2;
+
+            }
+                String index = getColumns().get(Integer.parseInt(v.getTag().toString()));
+
+            if (intt)
+                //vList.Sort(getList(),(p1,p2) -> Integer.valueOf(p1.getInt(index)).compareTo(p2.getInt(index)));
+                vList.Sort(getList(), new vList.PreTwice<DataTable.DataRow, Integer>() {
+                    @Override
+                    public Integer get(DataTable.DataRow t1, DataTable.DataRow t2) {
+                        return Double.valueOf(t1.getDouble(index)).compareTo(t2.getDouble(index));
+                    }
+                });
+            else
                 vList.Sort(getList(),(p1,p2) -> p1.get(index).compareToIgnoreCase(p2.get(index)));
                 notifyDataSetChanged();
         }
@@ -57,7 +74,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
                             if ( str != null && str.length()>0)
                             {
                                 if (!f.equals(""))f +="&&";
-                                f+=data.Columns.get(i)+ ((str.indexOf("%")>=0) ? "%%" : "==")+str.replace("%","") ;
+                                f+=getColumns().get(i)+ ((str.indexOf("%")>=0) ? "%%" : "==")+str.replace("%","") ;
                             }
 
                         }
@@ -94,7 +111,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
                     if ( str != null && str.length()>0)
                     {
                         if (!f.equals(""))f +="&&";
-                        f+=data.Columns.get(i)+ ((str.indexOf("%")>=0) ? "%%" : "==")+str.replace("%","") ;
+                        f+=getColumns().get(i)+ ((str.indexOf("%")>=0) ? "%%" : "%%")+str.replace("%","") ;
                     }
 
                 }
@@ -105,125 +122,54 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     };
     private EditText current;
     private int height;
+    private int headerForeColor = Color.WHITE;
+
     public DataGridAdapter(Context context) {
         super(context);
     }
 
 
-    public LinearLayout getLayout() {
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        return  linearLayout;
-    }
+
     void setLayoutClickable(View view,int i) {
         view.setTag(i);
         view.setBackground(yugi.activity.getResources().getDrawable(R.drawable.ripple_sold));
         view.setOnClickListener(this);
     }
-    private View getTextView(int i, int k) {
-        String caption = getList().get(i).get(k);
-        float width = getColumnLenght(k);
 
-        TextView textView = new TextView(context);
-
-        textView.setText(caption);
-        textView.setTextSize(getTextSize());
-        textView.setTextColor(getColor());
-        textView.setTypeface(getTypeface());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
-        textView.setPaddingRelative(3,5,3,5);
-        params.setMargins(3,5,3,5);
-        textView.setLayoutParams(params);
-
-
-        return  textView;
-    }
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         LinearLayout layout = (LinearLayout) (view == null ? view = getLayout() : view);
+        if (Columns !=null)
+            layout = (LinearLayout) super.getView(i,view,viewGroup);
+
         setLayoutClickable(layout,i);
+        if (Columns ==null)
         layout.removeAllViews();
-        for (int k = 0; k< data.Columns.size() ; k++ )
+
+        for (int k = 0; k< getColumns().size() ; k++ )
         {
-            layout.addView(getTextView(i,k));
+            if (Columns ==null)
+                    layout.addView(getTextView(i,k));
+            else
+                    getTextView(layout,i,k);
         }
+
         return layout;
     }
 
-    public View getFilterView() {
+    @Override
+    public void onClick(View v) {
 
-        LinearLayout layout = getLayout() ;
-        for (int k = 0; k< data.Columns.size() ; k++ ) { layout.addView(getFilterTextView(k)); }
-        return layout;
-    }
-    public View getHeaderView() {
-
-        LinearLayout layout = getLayout() ;
-        for (int k = 0; k< data.Columns.size() ; k++ ) { layout.addView(getHeaderTextView(k)); }
-        return layout;
-    }
-    private View getHeaderTextView(int k)
-    {
-        String caption = data.Captions.get(k);
-        float width = getColumnLenght(k);
-
-        TextView textView = new TextView(context);
-
-        textView.setText(caption);
-        textView.setTextSize(getTextSize()+2);
-        textView.setTextColor(Color.WHITE);
-        textView.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-        textView.setTag(k);
-        textView.setOnClickListener(HeaderClick);
-        textView.setOnLongClickListener(HeaderLongClick);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
-        textView.setPaddingRelative(3,5,3,5);
-        params.setMargins(3,5,3,5);
-        textView.setLayoutParams(params);
-
-        return  textView;
-    }
-    private View getFilterTextView(int k)
-    {
-        String caption = data.Captions.get(k);
-        float width = getColumnLenght(k);
-
-        EditText textView = new EditText(context);
-        //textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
-
-        //textView.setBackgroundColor(Color.WHITE);
-
-
-        textView.setTextSize(getTextSize());
-        textView.setTextColor(getColor());
-        textView.setTypeface(getTypeface());
-
-        textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus)
-                    current = (EditText)v;
-            }
-        });
-        textView.addTextChangedListener(filterchange);
-        textView.setTag(k);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, height+(int)yugi.convertPixelToDp(20,context));
-        textView.setPaddingRelative(3,5,3,5);
-        params.setMargins(3,5,3,5);
-        textView.setLayoutParams(params);
-        textView.setBackgroundColor(Color.WHITE);
-        //textView.setBackground(context.getResources().getDrawable(R.drawable.border));
-        return  textView;
+        int i = Integer.parseInt(v.getTag().toString());
+        if (getOnItemClickListener()!=null)
+            getOnItemClickListener().onItemClick(null,v,i,0);
     }
 
     //region Property
     String[] filters ;
 
     private float getColumnLenght(int i) {
+        String name = getColumns().get(i);
         try
         {
             float s = columLenght.get(i);
@@ -231,16 +177,16 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
                 return s;
             else
             {
-                String lenght = data.Captions.get(i);
-                String lenght2 = vList.Max(getList(),p-> p.get(i).length()).item.get(i);
+                String lenght = getCaptions().get(i);
+                String lenght2 = vList.Max(getList(),p-> p.get(name).length()).item.get(name);
                 columLenght.set(i,getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 ));
                 return columLenght.get(i);
             }
         }
         catch (Exception ex)
         {
-            String lenght = data.Captions.get(i);
-            String lenght2 = vList.Max(getList(),p-> p.get(i).length()).item.get(i);
+            String lenght = getCaptions().get(i);
+            String lenght2 = vList.Max(getList(),p-> p.get(name).length()).item.get(name);
             columLenght.add(getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 ));
             return columLenght.get(i);
 
@@ -248,16 +194,32 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     }
     private float getTextLenght(String text) {
 
-        text = "___"+text+"____";
-        Paint paint = new Paint();
-        paint.setTextSize(yugi.convertDpToPixel(getTextSize()+2,yugi.activity));
-        paint.setTypeface(Typeface.DEFAULT_BOLD);
-        paint.setColor(getColor());
-        paint.setStyle(Paint.Style.FILL);
-        Rect result = new Rect();
-        paint.getTextBounds(text, 0, text.length(), result);
-        height=result.height();
-        return result.width();
+        try
+        {
+            text = "_"+text+"_";
+            Paint paint = new Paint();
+            paint.setTextSize(yugi.convertDpToPixel(getTextSize()+2,yugi.activity));
+            paint.setTypeface(Typeface.DEFAULT_BOLD);
+            paint.setColor(getColor());
+            paint.setStyle(Paint.Style.FILL);
+            Rect result = new Rect();
+            paint.getTextBounds(text, 0, text.length(), result);
+            height=result.height();
+            return result.width();
+        }
+        catch (Exception ex)
+        {
+            text = "_"+text+"_";
+            Paint paint = new Paint();
+            paint.setTextSize(yugi.convertDpToPixel(getTextSize()+2,yugi.activity));
+            paint.setTypeface(Typeface.DEFAULT_BOLD);
+            paint.setColor(getColor());
+            paint.setStyle(Paint.Style.FILL);
+            Rect result = new Rect();
+            paint.getTextBounds(text, 0, text.length(), result);
+            height=result.height();
+            return result.width();
+        }
     }
 
     private int textSize = 14;
@@ -290,24 +252,10 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     public void setData(DataTable data) {
         this.data = data;
         columLenght.clear();
-        filters = new String[data.Columns.size()];
+        filters = new String[getColumns().size()];
         setList(data.Rows);
     }
 
-
-
-
-    //endregion
-
-
-
-    @Override
-    public void onClick(View v) {
-
-        int i = Integer.parseInt(v.getTag().toString());
-        if (getOnItemClickListener()!=null)
-            getOnItemClickListener().onItemClick(null,v,i,0);
-    }
 
     private AdapterView.OnItemClickListener onItemClickListener;
 
@@ -317,6 +265,206 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    //endregion
+
+    //region Captions
+    private List<String> Columns,Captions;
+    public List<String> getColumns()
+    {
+        return Columns ==null ? data.Columns : Columns;
+    }
+    public List<String> getCaptions()
+    {
+        return Captions== null? data.Captions : Captions;
+    }
+    public void setColumns(List<String> columns) {
+        Columns = columns;
+    }
+    public void setCaptions(List<String> captions) {
+        Captions = captions;
+    }
+    //endregion
+
+    //region Create View
+    public LinearLayout getLayout() {
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        return  linearLayout;
+    }
+    public View getFilterView() {
+
+        LinearLayout layout = getLayout() ;
+        for (int k = 0; k< getColumns().size() ; k++ ) { layout.addView(getFilterTextView(k)); }
+        return layout;
+    }
+    public View getFilterView(ViewGroup lyt) {
+
+        LinearLayout layout = getLayout() ;
+        for (int k = 0; k< getColumns().size() ; k++ )
+        {
+            layout.addView(getFilterTextView(k, (LinearLayout.LayoutParams) lyt.getChildAt(k).getLayoutParams()));
+        }
+        return layout;
+    }
+    public View getHeaderView() {
+
+        LinearLayout layout = getLayout() ;
+        for (int k = 0; k< getColumns().size() ; k++ ) { layout.addView(getHeaderTextView(k)); }
+        return layout;
+    }
+    private View getHeaderTextView(int k) {
+        String caption = getCaptions().get(k);
+        float width = getColumnLenght(k);
+
+        TextView textView = new TextView(context);
+
+        textView.setText(caption);
+        textView.setTextSize(getTextSize()+2);
+        textView.setTextColor(headerForeColor);
+        textView.setTypeface(Typeface.DEFAULT_BOLD);
+
+
+        textView.setTag(k);
+        textView.setOnClickListener(HeaderClick);
+        textView.setOnLongClickListener(HeaderLongClick);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+        textView.setPaddingRelative(3,5,3,5);
+        params.setMargins(3,5,3,5);
+        textView.setLayoutParams(params);
+
+        return  textView;
+    }
+    private View getFilterTextView(int k) {
+
+        float width = getColumnLenght(k);
+
+        EditText textView = new EditText(context);
+        //textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
+
+        //textView.setBackgroundColor(Color.WHITE);
+
+
+        textView.setTextSize(getTextSize());
+        textView.setTextColor(getColor());
+        textView.setTypeface(getTypeface());
+
+        textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    current = (EditText)v;
+            }
+        });
+        textView.addTextChangedListener(filterchange);
+        textView.setTag(k);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, height+(int)yugi.convertPixelToDp(20,context));
+        textView.setPaddingRelative(3,5,3,5);
+        params.setMargins(3,5,3,5);
+        textView.setLayoutParams(params);
+        textView.setBackgroundColor(Color.WHITE);
+        //textView.setBackground(context.getResources().getDrawable(R.drawable.border));
+        return  textView;
+    }
+    private View getFilterTextView(int k, LinearLayout.LayoutParams params) {
+
+        EditText textView = new EditText(context);
+        textView.setTextSize(getTextSize());
+        textView.setTextColor(getColor());
+        textView.setTypeface(getTypeface());
+
+        textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    current = (EditText)v;
+            }
+        });
+        textView.addTextChangedListener(filterchange);
+        textView.setTag(k);
+        textView.setPaddingRelative(3,5,3,5);
+
+        params.setMargins(3,5,3,5);
+
+        textView.setLayoutParams(params);
+        textView.setBackgroundColor(Color.WHITE);
+
+
+
+        //textView.setBackground(context.getResources().getDrawable(R.drawable.border));
+        return  textView;
+    }
+    private View getTextView(int i, int k) {
+
+        String name = getColumns().get(k);
+
+        DataGridTextView textView = new DataGridTextView(context);
+
+        if (textView.isAutoSize())
+        {
+            float width = getColumnLenght(k);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.setMargins(3,5,3,5);
+            textView.setLayoutParams(params);
+        }
+
+        String caption = getList().get(i).get(name);
+        textView.setValue(caption);
+        textView.setTextSize(getTextSize());
+        textView.setTextColor(getColor());
+        textView.setTypeface(getTypeface());
+        textView.setPaddingRelative(3,5,3,5);
+
+
+
+        return  textView;
+    }
+    private View getTextView(ViewGroup layout,int i, int k) {
+        String name = getColumns().get(k);
+        DataGridTextView textView = (DataGridTextView) layout.getChildAt(k);
+        if (textView.isAutoSize())
+        {
+            float width = getColumnLenght(k);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.setMargins(3,5,3,5);
+            textView.setLayoutParams(params);
+        }
+        String caption = getList().get(i).get(name);
+        textView.setValue(caption);
+        textView.setTextSize(getTextSize());
+        textView.setTextColor(getColor());
+        textView.setTypeface(getTypeface());
+        textView.setPaddingRelative(3,5,3,5);
+        return  textView;
+    }
+    //endregion
+
+    public void setHeaderItemSize(ViewGroup childAt) {
+     for (int k = 0; k< getColumns().size();k++)
+     {
+         DataGridTextView textView = (DataGridTextView) childAt.getChildAt(k);
+         textView.setTag(k);
+         textView.setOnClickListener(HeaderClick);
+         if (textView.isAutoSize())
+         {
+             float width = getColumnLenght(k);
+             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+             textView.setPaddingRelative(3,5,3,5);
+             params.setMargins(3,5,3,5);
+             textView.setLayoutParams(params);
+         }
+         else
+         {
+             columLenght.add((float) textView.getWidth());
+         }
+     }
+    }
+
+    public void setHeaderForeColor(int headerForeColor) {
+        this.headerForeColor = headerForeColor;
     }
 }
 

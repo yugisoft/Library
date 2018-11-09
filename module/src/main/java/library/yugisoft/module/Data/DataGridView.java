@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import library.yugisoft.module.INTERFACES;
@@ -33,8 +34,12 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         init();
     }
 
-    private LinearLayout verLayout,headerLayout,filterLayout;
-    //private ListView listView;
+    boolean useHeaderLayout=false;
+    int headerLayoutid = 0;
+
+    private LinearLayout verLayout,filterLayout;
+    private ViewGroup headerLayout;
+
     private void init() {
 
 
@@ -53,8 +58,22 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
             setShowHeader(a.getBoolean(R.styleable.DataGridView_showHeader,showHeader));
             setShowFilter(a.getBoolean(R.styleable.DataGridView_showFilter,showFilter));
 
+            headerLayoutid = a.getResourceId(R.styleable.DataGridView_headerLayout,0);
+            if (headerLayoutid>0)
+            {
+                useHeaderLayout = true;
+                headerLayout = (ViewGroup) inflate(getContext(),headerLayoutid, (ViewGroup)findViewById(R.id.headerLayout));
+                getDataGridAdapter().setContentView(headerLayoutid);
+            }
+
+
             setTextColor(a.getColor(R.styleable.DataGridView_textColor,getDataGridAdapter().getColor()));
             setTextSize(a.getInt(R.styleable.DataGridView_textSize,getDataGridAdapter().getTextSize()));
+
+            setRowColor1(a.getColor(R.styleable.DataGridView_rowColor1,getRowColor1()));
+            setRowColor2(a.getColor(R.styleable.DataGridView_rowColor2,getRowColor2()));
+            setHeaderBackColor(a.getColor(R.styleable.DataGridView_headerBackColor,getHeaderBackColor()));
+            setHeaderForeColor(a.getColor(R.styleable.DataGridView_headerForeColor,getHeaderForeColor()));
         }
         else
         {
@@ -85,82 +104,166 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
 
     @Override
     public void onLoad(List data) {
-        if (getDataGridAdapter().getData()==null)
-        {
-            headerLayout.removeAllViews();
-            filterLayout.removeAllViews();
-            verLayout.removeAllViews();
-            return;
-        }
-        else
 
+        //region Manual Load
+        if (!useHeaderLayout)
         {
-            if ( getDataGridAdapter().getData().Parent ==null)
+            if (getDataGridAdapter().getData()==null)
             {
                 headerLayout.removeAllViews();
                 filterLayout.removeAllViews();
+                verLayout.removeAllViews();
+                return;
             }
-            verLayout.removeAllViews();
+            else
 
-            if (getDataGridAdapter().getData().Columns.size() > 0 && headerLayout.getChildCount() ==0)
             {
-                headerLayout.addView(getDataGridAdapter().getHeaderView());
+                if ( getDataGridAdapter().getData().Parent ==null)
+                {
+                    headerLayout.removeAllViews();
+                    filterLayout.removeAllViews();
+                }
+                verLayout.removeAllViews();
 
-                filterLayout.addView(getDataGridAdapter().getFilterView());
+                if (getDataGridAdapter().getData().Columns.size() > 0 && headerLayout.getChildCount() ==0)
+                {
+                    headerLayout.addView(getDataGridAdapter().getHeaderView());
+
+                    filterLayout.addView(getDataGridAdapter().getFilterView());
+                }
+
+                for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
+                {
+                    View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
+                    verLayout.addView(v);
+                    v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
+
+                }
+
+                getDataGridAdapter().getData().Parent = this;
             }
-
-            for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
-            {
-                View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
-                verLayout.addView(v);
-                if (i%2 ==0 )
-                    v.getBackground().setColorFilter(Color.parseColor("#E6FFF3"), PorterDuff.Mode.MULTIPLY);
-            }
-
-            getDataGridAdapter().getData().Parent = this;
         }
+        //endregion
+        //region Custom Load
+        else
+        {
+
+            verLayout.removeAllViews();
+            if (getDataGridAdapter().getData()==null)
+            {
+                filterLayout.removeAllViews();
+            }
+            else
+            {
+                if ( getDataGridAdapter().getData().Parent ==null)
+                    setDataGridAdapterHeaderInfo();
+
+                if (getDataGridAdapter().getData().Columns.size() > 0 && filterLayout.getChildCount() == 0)
+                {
+                    getDataGridAdapter().setHeaderItemSize((ViewGroup)headerLayout.getChildAt(0));
+                    filterLayout.addView(getDataGridAdapter().getFilterView((ViewGroup) headerLayout.getChildAt(0)));
+                }
+
+                for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
+                {
+                    View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
+                    verLayout.addView(v);
+
+                    v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
+                }
+
+                getDataGridAdapter().getData().Parent = this;
+
+            }
+        }
+        //endregion
 
     }
 
+    private void setDataGridAdapterHeaderInfo() {
+        List<String> Columns = new ArrayList<>();
+        List<String> Captions = new ArrayList<>();
+        for (int i=0;i< ((ViewGroup)headerLayout.getChildAt(0)).getChildCount() ; i++)
+        {
+            View v = ((ViewGroup)headerLayout.getChildAt(0)).getChildAt(i);
+            if (v instanceof DataGridTextView)
+            {
+                DataGridTextView gridTextView = (DataGridTextView) v;
+                Columns.add(gridTextView.getFieldName());
+                Captions.add(gridTextView.getText().toString());
+                filterLayout.removeAllViews();
+                verLayout.removeAllViews();
 
+            }
+        }
+
+        getDataGridAdapter().setColumns(Columns);
+        getDataGridAdapter().setCaptions(Captions);
+    }
+
+
+    //region Property
+
+    //PRIVATE
     private boolean showHeader = true,showFilter = false;
-    private int textSize,textColor;
+    private int
+             textSize
+            ,textColor
+            ,rowColor1=Color.WHITE
+            ,rowColor2  = Color.parseColor("#E6FFF3")
+            ,headerBackColor = Color.parseColor("#6d8aa1")
+            ,headerForeColor = Color.WHITE;
+
+
+    //GET
 
     public boolean isShowHeader() {
         return showHeader;
     }
+    public boolean isShowFilter() {
+        return showFilter;
+    }
+    public int getTextSize() {
+        return textSize;
+    }
+    public int getTextColor() {
+        return textColor;
+    }
+    public int getRowColor1() { return rowColor1; }
+    public int getRowColor2() { return rowColor2; }
+    public int getHeaderBackColor() { return headerBackColor; }
+    public int getHeaderForeColor() { return headerForeColor; }
 
+
+    //SET
     public void setShowHeader(boolean showHeader) {
         this.showHeader = showHeader;
         headerLayout.setVisibility(showHeader ? VISIBLE : GONE);
     }
-
-    public boolean isShowFilter() {
-        return showFilter;
-    }
-
     public void setShowFilter(boolean showFilter) {
         this.showFilter = showFilter;
         filterLayout.setVisibility(showFilter ? VISIBLE : GONE);
     }
-
-    public int getTextSize() {
-        return textSize;
-    }
-
     public void setTextSize(int textSize) {
         this.textSize = textSize;
         if (getDataGridAdapter()!=null)
             getDataGridAdapter().setTextSize(textSize);
     }
-
-    public int getTextColor() {
-        return textColor;
-    }
-
     public void setTextColor(int textColor) {
         this.textColor = textColor;
         if (getDataGridAdapter()!=null)
             getDataGridAdapter().setColor(textColor);
     }
+    public void setRowColor1(int rowColor1) { this.rowColor1 = rowColor1; }
+    public void setRowColor2(int rowColor2) { this.rowColor2 = rowColor2; }
+    public void setHeaderBackColor(int headerBackColor) {
+        this.headerBackColor = headerBackColor;
+        headerLayout.setBackgroundColor(headerBackColor);
+    }
+    public void setHeaderForeColor(int headerForeColor) {
+        this.headerForeColor = headerForeColor;
+        getDataGridAdapter().setHeaderForeColor(headerForeColor);
+    }
+
+    //endregion
 }

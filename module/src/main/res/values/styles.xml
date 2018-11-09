@@ -20,36 +20,63 @@
         </attr>
     </declare-styleable>
 
+
+
+
     <attr name="focusedDrawable" format="color|reference" />
     <attr name="unFocusedDrawable" format="color|reference" />
-    <attr name="viewID" format="reference" />
+    <attr name="rowColor1" format="color|reference"/>
+    <attr name="rowColor2" format="color|reference"/>
+    <attr name="headerBackColor" format="color|reference"/>
+    <attr name="headerForeColor" format="color|reference"/>
 
+    <attr name="viewID" format="reference" />
+    <attr name="showHeader" format="boolean" />
+    <attr name="showFilter" format="boolean" />
+    <attr name="dataType" format="enum">
+        <enum name="String" value="0" />
+        <enum name="Int" value="1" />
+        <enum name="Double" value="2" />
+        <enum name="Date" value="3" />
+    </attr>
+    <attr name="format" format="string"/>
+    <attr name="fieldName" format="string"/>
+    <attr name="autoWidth" format="boolean"/>
+    <attr name="headerLayout" format="reference"/>
+    <attr name="textColor" format="color|reference"/>
 
     <declare-styleable name="InputLayout">
         <attr name="focusedDrawable" />
         <attr name="unFocusedDrawable" />
         <attr name="hint" />
     </declare-styleable>
-
     <declare-styleable name="ViewLayout">
         <attr name="focusedDrawable" />
         <attr name="unFocusedDrawable"  />
         <attr name="viewID"  />
         <attr name="hint" />
     </declare-styleable>
-
-
-    <attr name="showHeader" format="boolean" />
-    <attr name="showFilter" format="boolean" />
-
     <declare-styleable name="DataGridView">
 
         <attr name="showHeader" />
         <attr name="showFilter" />
         <attr name="textSize"   />
         <attr name="textColor"   />
-
+        <attr name="headerLayout" />
+        <attr name="rowColor1" />
+        <attr name="rowColor2" />
+        <attr name="headerBackColor" />
+        <attr name="headerForeColor" />
 
     </declare-styleable>
+    <declare-styleable name="DataGridTextView">
+
+        <attr name="dataType" />
+        <attr name="format"   />
+        <attr name="fieldName"/>
+        <attr name="autoWidth"/>
+    </declare-styleable>
+
+
 
 </resources>

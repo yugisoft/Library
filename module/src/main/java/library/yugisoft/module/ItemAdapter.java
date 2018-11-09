@@ -27,6 +27,10 @@ public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapt
     public int contentView;
     private String YerelParaBirimi="TL";
 
+    public void setContentView(int contentView) {
+        this.contentView = contentView;
+    }
+
     public LayoutInflater getLayoutInflater() {
         return layoutInflater;
     }
