@@ -15,6 +15,5 @@
         android:layout_height="match_parent"
         android:background="@drawable/dotted"
         android:fillViewport="true"
-        app:headerLayout="@layout/item_test"
         />
 </LinearLayout>
