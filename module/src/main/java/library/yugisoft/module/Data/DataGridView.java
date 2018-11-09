@@ -297,6 +297,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         getDataGridAdapter().setParentWidth(0);
         getDataGridAdapter().setData(data);
     }
+    public DataTable getData(){ return  getDataGridAdapter().getData();}
 
     public AdapterView.OnItemClickListener getOnItemClickListener() {
         return getDataGridAdapter().getOnItemClickListener();
