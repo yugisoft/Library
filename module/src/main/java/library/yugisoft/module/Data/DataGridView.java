@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -100,6 +101,8 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         //listView.setAdapter(getDataGridAdapter());
         dataGridAdapter.notifyDataSetChanged();
     }
+
+
 
 
 
@@ -293,5 +296,13 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     {
         getDataGridAdapter().setParentWidth(0);
         getDataGridAdapter().setData(data);
+    }
+
+    public AdapterView.OnItemClickListener getOnItemClickListener() {
+        return getDataGridAdapter().getOnItemClickListener();
+    }
+
+    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        getDataGridAdapter().setOnItemClickListener(onItemClickListener);
     }
 }
