@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -123,6 +125,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     private EditText current;
     private int height;
     private int headerForeColor = Color.WHITE;
+    private int parentWidth;
 
     public DataGridAdapter(Context context) {
         super(context);
@@ -139,6 +142,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         LinearLayout layout = (LinearLayout) (view == null ? view = getLayout() : view);
+        layout.setGravity(Gravity.CENTER_VERTICAL);
         if (Columns !=null)
             layout = (LinearLayout) super.getView(i,view,viewGroup);
 
@@ -168,18 +172,31 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     //region Property
     String[] filters ;
 
-    private float getColumnLenght(int i) {
+    private float getColumnLenght(int i)
+    {
+
+        if (getParentWidth()>0 && totalWith()<getParentWidth())
+        {
+            if (vList.Min(columLenght).value != -1)
+            {
+
+                int in = columLenght.indexOf(vList.Max(columLenght).item);
+                columLenght.set(in, -1);
+            }
+        }
         String name = getColumns().get(i);
         try
         {
+
             float s = columLenght.get(i);
-            if (s>0)
+            if (s!=0)
                 return s;
             else
             {
                 String lenght = getCaptions().get(i);
                 String lenght2 = vList.Max(getList(),p-> p.get(name).length()).item.get(name);
                 columLenght.set(i,getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 ));
+
                 return columLenght.get(i);
             }
         }
@@ -188,11 +205,23 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
             String lenght = getCaptions().get(i);
             String lenght2 = vList.Max(getList(),p-> p.get(name).length()).item.get(name);
             columLenght.add(getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 ));
-            return columLenght.get(i);
-
         }
+        return columLenght.get(i);
     }
-    private float getTextLenght(String text) {
+
+    private int totalWith() {
+        int w = 0;
+        for (int i = 0; i < getColumns().size() ; i++)
+        {
+            String index = getColumns().get(i);
+            String lenght = getCaptions().get(i);
+            String lenght2 = vList.Max(getList(),p-> p.get(index).length()).item.get(index);
+            w += getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 );
+        }
+        return w;
+    }
+
+    private int getTextLenght(String text) {
 
         try
         {
@@ -245,7 +274,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         this.color = color;
     }
     private DataTable data;
-    List<Float> columLenght = new ArrayList<>();
+    List<Integer> columLenght = new ArrayList<>();
     public DataTable getData() {
         return data;
     }
@@ -292,8 +321,10 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setGravity(Gravity.CENTER_VERTICAL);
         return  linearLayout;
     }
+
     public View getFilterView() {
 
         LinearLayout layout = getLayout() ;
@@ -331,7 +362,15 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         textView.setOnClickListener(HeaderClick);
         textView.setOnLongClickListener(HeaderLongClick);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams params;
+        if (width==-1)
+        {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1.0f);
+        }
+        else
+        {
+            params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+        }
         textView.setPaddingRelative(3,5,3,5);
         params.setMargins(3,5,3,5);
         textView.setLayoutParams(params);
@@ -361,7 +400,16 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         });
         textView.addTextChangedListener(filterchange);
         textView.setTag(k);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, height+(int)yugi.convertPixelToDp(20,context));
+
+        LinearLayout.LayoutParams params;
+        if (width==-1)
+        {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1.0f);
+        }
+        else
+        {
+            params = new LinearLayout.LayoutParams((int)width, height+(int)yugi.convertPixelToDp(20,context));
+        }
         textView.setPaddingRelative(3,5,3,5);
         params.setMargins(3,5,3,5);
         textView.setLayoutParams(params);
@@ -397,6 +445,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         //textView.setBackground(context.getResources().getDrawable(R.drawable.border));
         return  textView;
     }
+
     private View getTextView(int i, int k) {
 
         String name = getColumns().get(k);
@@ -406,10 +455,22 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         if (textView.isAutoSize())
         {
             float width = getColumnLenght(k);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params;
+            if (width==-1)
+            {
+                 params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT,1.0f);
+            }
+            else
+            {
+                params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
             params.setMargins(3,5,3,5);
+            params.gravity = Gravity.CENTER_VERTICAL;
             textView.setLayoutParams(params);
         }
+
+        textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
+        textView.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
 
         String caption = getList().get(i).get(name);
         textView.setValue(caption);
@@ -428,7 +489,16 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         if (textView.isAutoSize())
         {
             float width = getColumnLenght(k);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params;
+            if (width==-1)
+            {
+                params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT,1.0f);
+            }
+            else
+            {
+                params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+            params.gravity = Gravity.CENTER_VERTICAL;
             params.setMargins(3,5,3,5);
             textView.setLayoutParams(params);
         }
@@ -451,20 +521,36 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
          if (textView.isAutoSize())
          {
              float width = getColumnLenght(k);
-             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+             LinearLayout.LayoutParams params;
+             if (width==-1)
+             {
+                 params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1.0f);
+             }
+             else
+             {
+                 params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+             }
              textView.setPaddingRelative(3,5,3,5);
              params.setMargins(3,5,3,5);
              textView.setLayoutParams(params);
          }
          else
          {
-             columLenght.add((float) textView.getWidth());
+             columLenght.add(textView.getWidth());
          }
      }
     }
 
     public void setHeaderForeColor(int headerForeColor) {
         this.headerForeColor = headerForeColor;
+    }
+
+    public void setParentWidth(int parentWidth) {
+        this.parentWidth = parentWidth;
+    }
+
+    public int getParentWidth() {
+        return parentWidth;
     }
 }
 

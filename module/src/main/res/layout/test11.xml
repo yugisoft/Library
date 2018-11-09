@@ -5,11 +5,12 @@
     android:layout_height="match_parent">
 
 
-  <library.yugisoft.module.Data.DataGridView
-      android:id="@+id/dataGrid"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="@drawable/dotted"
-      android:fillViewport="true"
-      app:showFilter="false" />
+    <library.yugisoft.module.Data.DataGridView
+        android:id="@+id/dataGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/dotted"
+        android:fillViewport="true"
+
+        />
 </LinearLayout>

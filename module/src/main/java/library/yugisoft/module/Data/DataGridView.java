@@ -105,6 +105,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     @Override
     public void onLoad(List data) {
 
+
         //region Manual Load
         if (!useHeaderLayout)
         {
@@ -259,6 +260,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     public void setHeaderBackColor(int headerBackColor) {
         this.headerBackColor = headerBackColor;
         headerLayout.setBackgroundColor(headerBackColor);
+        filterLayout.setBackgroundColor(headerBackColor);
     }
     public void setHeaderForeColor(int headerForeColor) {
         this.headerForeColor = headerForeColor;
@@ -266,4 +268,20 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     }
 
     //endregion
+
+
+    int width = 0;
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        if (width == 0 || width != this.getWidth())
+        {
+            width = this.getWidth();
+            getDataGridAdapter().getData().Parent =null;
+            getDataGridAdapter().setParentWidth(width);
+            getDataGridAdapter().notifyDataSetChanged();
+        }
+
+
+    }
 }
