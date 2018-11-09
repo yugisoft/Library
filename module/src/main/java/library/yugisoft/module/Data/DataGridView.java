@@ -277,9 +277,11 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         if (width == 0 || width != this.getWidth())
         {
             width = this.getWidth();
-            getDataGridAdapter().getData().Parent =null;
-            getDataGridAdapter().setParentWidth(width);
-            getDataGridAdapter().notifyDataSetChanged();
+            try{getDataGridAdapter().getData().Parent =null;}catch (Exception ex){}
+            try{ getDataGridAdapter().setParentWidth(width);}catch (Exception ex){}
+            try{getDataGridAdapter().notifyDataSetChanged();}catch (Exception ex){}
+
+
         }
 
 
