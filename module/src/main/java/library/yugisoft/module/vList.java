@@ -277,7 +277,7 @@ public class vList<E>  implements List<E>{
             item.value = list.get(0);
             item.item = item.value;
             for (int i = 0; i < list.size(); i++)
-                if (list.get(i) > item.value)
+                if (list.get(i) < item.value)
                 {
                     item.value = list.get(i);
                     item.item = item.value;
@@ -405,7 +405,7 @@ public class vList<E>  implements List<E>{
             item.value = list.get(0);
             item.item = item.value;
             for (int i = 0; i < list.size(); i++)
-                if (list.get(i) > item.value)
+                if (list.get(i) < item.value)
                 {
                     item.value= list.get(i);
                     item.item = item.value;

@@ -294,8 +294,10 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
 
     public void setData(DataTable data)
     {
+        width = 0;
         getDataGridAdapter().setParentWidth(0);
         getDataGridAdapter().setData(data);
+        this.requestLayout();
     }
     public DataTable getData(){ return  getDataGridAdapter().getData();}
 

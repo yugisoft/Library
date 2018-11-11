@@ -179,7 +179,6 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         {
             if (vList.Min(columLenght).value != -1)
             {
-
                 int in = columLenght.indexOf(vList.Max(columLenght).item);
                 columLenght.set(in, -1);
             }
@@ -193,8 +192,16 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
                 return s;
             else
             {
-                String lenght = getCaptions().get(i);
-                String lenght2 = vList.Max(getList(),p-> p.get(name).length()).item.get(name);
+                String lenght = getCaption(i);
+                String lenght2 = "";
+                try
+                {
+                    vList.Max(getList(),p-> p.get(name).length()).item.get(name);
+                }
+                catch (Exception ex)
+                {
+
+                }
                 columLenght.set(i,getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 ));
 
                 return columLenght.get(i);
@@ -202,8 +209,16 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         }
         catch (Exception ex)
         {
-            String lenght = getCaptions().get(i);
-            String lenght2 = vList.Max(getList(),p-> p.get(name).length()).item.get(name);
+            String lenght = getCaption(i);
+            String lenght2 = "";
+            try
+            {
+                vList.Max(getList(),p-> p.get(name).length()).item.get(name);
+            }
+            catch (Exception exx)
+            {
+
+            }
             columLenght.add(getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 ));
         }
         return columLenght.get(i);
@@ -214,7 +229,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         for (int i = 0; i < getColumns().size() ; i++)
         {
             String index = getColumns().get(i);
-            String lenght = getCaptions().get(i);
+            String lenght =getCaption(i);
             String lenght2 = vList.Max(getList(),p-> p.get(index).length()).item.get(index);
             w += getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 );
         }
@@ -319,7 +334,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     //region Create View
     public LinearLayout getLayout() {
         LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setGravity(Gravity.CENTER_VERTICAL);
         return  linearLayout;
@@ -346,8 +361,12 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         for (int k = 0; k< getColumns().size() ; k++ ) { layout.addView(getHeaderTextView(k)); }
         return layout;
     }
-    private View getHeaderTextView(int k) {
-        String caption = getCaptions().get(k);
+    private View getHeaderTextView(int k)
+    {
+
+
+        String caption = getCaption(k);
+
         float width = getColumnLenght(k);
 
         TextView textView = new TextView(context);
@@ -377,6 +396,27 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
 
         return  textView;
     }
+
+    private String getCaption(int k)
+    {
+        try
+        {
+            return  getCaptions().get(k);
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                return  getColumns().get(k);
+            }
+            catch (Exception exx)
+            {
+                return "invalid";
+            }
+        }
+
+    }
+
     private View getFilterTextView(int k) {
 
         float width = getColumnLenght(k);
@@ -408,7 +448,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         }
         else
         {
-            params = new LinearLayout.LayoutParams((int)width, height+(int)yugi.convertPixelToDp(20,context));
+            params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
         }
         textView.setPaddingRelative(3,5,3,5);
         params.setMargins(3,5,3,5);
@@ -458,13 +498,15 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
             LinearLayout.LayoutParams params;
             if (width==-1)
             {
-                 params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT,1.0f);
+                params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height+20,1.0f);
             }
             else
             {
-                params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params = new LinearLayout.LayoutParams((int)width, height+20);
             }
+            textView.setPaddingRelative(3,5,3,5);
             params.setMargins(3,5,3,5);
+
             params.gravity = Gravity.CENTER_VERTICAL;
             textView.setLayoutParams(params);
         }
@@ -510,6 +552,8 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         textView.setPaddingRelative(3,5,3,5);
         return  textView;
     }
+
+
     //endregion
 
     public void setHeaderItemSize(ViewGroup childAt) {
