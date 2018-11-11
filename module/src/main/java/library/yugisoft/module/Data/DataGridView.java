@@ -38,13 +38,13 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
 
     boolean useHeaderLayout=false;
     int headerLayoutid = 0;
-
+    boolean isLoad= false;
     private LinearLayout verLayout,filterLayout;
     private ViewGroup headerLayout;
 
     private void init() {
 
-
+        isLoad =false;
         inflate(getContext(), R.layout.view_datagridview,this);
         this.setPadding(3,0,3,3);
         verLayout = (LinearLayout)findViewById(R.id.layout);
@@ -84,7 +84,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
             setTextColor(getDataGridAdapter().getColor());
             setTextSize(getDataGridAdapter().getTextSize());
         }
-
+isLoad=true;
 
 
 
@@ -110,78 +110,79 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     public void onLoad(List data) {
 
 
-        //region Manual Load
-        if (!useHeaderLayout)
+        if (isLoad)
         {
-            if (getDataGridAdapter().getData()==null)
+            //region Manual Load
+            if (!useHeaderLayout)
             {
-                headerLayout.removeAllViews();
-                filterLayout.removeAllViews();
-                verLayout.removeAllViews();
-                return;
-            }
-            else
-
-            {
-                if ( getDataGridAdapter().getData().Parent ==null)
+                if (getDataGridAdapter().getData()==null)
                 {
                     headerLayout.removeAllViews();
                     filterLayout.removeAllViews();
+                    verLayout.removeAllViews();
+                    return;
                 }
-                verLayout.removeAllViews();
+                else
 
-                if (getDataGridAdapter().getData().Columns.size() > 0 && headerLayout.getChildCount() ==0)
                 {
-                    headerLayout.addView(getDataGridAdapter().getHeaderView());
+                    if ( getDataGridAdapter().getData().Parent ==null)
+                    {
+                        headerLayout.removeAllViews();
+                        filterLayout.removeAllViews();
+                    }
+                    verLayout.removeAllViews();
 
-                    filterLayout.addView(getDataGridAdapter().getFilterView());
+                    if (getDataGridAdapter().getData().Columns.size() > 0 && headerLayout.getChildCount() ==0)
+                    {
+                        headerLayout.addView(getDataGridAdapter().getHeaderView());
+
+                        filterLayout.addView(getDataGridAdapter().getFilterView());
+                    }
+
+                    for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
+                    {
+                        View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
+                        verLayout.addView(v);
+                        v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
+
+                    }
+
+                    getDataGridAdapter().getData().Parent = this;
                 }
-
-                for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
-                {
-                    View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
-                    verLayout.addView(v);
-                    v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
-
-                }
-
-                getDataGridAdapter().getData().Parent = this;
             }
-        }
-        //endregion
-        //region Custom Load
-        else
-        {
-
-            verLayout.removeAllViews();
-            if (getDataGridAdapter().getData()==null)
-            {
-                filterLayout.removeAllViews();
-            }
+            //endregion
+            //region Custom Load
             else
             {
-                if ( getDataGridAdapter().getData().Parent ==null)
+
+                verLayout.removeAllViews();
+                if (getDataGridAdapter().getData()==null)
+                {
+                    filterLayout.removeAllViews();
+                }
+                else
+                {
                     setDataGridAdapterHeaderInfo();
+                    if (getDataGridAdapter().getData().Columns.size() > 0 && filterLayout.getChildCount() == 0)
+                    {
+                        getDataGridAdapter().setHeaderItemSize((ViewGroup)headerLayout.getChildAt(0));
+                        filterLayout.addView(getDataGridAdapter().getFilterView((ViewGroup) headerLayout.getChildAt(0)));
+                    }
 
-                if (getDataGridAdapter().getData().Columns.size() > 0 && filterLayout.getChildCount() == 0)
-                {
-                    getDataGridAdapter().setHeaderItemSize((ViewGroup)headerLayout.getChildAt(0));
-                    filterLayout.addView(getDataGridAdapter().getFilterView((ViewGroup) headerLayout.getChildAt(0)));
+                    for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
+                    {
+                        View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
+                        verLayout.addView(v);
+
+                        v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
+                    }
+
+                    getDataGridAdapter().getData().Parent = this;
+
                 }
-
-                for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
-                {
-                    View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
-                    verLayout.addView(v);
-
-                    v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
-                }
-
-                getDataGridAdapter().getData().Parent = this;
-
             }
+            //endregion
         }
-        //endregion
 
     }
 
