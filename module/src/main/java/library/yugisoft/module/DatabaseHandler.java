@@ -84,7 +84,8 @@ public class DatabaseHandler
     public static class DBTABLE extends SQLiteOpenHelper {
         DataTable dt = new DataTable();
         public String TABLENAME;
-            public List<DBColumn> Columns = new ArrayList<>();
+
+        public List<DBColumn> Columns = new ArrayList<>();
 
         public DBTABLE(Context context, String tablename) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -200,9 +201,22 @@ public class DatabaseHandler
             return pSelect("SELECT Count(*) FROM " + TABLENAME).getInt(0,0);
         }
 
+        public void Insert(DataTable o)
+        {
+            for (DataTable.DataRow row:o.Rows)
+            {
+                    Insert(row);
+            }
+        }
+        public void Insert(DataTable.DataRow o)
+        {
+            String sql = sqlInsert();
+            for (int i =0 ; i< o.Cells.size();i++) { sql = sql.replace("{"+o.Cells.get(i).Name+"}","'"+o.Cells.get(i).Name+"'"); }
+            mSelect(sql);
+        }
+
         public void Insert(Object o)
         {
-
             //region Fields
 
             Field[] f = o.getClass().getFields();
@@ -255,6 +269,10 @@ public class DatabaseHandler
             db.close();
             //endregion
         }
+
+
+
+
 
         public String sqlCreate() {
             String SQL = "CREATE TABLE " + TABLENAME + " ( ";
