@@ -98,6 +98,7 @@ isLoad=true;
 
     private void setDataGridAdapter(DataGridAdapter dataGridAdapter) {
         this.dataGridAdapter = dataGridAdapter;
+        this.dataGridAdapter.setOnDataGridValueChanged(gridValueChanged);
         dataGridAdapter.setOnAdapterDataLoad(this);
         //listView.setAdapter(getDataGridAdapter());
         dataGridAdapter.notifyDataSetChanged();
