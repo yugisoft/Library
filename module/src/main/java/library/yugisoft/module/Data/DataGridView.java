@@ -47,7 +47,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
 
         isLoad =false;
         inflate(getContext(), R.layout.view_datagridview,this);
-        this.setPadding(3,0,3,3);
+
         verLayout = (LinearLayout)findViewById(R.id.layout);
 
         headerLayout= (LinearLayout)findViewById(R.id.headerLayout);
