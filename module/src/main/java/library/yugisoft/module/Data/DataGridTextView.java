@@ -33,7 +33,9 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
 
 
 
-    private int type = 0;
+    private int type = 0,row,cell;
+
+    private DataGridValueChanged onDataGridValueChanged;
 
     private String format="",fieldName="";
 
@@ -108,5 +110,36 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
             }
 
         }
+        if (getOnDataGridValueChanged()!=null)
+            getOnDataGridValueChanged().onChange(getRow(),getCell(),this,caption);
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getCell() {
+        return cell;
+    }
+
+    public void setCell(int cell) {
+        this.cell = cell;
+    }
+
+    public DataGridValueChanged getOnDataGridValueChanged() {
+        return onDataGridValueChanged;
+    }
+
+    public void setOnDataGridValueChanged(DataGridValueChanged onDataGridValueChanged) {
+        this.onDataGridValueChanged = onDataGridValueChanged;
+    }
+
+    public interface DataGridValueChanged
+    {
+        void  onChange(int row,int cell,DataGridTextView textView,String value);
     }
 }

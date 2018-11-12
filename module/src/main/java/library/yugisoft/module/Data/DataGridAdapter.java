@@ -491,7 +491,9 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         String name = getColumns().get(k);
 
         DataGridTextView textView = new DataGridTextView(context);
-
+        textView.setRow(i);
+        textView.setCell(k);
+        textView.setOnDataGridValueChanged(onGridValueChanged);
         if (textView.isAutoSize())
         {
             float width = getColumnLenght(k);
@@ -528,6 +530,9 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     private View getTextView(ViewGroup layout,int i, int k) {
         String name = getColumns().get(k);
         DataGridTextView textView = (DataGridTextView) layout.getChildAt(k);
+        textView.setRow(i);
+        textView.setCell(k);
+        textView.setOnDataGridValueChanged(onGridValueChanged);
         if (textView.isAutoSize())
         {
             float width = getColumnLenght(k);
@@ -595,6 +600,24 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
 
     public int getParentWidth() {
         return parentWidth;
+    }
+
+    private DataGridTextView.DataGridValueChanged onGridValueChanged = new DataGridTextView.DataGridValueChanged() {
+        @Override
+        public void onChange(int row, int cell, DataGridTextView textView,String value) {
+            if (getOnDataGridValueChanged()!=null)
+                getOnDataGridValueChanged().onChange(row,cell,textView,value);
+        }
+    };
+
+    private DataGridTextView.DataGridValueChanged onDataGridValueChanged;
+
+    public DataGridTextView.DataGridValueChanged getOnDataGridValueChanged() {
+        return onDataGridValueChanged;
+    }
+
+    public void setOnDataGridValueChanged(DataGridTextView.DataGridValueChanged onDataGridValueChanged) {
+        this.onDataGridValueChanged = onDataGridValueChanged;
     }
 }
 

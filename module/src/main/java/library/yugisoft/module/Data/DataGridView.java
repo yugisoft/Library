@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import library.yugisoft.module.DataTable;
+import library.yugisoft.module.DateTextView;
 import library.yugisoft.module.INTERFACES;
 import library.yugisoft.module.R;
 
@@ -103,7 +104,17 @@ isLoad=true;
     }
 
 
+    private DataGridTextView.DataGridValueChanged onDataGridValueChanged;
 
+    private DataGridTextView.DataGridValueChanged gridValueChanged = new DataGridTextView.DataGridValueChanged() {
+        @Override
+        public void onChange(int row, int cell, DataGridTextView textView,String value) {
+       if (getOnDataGridValueChanged()!=null)
+
+           getOnDataGridValueChanged().onChange(row,cell,textView,value);
+
+        }
+    };
 
 
     @Override
@@ -308,5 +319,13 @@ isLoad=true;
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
         getDataGridAdapter().setOnItemClickListener(onItemClickListener);
+    }
+
+    public DataGridTextView.DataGridValueChanged getOnDataGridValueChanged() {
+        return onDataGridValueChanged;
+    }
+
+    public void setOnDataGridValueChanged(DataGridTextView.DataGridValueChanged onDataGridValueChanged) {
+        this.onDataGridValueChanged = onDataGridValueChanged;
     }
 }
