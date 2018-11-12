@@ -196,7 +196,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
                 String lenght2 = "";
                 try
                 {
-                    vList.Max(getList(),p-> p.get(name).length()).item.get(name);
+                    lenght2 =  vList.Max(getList(),p-> p.get(name).length()).item.get(name);
                 }
                 catch (Exception ex)
                 {
@@ -213,7 +213,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
             String lenght2 = "";
             try
             {
-                vList.Max(getList(),p-> p.get(name).length()).item.get(name);
+                lenght2 =  vList.Max(getList(),p-> p.get(name).length()).item.get(name);
             }
             catch (Exception exx)
             {
