@@ -512,16 +512,14 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
             params.gravity = Gravity.CENTER_VERTICAL;
             textView.setLayoutParams(params);
         }
-
         textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
         textView.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
-
         String caption = getList().get(i).get(name);
-        textView.setValue(caption);
         textView.setTextSize(getTextSize());
         textView.setTextColor(getColor());
         textView.setTypeface(getTypeface());
         textView.setPaddingRelative(3,5,3,5);
+        textView.setValue(caption);
 
 
 
@@ -550,11 +548,11 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
             textView.setLayoutParams(params);
         }
         String caption = getList().get(i).get(name);
-        textView.setValue(caption);
         textView.setTextSize(getTextSize());
         textView.setTextColor(getColor());
         textView.setTypeface(getTypeface());
         textView.setPaddingRelative(3,5,3,5);
+        textView.setValue(caption);
         return  textView;
     }
 
