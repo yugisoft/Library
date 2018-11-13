@@ -26,7 +26,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.lang.annotation.Retention;
@@ -34,7 +33,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import library.yugisoft.module.R;
 
-public class FloatingActionButton extends android.support.v7.widget.AppCompatImageButton {
+public class FloatingActionMenuButton extends android.support.v7.widget.AppCompatImageButton {
 
     public static final int SIZE_NORMAL = 0;
     public static final int SIZE_MINI = 1;
@@ -59,29 +58,29 @@ public class FloatingActionButton extends android.support.v7.widget.AppCompatIma
     private int mDrawableSize;
     boolean mStrokeVisible;
 
-    public FloatingActionButton(Context context) {
+    public FloatingActionMenuButton(Context context) {
         this(context, null);
     }
 
-    public FloatingActionButton(Context context, AttributeSet attrs) {
+    public FloatingActionMenuButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public FloatingActionButton(Context context, AttributeSet attrs, int defStyle) {
+    public FloatingActionMenuButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
 
     void init(Context context, AttributeSet attributeSet) {
-        TypedArray attr = context.obtainStyledAttributes(attributeSet, R.styleable.FloatingActionButton, 0, 0);
-        mColorNormal = attr.getColor(R.styleable.FloatingActionButton_fab_colorNormal, getColor(android.R.color.holo_blue_dark));
-        mColorPressed = attr.getColor(R.styleable.FloatingActionButton_fab_colorPressed, getColor(android.R.color.holo_blue_light));
-        mColorDisabled = attr.getColor(R.styleable.FloatingActionButton_fab_colorDisabled, getColor(android.R.color.darker_gray));
-        mSize = attr.getInt(R.styleable.FloatingActionButton_fab_size, SIZE_NORMAL);
-        mIcon = attr.getResourceId(R.styleable.FloatingActionButton_fab_icon, 0);
-        mTitle = attr.getString(R.styleable.FloatingActionButton_fab_title);
-        mStrokeVisible = attr.getBoolean(R.styleable.FloatingActionButton_fab_stroke_visible, true);
+        TypedArray attr = context.obtainStyledAttributes(attributeSet, R.styleable.FloatingActionMenuButton, 0, 0);
+        mColorNormal = attr.getColor(R.styleable.FloatingActionMenuButton_fab_colorNormal, getColor(android.R.color.holo_blue_dark));
+        mColorPressed = attr.getColor(R.styleable.FloatingActionMenuButton_fab_colorPressed, getColor(android.R.color.holo_blue_light));
+        mColorDisabled = attr.getColor(R.styleable.FloatingActionMenuButton_fab_colorDisabled, getColor(android.R.color.darker_gray));
+        mSize = attr.getInt(R.styleable.FloatingActionMenuButton_fab_size, SIZE_NORMAL);
+        mIcon = attr.getResourceId(R.styleable.FloatingActionMenuButton_fab_icon, 0);
+        mTitle = attr.getString(R.styleable.FloatingActionMenuButton_fab_title);
+        mStrokeVisible = attr.getBoolean(R.styleable.FloatingActionMenuButton_fab_stroke_visible, true);
         attr.recycle();
 
         updateCircleSize();

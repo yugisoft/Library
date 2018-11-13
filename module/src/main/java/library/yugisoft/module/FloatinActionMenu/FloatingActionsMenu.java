@@ -80,7 +80,7 @@ public class FloatingActionsMenu extends ViewGroup {
 
     private AnimatorSet mExpandAnimation = new AnimatorSet().setDuration(ANIMATION_DURATION);
     private AnimatorSet mCollapseAnimation = new AnimatorSet().setDuration(ANIMATION_DURATION);
-    private AddFloatingActionButton mAddButton;
+    private AddFloatingActionMenuButton mAddButton;
     private RotatingDrawable mRotatingDrawable;
     private int mMaxButtonWidth;
     private int mMaxButtonHeight;
@@ -133,7 +133,7 @@ public class FloatingActionsMenu extends ViewGroup {
         mAddButtonPlusColor = attr.getColor(R.styleable.FloatingActionsMenu_fab_addButtonPlusIconColor, getColor(android.R.color.white));
         mAddButtonColorNormal = attr.getColor(R.styleable.FloatingActionsMenu_fab_addButtonColorNormal, getColor(android.R.color.holo_blue_dark));
         mAddButtonColorPressed = attr.getColor(R.styleable.FloatingActionsMenu_fab_addButtonColorPressed, getColor(android.R.color.holo_blue_light));
-        mAddButtonSize = attr.getInt(R.styleable.FloatingActionsMenu_fab_addButtonSize, FloatingActionButton.SIZE_NORMAL);
+        mAddButtonSize = attr.getInt(R.styleable.FloatingActionsMenu_fab_addButtonSize, FloatingActionMenuButton.SIZE_NORMAL);
         mAddButtonStrokeVisible = attr.getBoolean(R.styleable.FloatingActionsMenu_fab_addButtonStrokeVisible, true);
         mExpandDirection = attr.getInt(R.styleable.FloatingActionsMenu_fab_expandDirection, EXPAND_UP);
         mLabelsStyle = attr.getResourceId(R.styleable.FloatingActionsMenu_fab_labelStyle, 0);
@@ -183,7 +183,7 @@ public class FloatingActionsMenu extends ViewGroup {
     }
 
     private void createAddButton(Context context) {
-        mAddButton = new AddFloatingActionButton(context) {
+        mAddButton = new AddFloatingActionMenuButton(context) {
             @Override
             void updateBackground() {
                 mPlusColor = mAddButtonPlusColor;
@@ -226,7 +226,7 @@ public class FloatingActionsMenu extends ViewGroup {
         mButtonsCount++;
     }
 
-    public void addButton(FloatingActionButton button) {
+    public void addButton(FloatingActionMenuButton button) {
         addView(button, mButtonsCount - 1);
         mButtonsCount++;
 
@@ -235,7 +235,7 @@ public class FloatingActionsMenu extends ViewGroup {
         }
     }
 
-    public void removeButton(FloatingActionButton button) {
+    public void removeButton(FloatingActionMenuButton button) {
         removeView(button.getLabelView());
         removeView(button);
         button.setTag(R.id.fab_label, null);
@@ -551,7 +551,7 @@ public class FloatingActionsMenu extends ViewGroup {
         Context context = new ContextThemeWrapper(getContext(), mLabelsStyle);
 
         for (int i = 0; i < mButtonsCount; i++) {
-            FloatingActionButton button = (FloatingActionButton) getChildAt(i);
+            FloatingActionMenuButton button = (FloatingActionMenuButton) getChildAt(i);
             String title = button.getTitle();
 
             if (button == mAddButton || title == null ||

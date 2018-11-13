@@ -14,25 +14,25 @@ import android.util.AttributeSet;
 
 import library.yugisoft.module.R;
 
-public class AddFloatingActionButton extends FloatingActionButton {
+public class AddFloatingActionMenuButton extends FloatingActionMenuButton {
     int mPlusColor;
 
-    public AddFloatingActionButton(Context context) {
+    public AddFloatingActionMenuButton(Context context) {
         this(context, null);
     }
 
-    public AddFloatingActionButton(Context context, AttributeSet attrs) {
+    public AddFloatingActionMenuButton(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public AddFloatingActionButton(Context context, AttributeSet attrs, int defStyle) {
+    public AddFloatingActionMenuButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
     void init(Context context, AttributeSet attributeSet) {
-        TypedArray attr = context.obtainStyledAttributes(attributeSet, R.styleable.AddFloatingActionButton, 0, 0);
-        mPlusColor = attr.getColor(R.styleable.AddFloatingActionButton_fab_plusIconColor, getColor(android.R.color.white));
+        TypedArray attr = context.obtainStyledAttributes(attributeSet, R.styleable.AddFloatingActionMenuButton, 0, 0);
+        mPlusColor = attr.getColor(R.styleable.AddFloatingActionMenuButton_fab_plusIconColor, getColor(android.R.color.white));
         attr.recycle();
 
         super.init(context, attributeSet);
