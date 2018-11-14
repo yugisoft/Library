@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import library.yugisoft.module.DataTable;
+import library.yugisoft.module.DateTextView;
 import library.yugisoft.module.DialogBox;
 import library.yugisoft.module.ItemAdapter;
 import library.yugisoft.module.R;
@@ -126,9 +127,11 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     private int height;
     private int headerForeColor = Color.WHITE;
     private int parentWidth;
-
-    public DataGridAdapter(Context context) {
+    private DataGridView dataGridView;
+    public DataGridAdapter(Context context,DataGridView dataGridView)
+    {
         super(context);
+        this.dataGridView = dataGridView;
     }
 
 
@@ -172,8 +175,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     //region Property
     String[] filters ;
 
-    private float getColumnLenght(int i)
-    {
+    private float getColumnLenght(int i) {
 
         if (getParentWidth()>0 && totalWith()<getParentWidth())
         {
@@ -196,12 +198,39 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
                 String lenght2 = "";
                 try
                 {
-                    lenght2 =  vList.Max(getList(),p-> p.get(name).length()).item.get(name);
-                }
-                catch (Exception ex)
-                {
+                    if (getOnDataGridValueChanged()!=null)
+                    {
 
+                        DataTable.DataRow rw = vList.Max(getList(),p-> getOnDataGridValueChanged().onChange(-1,i,RowTextView(p,i,name),p.get(name)).length()).item;
+
+                        DataGridTextView tv = new DataGridTextView(context) {
+                            @Override
+                            public int getRow() {
+                                return getList().indexOf(rw);
+                            }
+
+                            @Override
+                            public int getCell() {
+                                return i;
+                            }
+
+                            @Override
+                            public String getFieldName() {
+                                return name;
+                            }
+                        };
+
+                        lenght2 = getOnDataGridValueChanged().onChange(tv.getRow(),tv.getCell(),tv,rw.get(name));
+                    }
+                    else {
+                        lenght2 = vList.Max(getList(), p -> p.get(name).length()).item.get(name);
+                    }
                 }
+                catch (Exception eee)
+                {
+                    lenght2 = vList.Max(getList(), p -> p.get(name).length()).item.get(name);
+                }
+
                 columLenght.set(i,getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 ));
 
                 return columLenght.get(i);
@@ -213,15 +242,52 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
             String lenght2 = "";
             try
             {
-                lenght2 =  vList.Max(getList(),p-> p.get(name).length()).item.get(name);
-            }
-            catch (Exception exx)
-            {
+                if (getOnDataGridValueChanged()!=null)
+                {
 
+                    DataTable.DataRow rw = vList.Max(getList(),p-> getOnDataGridValueChanged().onChange(-1,i,RowTextView(p,i,name),p.get(name)).length()).item;
+
+                    DataGridTextView tv = new DataGridTextView(context) {
+                        @Override
+                        public int getRow() {
+                            return getList().indexOf(rw);
+                        }
+
+                        @Override
+                        public int getCell() {
+                            return i;
+                        }
+
+                        @Override
+                        public String getFieldName() {
+                            return name;
+                        }
+                    };
+
+                    lenght2 = getOnDataGridValueChanged().onChange(tv.getRow(),tv.getCell(),tv,rw.get(name));
+                }
+                else {
+                    lenght2 = vList.Max(getList(), p -> p.get(name).length()).item.get(name);
+                }
+            }
+            catch (Exception eee)
+            {
+                lenght2 = vList.Max(getList(), p -> p.get(name).length()).item.get(name);
             }
             columLenght.add(getTextLenght( lenght.length() > lenght2.length() ? lenght: lenght2 ));
         }
         return columLenght.get(i);
+    }
+
+    DataGridTextView RowTextView(DataTable.DataRow row,int k,String name)
+    {
+        DataGridTextView textView = new DataGridTextView(context);
+
+        textView.setRow(getList().indexOf(row));
+        textView.setCell(k);
+        textView.setFieldName(name);
+
+        return textView;
     }
 
     private int totalWith() {
@@ -419,44 +485,44 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
 
     private View getFilterTextView(int k) {
 
-        float width = getColumnLenght(k);
+    float width = getColumnLenght(k);
 
-        EditText textView = new EditText(context);
-        //textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
+    EditText textView = new EditText(context);
+    //textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
 
-        //textView.setBackgroundColor(Color.WHITE);
+    //textView.setBackgroundColor(Color.WHITE);
 
 
-        textView.setTextSize(getTextSize());
-        textView.setTextColor(getColor());
-        textView.setTypeface(getTypeface());
+    textView.setTextSize(getTextSize());
+    textView.setTextColor(getColor());
+    textView.setTypeface(getTypeface());
 
-        textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus)
-                    current = (EditText)v;
-            }
-        });
-        textView.addTextChangedListener(filterchange);
-        textView.setTag(k);
-
-        LinearLayout.LayoutParams params;
-        if (width==-1)
-        {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1.0f);
+    textView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus)
+                current = (EditText)v;
         }
-        else
-        {
-            params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
-        }
-        textView.setPaddingRelative(3,5,3,5);
-        params.setMargins(3,5,3,5);
-        textView.setLayoutParams(params);
-        textView.setBackgroundColor(Color.WHITE);
-        //textView.setBackground(context.getResources().getDrawable(R.drawable.border));
-        return  textView;
+    });
+    textView.addTextChangedListener(filterchange);
+    textView.setTag(k);
+
+    LinearLayout.LayoutParams params;
+    if (width==-1)
+    {
+        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,1.0f);
     }
+    else
+    {
+        params = new LinearLayout.LayoutParams((int)width, ViewGroup.LayoutParams.MATCH_PARENT);
+    }
+    textView.setPaddingRelative(3,5,3,5);
+    params.setMargins(3,5,3,5);
+    textView.setLayoutParams(params);
+    textView.setBackgroundColor(Color.WHITE);
+    //textView.setBackground(context.getResources().getDrawable(R.drawable.border));
+    return  textView;
+}
     private View getFilterTextView(int k, LinearLayout.LayoutParams params) {
 
         EditText textView = new EditText(context);
@@ -491,6 +557,8 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
         String name = getColumns().get(k);
 
         DataGridTextView textView = new DataGridTextView(context);
+        textView.setDataGridView(this.dataGridView);
+        textView.setFieldName(name);
         textView.setRow(i);
         textView.setCell(k);
         textView.setOnDataGridValueChanged(onGridValueChanged);
@@ -528,6 +596,7 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
     private View getTextView(ViewGroup layout,int i, int k) {
         String name = getColumns().get(k);
         DataGridTextView textView = (DataGridTextView) layout.getChildAt(k);
+        textView.setDataGridView(this.dataGridView);
         textView.setRow(i);
         textView.setCell(k);
         textView.setOnDataGridValueChanged(onGridValueChanged);
@@ -602,9 +671,11 @@ public class DataGridAdapter extends ItemAdapter<DataTable.DataRow> implements V
 
     private DataGridTextView.DataGridValueChanged onGridValueChanged = new DataGridTextView.DataGridValueChanged() {
         @Override
-        public void onChange(int row, int cell, DataGridTextView textView,String value) {
+        public String onChange(int row, int cell, DataGridTextView textView,String value) {
             if (getOnDataGridValueChanged()!=null)
-                getOnDataGridValueChanged().onChange(row,cell,textView,value);
+               return getOnDataGridValueChanged().onChange(row,cell,textView,value);
+            else
+                return value;
         }
     };
 

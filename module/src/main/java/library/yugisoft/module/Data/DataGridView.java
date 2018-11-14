@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import library.yugisoft.module.DataTable;
@@ -22,7 +25,8 @@ import library.yugisoft.module.R;
 
 public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDataLoad {
 
-    private DataGridAdapter dataGridAdapter;
+    //region MORE
+    private DataGridAdapter2 dataGridAdapter;
     AttributeSet attrs; int defStyleAttr;
     public DataGridView(Context context) {
         this(context, null, 0);
@@ -36,12 +40,11 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         this.defStyleAttr =defStyleAttr;
         init();
     }
-
     boolean useHeaderLayout=false;
     int headerLayoutid = 0;
     boolean isLoad= false;
     private LinearLayout verLayout,filterLayout;
-    private ViewGroup headerLayout;
+    private LinearLayout headerLayout;
 
     private void init() {
 
@@ -53,7 +56,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         headerLayout= (LinearLayout)findViewById(R.id.headerLayout);
         filterLayout = (LinearLayout)findViewById(R.id.filterLayout);
         if (dataGridAdapter == null)
-            setDataGridAdapter(new DataGridAdapter(getContext()));
+            setDataGridAdapter(new DataGridAdapter2(getContext(),this));
 
         final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DataGridView, defStyleAttr, 0);
         if (a!=null)
@@ -65,8 +68,9 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
             if (headerLayoutid>0)
             {
                 useHeaderLayout = true;
-                headerLayout = (ViewGroup) inflate(getContext(),headerLayoutid, (ViewGroup)findViewById(R.id.headerLayout));
+                headerLayout = (LinearLayout) inflate(getContext(),headerLayoutid, (ViewGroup)findViewById(R.id.headerLayout));
                 getDataGridAdapter().setContentView(headerLayoutid);
+                setDataGridAdapterHeaderInfo();
             }
 
 
@@ -85,41 +89,54 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
             setTextColor(getDataGridAdapter().getColor());
             setTextSize(getDataGridAdapter().getTextSize());
         }
-isLoad=true;
+        isLoad=true;
 
 
 
 
     }
 
-    private DataGridAdapter getDataGridAdapter() {
+    public DataGridAdapter2 getDataGridAdapter() {
         return dataGridAdapter;
     }
 
-    private void setDataGridAdapter(DataGridAdapter dataGridAdapter) {
+    private void setDataGridAdapter(DataGridAdapter2 dataGridAdapter) {
         this.dataGridAdapter = dataGridAdapter;
-        this.dataGridAdapter.setOnDataGridValueChanged(gridValueChanged);
+        this.dataGridAdapter.setDataGridValueChanged(gridValueChanged);
         dataGridAdapter.setOnAdapterDataLoad(this);
-        //listView.setAdapter(getDataGridAdapter());
         dataGridAdapter.notifyDataSetChanged();
     }
 
-
-    private DataGridTextView.DataGridValueChanged onDataGridValueChanged;
+    private HashMap<String,DataGridTextView.DataGridValueChanged> onChangeMap = new HashMap<>();
+    public void addChangeListener(String fieldName,DataGridTextView.DataGridValueChanged onGridValueChanged) {
+        onChangeMap.remove(fieldName);
+        onChangeMap.put(fieldName,onGridValueChanged);
+    }
+    public void removeChangeListener(String fieldName)
+    {
+        onChangeMap.remove(fieldName);
+    }
 
     private DataGridTextView.DataGridValueChanged gridValueChanged = new DataGridTextView.DataGridValueChanged() {
         @Override
-        public void onChange(int row, int cell, DataGridTextView textView,String value) {
-       if (getOnDataGridValueChanged()!=null)
+        public String onChange(int row, int cell, DataGridTextView textView,String value) {
 
-           getOnDataGridValueChanged().onChange(row,cell,textView,value);
 
+            try {
+                return onChangeMap.get(textView.getFieldName()).onChange(row,cell,textView,value);
+            }
+            catch (Exception ex) {
+                return value;
+            }
         }
+
+
     };
 
 
-    @Override
-    public void onLoad(List data) {
+
+
+    public void onLoadd(List data) {
 
 
         if (isLoad)
@@ -146,9 +163,9 @@ isLoad=true;
 
                     if (getDataGridAdapter().getData().Columns.size() > 0 && headerLayout.getChildCount() ==0)
                     {
-                        headerLayout.addView(getDataGridAdapter().getHeaderView());
+                        //  headerLayout.addView(getDataGridAdapter().getHeaderView());
 
-                        filterLayout.addView(getDataGridAdapter().getFilterView());
+                        //  filterLayout.addView(getDataGridAdapter().getFilterView());
                     }
 
                     for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
@@ -174,22 +191,22 @@ isLoad=true;
                 }
                 else
                 {
-                    setDataGridAdapterHeaderInfo();
-                    if (getDataGridAdapter().getData().Columns.size() > 0 && filterLayout.getChildCount() == 0)
-                    {
-                        getDataGridAdapter().setHeaderItemSize((ViewGroup)headerLayout.getChildAt(0));
-                        filterLayout.addView(getDataGridAdapter().getFilterView((ViewGroup) headerLayout.getChildAt(0)));
-                    }
-
-                    for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
-                    {
-                        View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
-                        verLayout.addView(v);
-
-                        v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
-                    }
-
-                    getDataGridAdapter().getData().Parent = this;
+                    //  setDataGridAdapterHeaderInfo();
+                    //  if (getDataGridAdapter().getData().Columns.size() > 0 && filterLayout.getChildCount() == 0)
+                    //  {
+                    //      getDataGridAdapter().setHeaderItemSize((ViewGroup)headerLayout.getChildAt(0));
+                    //      filterLayout.addView(getDataGridAdapter().getFilterView((ViewGroup) headerLayout.getChildAt(0)));
+                    //  }
+//
+                    //  for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
+                    //  {
+                    //      View v = getDataGridAdapter().getView(i,verLayout.getChildAt(i),verLayout);
+                    //      verLayout.addView(v);
+//
+                    //      v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
+                    //  }
+//
+                    //  getDataGridAdapter().getData().Parent = this;
 
                 }
             }
@@ -198,9 +215,14 @@ isLoad=true;
 
     }
 
+    List<DataGridTextView> textViews = new ArrayList<>();
+    List<String> Columns = new ArrayList<>();
+    List<String> Captions = new ArrayList<>();
     private void setDataGridAdapterHeaderInfo() {
-        List<String> Columns = new ArrayList<>();
-        List<String> Captions = new ArrayList<>();
+        textViews = new ArrayList<>();
+        Columns = new ArrayList<>();
+        Captions = new ArrayList<>();
+
         for (int i=0;i< ((ViewGroup)headerLayout.getChildAt(0)).getChildCount() ; i++)
         {
             View v = ((ViewGroup)headerLayout.getChildAt(0)).getChildAt(i);
@@ -211,12 +233,13 @@ isLoad=true;
                 Captions.add(gridTextView.getText().toString());
                 filterLayout.removeAllViews();
                 verLayout.removeAllViews();
-
+                textViews.add(gridTextView);
             }
         }
-
+        getDataGridAdapter().setTextViews(textViews);
         getDataGridAdapter().setColumns(Columns);
         getDataGridAdapter().setCaptions(Captions);
+
     }
 
 
@@ -225,7 +248,7 @@ isLoad=true;
     //PRIVATE
     private boolean showHeader = true,showFilter = false;
     private int
-             textSize
+            textSize
             ,textColor
             ,rowColor1=Color.WHITE
             ,rowColor2  = Color.parseColor("#E6FFF3")
@@ -295,10 +318,8 @@ isLoad=true;
         {
             width = this.getWidth();
             try{getDataGridAdapter().getData().Parent =null;}catch (Exception ex){}
-            try{ getDataGridAdapter().setParentWidth(width);}catch (Exception ex){}
+            // try{ getDataGridAdapter().setParentWidth(width);}catch (Exception ex){}
             try{getDataGridAdapter().notifyDataSetChanged();}catch (Exception ex){}
-
-
         }
 
 
@@ -308,7 +329,7 @@ isLoad=true;
     public void setData(DataTable data)
     {
         width = 0;
-        getDataGridAdapter().setParentWidth(0);
+        // getDataGridAdapter().setParentWidth(0);
         getDataGridAdapter().setData(data);
         this.requestLayout();
     }
@@ -322,11 +343,69 @@ isLoad=true;
         getDataGridAdapter().setOnItemClickListener(onItemClickListener);
     }
 
-    public DataGridTextView.DataGridValueChanged getOnDataGridValueChanged() {
-        return onDataGridValueChanged;
+
+
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeRefreshLayout;
+
     }
 
-    public void setOnDataGridValueChanged(DataGridTextView.DataGridValueChanged onDataGridValueChanged) {
-        this.onDataGridValueChanged = onDataGridValueChanged;
+    public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
+        this.swipeRefreshLayout = swipeRefreshLayout;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ((ScrollView)findViewById(R.id.gridVerticalScroll)).setOnScrollChangeListener(new OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    swipeRefreshLayout.setEnabled(scrollY==0);
+                }
+            });
+        }
+    }
+    //endregion
+
+
+    @Override
+    public void onLoad(List data) {
+
+
+        if (getDataGridAdapter().getData()==null)
+        {
+            if (headerLayoutid==0)
+                headerLayout.removeAllViews();
+            filterLayout.removeAllViews();
+            verLayout.removeAllViews();
+            return;
+        }
+        else
+        {
+            if ( getDataGridAdapter().getData().Parent ==null)
+            {
+                if (headerLayoutid==0)
+                    headerLayout.removeAllViews();
+                filterLayout.removeAllViews();
+            }
+            verLayout.removeAllViews();
+
+            if (getDataGridAdapter().getData().Columns.size() > 0)
+            {
+                if (headerLayoutid==0)
+                    getDataGridAdapter().getHeaderView(headerLayout);
+                else
+                    getDataGridAdapter().UpdateHeaderView((LinearLayout) headerLayout.getChildAt(0));
+                getDataGridAdapter().getFilterView(filterLayout);
+
+            }
+
+            for (int i = 0 ; i < getDataGridAdapter().getCount();i++)
+            {
+                View v = getDataGridAdapter().getView(i,verLayout);
+                v.getBackground().setColorFilter( (i%2 !=0 ) ? getRowColor2() : getRowColor1() , PorterDuff.Mode.MULTIPLY);
+            }
+            getDataGridAdapter().getData().Parent = this;
+        }
+
     }
 }

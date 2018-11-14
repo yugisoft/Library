@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -152,6 +153,8 @@ public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapt
     public INTERFACES.OnAdapterDataLoad<T> getOnAdapterDataLoad() {
         return onAdapterDataLoad;
     }
+
+
 
 
     public enum ItemType {

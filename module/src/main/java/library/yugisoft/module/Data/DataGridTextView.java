@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import library.yugisoft.module.DataTable;
 import library.yugisoft.module.DateTime;
 import library.yugisoft.module.R;
 import library.yugisoft.module.yugi;
@@ -75,43 +76,92 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
 
     public void setValue(String caption)
     {
-        if (getFormat().equals(""))
+        if (getRow() <  0)
         {
-            switch (getType())
-            {
-                case 0:
-                case 1:
-                    setText(caption);
-                    break;
-                case 2:
-                    setText(yugi.NF2(caption));
-                    break;
-                case 3:
-                    setText(caption);
-                    break;
-            }
+         setText(caption);
+        }
+        else {
+            if (getFormat().equals("")) {
+                switch (getType()) {
+                    case 0:
+                    case 1:
+                        setText(caption);
+                        break;
+                    case 2:
+                        setText(yugi.NF2(caption));
+                        break;
+                    case 3:
+                        setText(caption);
+                        break;
+                }
 
+            } else {
+                switch (getType()) {
+                    case 0:
+                        setText(String.format(getFormat(), caption));
+                    case 1:
+                        setText(String.format(getFormat(), Integer.parseInt(caption)));
+                        break;
+                    case 2:
+                        setText(String.format(getFormat(), Double.parseDouble(caption)));
+                        break;
+                    case 3:
+                        setText(String.format(getFormat(), DateTime.fromDateTime(caption)));
+                        break;
+                }
+
+                if (getText().toString().indexOf("[") > 0 && getText().toString().indexOf("]") > 0) {
+                    for (String item : getText().toString().split("\\[")) {
+                        for (String item2 : item.split("\\]")) {
+                            String itemValue = "";
+                            try {
+                                itemValue = getDataGridView().getData().get(getRow(), item2);
+                            } catch (Exception ex) {
+                            }
+                            if (getOnDataGridValueChanged() != null) {
+                                DataGridTextView t = RowTextView(item2);
+                                setText(getText().toString().replace("[" + item2 + "]", getOnDataGridValueChanged().onChange(getRow(), t.getCell(), t, itemValue)));
+                            } else {
+                                setText(getText().toString().replace("[" + item2 + "]", itemValue));
+                            }
+                        }
+                    }
+                }
+
+
+            }
+            if (getOnDataGridValueChanged() != null && getRow() >= 0)
+                setText(getOnDataGridValueChanged().onChange(getRow(), getCell(), this, getText().toString()));
+        }
+    }
+
+    private DataGridView gridView;
+    public DataGridView getDataGridView() {
+        return gridView;
+    }
+    public void setDataGridView(DataGridView adapter) {
+        this.gridView = adapter;
+    }
+
+
+   DataGridTextView RowTextView(String name)
+    {
+        DataGridTextView textView = new DataGridTextView(getContext());
+
+        if (getDataGridView()!=null)
+        {
+            textView.setRow(getRow());
+            textView.setCell(gridView.getDataGridAdapter().getColumns().indexOf(name));
+            textView.setFieldName(name);
         }
         else
         {
-            switch (getType())
-            {
-                case 0:
-                    setText(String.format(getFormat(),caption));
-                case 1:
-                    setText(String.format(getFormat(),Integer.parseInt(caption)));
-                    break;
-                case 2:
-                    setText(String.format(getFormat(),Double.parseDouble(caption)));
-                    break;
-                case 3:
-                    setText(String.format(getFormat(),DateTime.fromDateTime(caption)));
-                    break;
-            }
-
+            textView.setRow(0);
+            textView.setCell(0);
+            textView.setFieldName("");
         }
-        if (getOnDataGridValueChanged()!=null)
-            getOnDataGridValueChanged().onChange(getRow(),getCell(),this,caption);
+
+        return textView;
     }
 
     public int getRow() {
@@ -140,6 +190,6 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
 
     public interface DataGridValueChanged
     {
-        void  onChange(int row,int cell,DataGridTextView textView,String value);
+        String  onChange(int row,int cell,DataGridTextView textView,String value);
     }
 }
