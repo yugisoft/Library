@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -1035,6 +1036,7 @@ public class yugi
             activity=ma;
             dialog = new Dialog.mDialog(activity,contentID,false);
             view=dialog.view;
+            dialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             Init();
         }
         public  mNumpad(Activity ma) {
