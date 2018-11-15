@@ -49,7 +49,8 @@ public class FloatingActionsMenu extends ViewGroup {
         onClickListener = l;
         for (int i = 0;i<this.getChildCount();i++)
         {
-            this.getChildAt(i).setOnClickListener(onClickListener);
+            if (this.getChildAt(i).getId() != R.id.fab_expand_menu_button)
+                 this.getChildAt(i).setOnClickListener(onClickListener);
         }
     }
 
