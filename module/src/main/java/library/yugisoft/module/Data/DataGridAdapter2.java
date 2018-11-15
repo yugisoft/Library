@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
 import android.text.Layout;
@@ -36,6 +37,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
     String[] filters ;
     private DataGridView dataGridView;
     private int height=0;
+    private int rowColor = 0;
 
 
     public DataGridAdapter2(Context context,DataGridView dataGridView) {
@@ -379,7 +381,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
        return textView;
     }
     private DataGridTextView getHeaderTextView(int i, int k,DataGridTextView textView) {
-        CreateDataGridTextView(i,k,textView);
+        textView = CreateDataGridTextView(i,k,textView);
         textView.setValue(getCaptions().get(k));
         textView.setTextColor(headerForeColor);
         textView.setTextSize(getTextSize()+2);
@@ -388,6 +390,13 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
         return textView;
     }
     private DataGridTextView CreateDataGridTextView(int i, int k,DataGridTextView textView) {
+        //DataGridTextView textView = new DataGridTextView(context);
+        // textView.setFormat(tView.getFormat());
+        // textView.setType(tView.getType());
+        // if (!tView.isAutoSize())
+        // {
+        //     textView.setLayoutParams(tView.getLayoutParams());
+        // }
 
         textView.setType(textViews.get(k).getType());
         textView.setFormat(textViews.get(k).getFormat());
@@ -398,6 +407,13 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
         textView.setCell(k);
 
         textView.setOnDataGridValueChanged(onGridValueChanged);
+
+        textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
+        textView.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
+        textView.setTextSize(getTextSize());
+        textView.setTextColor(getColor());
+        textView.setTypeface(getTypeface());
+
         //region AutoSize
         if (textView.isAutoSize())
         {
@@ -418,18 +434,14 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
             textView.setLayoutParams(params);
         }
         //endregion
-        textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
-        textView.getBackground().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
 
-        textView.setTextSize(getTextSize());
-        textView.setTextColor(getColor());
-        textView.setTypeface(getTypeface());
-        textView.setPaddingRelative(3,5,3,5);
+
 
         return  textView;
     }
 
-    public View getHeaderView(LinearLayout viewGroup) {
+    public View getHeaderView(LinearLayout viewGroup)
+    {
         LinearLayout layout = getLayout();
         layout.setBackground(null);
         layout.setGravity(Gravity.CENTER_VERTICAL);
@@ -490,6 +502,18 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
 
     public View getView(int i,  LinearLayout viewGroup) {
         LinearLayout layout = getLayout();
+        if (rowColor!=0)
+        {
+            try
+            {
+
+                layout.setBackground(context.getResources().getDrawable(rowColor));
+            }
+            catch (Exception ex){
+
+                layout.setBackgroundColor(rowColor);
+            }
+        }
         layout.setTag(i);
         layout.setOnClickListener(this::onClick);
         layout.setGravity(Gravity.CENTER_VERTICAL);
@@ -511,7 +535,13 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
     {
         for (int i =0 ; i< getColumns().size() ;i++)
         {
-            getHeaderTextView(-1,i, (DataGridTextView) header.getChildAt(i));
+            View v =header.getChildAt(i);
+             v = getHeaderTextView(-1,i, (DataGridTextView) header.getChildAt(i));
         }
+    }
+
+    public void setRowColor(int rowColor)
+    {
+        this.rowColor = rowColor;
     }
 }

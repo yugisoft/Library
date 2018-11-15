@@ -44,6 +44,7 @@
     <attr name="autoWidth" format="boolean"/>
     <attr name="headerLayout" format="reference"/>
     <attr name="textColor" format="color|reference"/>
+    <attr name="rowColor" format="color|reference"/>
 
     <declare-styleable name="InputLayout">
         <attr name="focusedDrawable" />
@@ -67,6 +68,7 @@
         <attr name="rowColor2" />
         <attr name="headerBackColor" />
         <attr name="headerForeColor" />
+        <attr name="rowColor" />
 
     </declare-styleable>
     <declare-styleable name="DataGridTextView">
@@ -75,6 +77,8 @@
         <attr name="format"   />
         <attr name="fieldName"/>
         <attr name="autoWidth"/>
+
+
     </declare-styleable>
 
 
