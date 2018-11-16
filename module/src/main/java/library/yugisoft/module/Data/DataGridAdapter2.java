@@ -405,7 +405,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
         textView.setFieldName(name);
         textView.setRow(i);
         textView.setCell(k);
-
+        textView.setTag(k);
         textView.setOnDataGridValueChanged(onGridValueChanged);
 
         textView.setBackground(context.getResources().getDrawable(android.R.drawable.edit_text));
@@ -431,6 +431,12 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
             params.setMargins(3,5,3,5);
 
             params.gravity = Gravity.CENTER_VERTICAL;
+            textView.setLayoutParams(params);
+        }
+        else
+        {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textViews.get(k).getLayoutParams();
+            params.setMargins(3,5,3,5);
             textView.setLayoutParams(params);
         }
         //endregion
@@ -539,7 +545,6 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
              v = getHeaderTextView(-1,i, (DataGridTextView) header.getChildAt(i));
         }
     }
-
     public void setRowColor(int rowColor)
     {
         this.rowColor = rowColor;

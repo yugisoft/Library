@@ -329,7 +329,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     public void setHeaderBackColor(int headerBackColor) {
         this.headerBackColor = headerBackColor;
 
-        if (rowColor==0)
+        if (rowColor!=0)
         {
             try {
                 headerLayout.setBackground(getContext().getResources().getDrawable(rowColor));
@@ -346,8 +346,9 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         }
         else
         {
-            headerLayout.getBackground().setColorFilter(headerBackColor, PorterDuff.Mode.MULTIPLY);
-            filterLayout.getBackground().setColorFilter(headerBackColor, PorterDuff.Mode.MULTIPLY);
+            headerLayout.setBackgroundColor(headerBackColor);
+            filterLayout.setBackgroundColor(headerBackColor);
+            //filterLayout.getBackground().setColorFilter(headerBackColor, PorterDuff.Mode.MULTIPLY);
         }
     }
 
