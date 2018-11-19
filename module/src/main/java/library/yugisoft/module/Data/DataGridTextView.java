@@ -64,6 +64,7 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
 
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
+        setTag(fieldName);
     }
 
     public boolean isAutoSize() {
@@ -192,4 +193,6 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
     {
         String  onChange(int row,int cell,DataGridTextView textView,String value);
     }
+
+
 }
