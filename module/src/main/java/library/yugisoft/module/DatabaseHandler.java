@@ -139,9 +139,11 @@ public class DatabaseHandler
             if (cursor!=null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 do {
                     String[] row = new String[cursor.getColumnCount()];
+
                     for (int i = 0; i < cursor.getColumnCount(); i++) {
-                        row[i] = cursor.getString(i);
+                        row[dt.Columns.indexOf(cursor.getColumnNames()[i])] = cursor.getString(i);
                     }
+                    
                     dt.add(row);
                 } while (cursor.moveToNext());
             }
