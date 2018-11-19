@@ -143,7 +143,7 @@ public class DatabaseHandler
                     for (int i = 0; i < cursor.getColumnCount(); i++) {
                         row[dt.Columns.indexOf(cursor.getColumnNames()[i])] = cursor.getString(i);
                     }
-                    
+
                     dt.add(row);
                 } while (cursor.moveToNext());
             }
