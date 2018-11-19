@@ -489,6 +489,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     public void setBaseDataGridAdapter(BaseDataGridAdapter baseDataGridAdapter) {
         this.baseDataGridAdapter = baseDataGridAdapter;
         baseDataGridAdapter.setDataGridValueChanged(gridValueChanged);
+        baseDataGridAdapter.setOnAdapterDataLoad(this::onLoad);
         onLoad(null);
 
     }

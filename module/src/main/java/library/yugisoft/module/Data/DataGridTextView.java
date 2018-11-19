@@ -75,8 +75,7 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
         this.autoSize = autoSize;
     }
 
-    public void setValue(String caption)
-    {
+    public void setValue(String caption) {
         if (getRow() <  0)
         {
          setText(caption);
@@ -117,6 +116,67 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
                             String itemValue = "";
                             try {
                                 itemValue = getDataGridView().getData().get(getRow(), item2);
+                            } catch (Exception ex) {
+                            }
+                            if (getOnDataGridValueChanged() != null) {
+                                DataGridTextView t = RowTextView(item2);
+                                setText(getText().toString().replace("[" + item2 + "]", getOnDataGridValueChanged().onChange(getRow(), t.getCell(), t, itemValue)));
+                            } else {
+                                setText(getText().toString().replace("[" + item2 + "]", itemValue));
+                            }
+                        }
+                    }
+                }
+
+
+            }
+            if (getOnDataGridValueChanged() != null && getRow() >= 0)
+                setText(getOnDataGridValueChanged().onChange(getRow(), getCell(), this, getText().toString()));
+        }
+    }
+
+    public void setValue(String caption,Object obj) {
+        if (getRow() <  0)
+        {
+            setText(caption);
+        }
+        else {
+            if (getFormat().equals("")) {
+                switch (getType()) {
+                    case 0:
+                    case 1:
+                        setText(caption);
+                        break;
+                    case 2:
+                        setText(yugi.NF2(caption));
+                        break;
+                    case 3:
+                        setText(caption);
+                        break;
+                }
+
+            } else {
+                switch (getType()) {
+                    case 0:
+                        setText(String.format(getFormat(), caption));
+                    case 1:
+                        setText(String.format(getFormat(), Integer.parseInt(caption)));
+                        break;
+                    case 2:
+                        setText(String.format(getFormat(), Double.parseDouble(caption)));
+                        break;
+                    case 3:
+                        setText(String.format(getFormat(), DateTime.fromDateTime(caption)));
+                        break;
+                }
+
+                if (getText().toString().indexOf("[") > 0 && getText().toString().indexOf("]") > 0)
+                {
+                    for (String item : getText().toString().split("\\[")) {
+                        for (String item2 : item.split("\\]")) {
+                            String itemValue = "";
+                            try {
+                                itemValue = obj.getClass().getField(item2).get(obj).toString();
                             } catch (Exception ex) {
                             }
                             if (getOnDataGridValueChanged() != null) {

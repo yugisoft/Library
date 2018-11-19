@@ -51,11 +51,14 @@ public class BaseDataGridAdapter<T> extends ItemAdapter<T>
                 textView.setOnDataGridValueChanged(getDataGridValueChanged());
                 try
                 {
-                    textView.setValue(field.get(ob).toString());
+                    textView.setValue(field.get(ob).toString(),ob);
+
                 } catch (Exception ex) { }
             }
         }
 
+        if (viewGroup!=null)
+            viewGroup.addView(view);
         return view;
     }
 

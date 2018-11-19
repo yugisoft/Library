@@ -100,50 +100,50 @@ public class vList<E>  implements List<E>{
 
     @Override
     public E get(int index) {
-        return null;
+        return list.get(index);
     }
 
     @Override
     public E set(int index, E element) {
-        return null;
+        return list.set(index,element);
     }
 
     @Override
     public void add(int index, E element) {
-
+        list.add(index,element);
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        return list.remove(index);
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        return list.indexOf(o);
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        return list.lastIndexOf(o);
     }
 
     @NonNull
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return list.listIterator();
     }
 
     @NonNull
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        return list.listIterator(index);
     }
 
     @NonNull
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        return list.subList(fromIndex,toIndex);
     }
     //endregion
 
