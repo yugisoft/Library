@@ -28,6 +28,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
 
     //region MORE
 
+    private BaseDataGridAdapter baseDataGridAdapter;
     private DataGridAdapter2 dataGridAdapter;
     AttributeSet attrs;
     int defStyleAttr;
@@ -427,35 +428,47 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     public void onLoad(List data) {
 
 
-        if (getDataGridAdapter().getData() == null) {
-            if (headerLayoutid == 0)
-                headerLayout.removeAllViews();
-            filterLayout.removeAllViews();
+        if (baseDataGridAdapter!=null)
+        {
             verLayout.removeAllViews();
-            return;
-        } else {
-            if (getDataGridAdapter().getData().Parent == null) {
+            for (int i = 0; i < getBaseDataGridAdapter().getCount(); i++) {
+                View v = getBaseDataGridAdapter().getView(i, null,verLayout);
+
+                v.getBackground().setColorFilter((i % 2 != 0) ? getRowColor2() : getRowColor1(), PorterDuff.Mode.MULTIPLY);
+            }
+        }
+        else
+        {
+            if (getDataGridAdapter().getData() == null) {
                 if (headerLayoutid == 0)
                     headerLayout.removeAllViews();
                 filterLayout.removeAllViews();
-            }
-            verLayout.removeAllViews();
+                verLayout.removeAllViews();
+                return;
+            } else {
+                if (getDataGridAdapter().getData().Parent == null) {
+                    if (headerLayoutid == 0)
+                        headerLayout.removeAllViews();
+                    filterLayout.removeAllViews();
+                }
+                verLayout.removeAllViews();
 
-            if (getDataGridAdapter().getData().Columns.size() > 0) {
-                if (headerLayoutid == 0)
-                    getDataGridAdapter().getHeaderView(headerLayout);
-                else
-                    getDataGridAdapter().UpdateHeaderView((LinearLayout) headerLayout.getChildAt(0));
-                getDataGridAdapter().getFilterView(filterLayout);
+                if (getDataGridAdapter().getData().Columns.size() > 0) {
+                    if (headerLayoutid == 0)
+                        getDataGridAdapter().getHeaderView(headerLayout);
+                    else
+                        getDataGridAdapter().UpdateHeaderView((LinearLayout) headerLayout.getChildAt(0));
+                    getDataGridAdapter().getFilterView(filterLayout);
 
-            }
+                }
 
-            for (int i = 0; i < getDataGridAdapter().getCount(); i++) {
-                View v = getDataGridAdapter().getView(i, verLayout);
-               // if (rowColor == 0)
+                for (int i = 0; i < getDataGridAdapter().getCount(); i++) {
+                    View v = getDataGridAdapter().getView(i, verLayout);
+                    // if (rowColor == 0)
                     v.getBackground().setColorFilter((i % 2 != 0) ? getRowColor2() : getRowColor1(), PorterDuff.Mode.MULTIPLY);
+                }
+                getDataGridAdapter().getData().Parent = this;
             }
-            getDataGridAdapter().getData().Parent = this;
         }
 
     }
@@ -467,5 +480,16 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     public void setRowColor(int rowColor) {
         this.rowColor = rowColor;
         getDataGridAdapter().setRowColor(rowColor);
+    }
+
+    public BaseDataGridAdapter getBaseDataGridAdapter() {
+        return baseDataGridAdapter;
+    }
+
+    public void setBaseDataGridAdapter(BaseDataGridAdapter baseDataGridAdapter) {
+        this.baseDataGridAdapter = baseDataGridAdapter;
+        baseDataGridAdapter.setDataGridValueChanged(gridValueChanged);
+        onLoad(null);
+
     }
 }
