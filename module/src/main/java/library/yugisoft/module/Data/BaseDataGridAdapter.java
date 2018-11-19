@@ -45,7 +45,7 @@ public class BaseDataGridAdapter<T> extends ItemAdapter<T>
         {
             View v = view.findViewWithTag(field.getName());
 
-            if (v != null && v instanceof DateTextView)
+            if (v != null && v instanceof DataGridTextView)
             {
                 DataGridTextView textView = (DataGridTextView) v;
                 textView.setOnDataGridValueChanged(getDataGridValueChanged());
