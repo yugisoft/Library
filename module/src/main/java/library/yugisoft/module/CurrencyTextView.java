@@ -1,8 +1,10 @@
 package library.yugisoft.module;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 
 
 /**
@@ -20,31 +22,35 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     public String Currency="";
 
     public CurrencyTextView(Context context) {
-        super(context);
-        Init();
+        this(context,null,0);
     }
 
     private INTERFACES.OnNumpadListener onNumpadListener;
 
     public CurrencyTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        Init();
+        this(context, attrs,0);
     }
 
     public CurrencyTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        Init();
-    }
-    public void Init()
-    {
         numpad = new yugi.mNumpad(yugi.activity);
+        final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CurrencyTextView, defStyleAttr, 0);
+        if (a != null) {
+
+            numpad.Currency = a.getString(R.styleable.CurrencyTextView_currency);
+            numpad.setDecimal(a.getInteger(R.styleable.CurrencyTextView_decimal,2));
+
+        }
+
+
+
         numpad.mlistener=new INTERFACES.OnNumpadListener() {
             @Override
             public void onResultOK(double Before, double After)
             {
 
                 Tutar=After;
-                CurrencyTextView.this.setText(yugi.NF2Replace(Tutar)+" "+Currency);
+                CurrencyTextView.this.setText(yugi.NFReplace(Tutar,decimal)+" "+Currency);
                 if (onNumpadListener!=null)onNumpadListener.onResultOK(Before,After);
             }
         };
@@ -59,6 +65,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
         });
     }
 
+
     public INTERFACES.OnNumpadListener getOnNumpadListener() {
         return onNumpadListener;
     }
@@ -70,7 +77,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     public void setTutar(Double t)
     {
         Tutar=t;
-        CurrencyTextView.this.setText(yugi.NF2Replace(Tutar)+" "+Currency);
+        CurrencyTextView.this.setText(yugi.NFReplace(Tutar,decimal)+" "+Currency);
     }
 
     public int getDecimal() {

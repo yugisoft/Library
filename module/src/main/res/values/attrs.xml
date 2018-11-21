@@ -2,8 +2,7 @@
 <resources>
 
     <attr name="contentView" format="reference|integer" />
-
-
+    
     <declare-styleable name="MaskedEditText"><attr format="string" name="mask"/><attr format="string" name="allowed_chars"/><attr format="string" name="denied_chars"/><attr format="string" name="char_representation"/><attr format="boolean" name="keep_hint"/></declare-styleable>
     <declare-styleable name="myViews">
 
@@ -31,6 +30,16 @@
     </declare-styleable>
     <declare-styleable name="CirclePageIndicator">
         <attr name="indicator_spacing" format="dimension" />
+    </declare-styleable>
+    
+    
+    
+    <attr name="decimal" format="integer"/>
+    <attr name="currency" format="string"/>
+
+    <declare-styleable name="CurrencyTextView">
+        <attr name="decimal" />
+        <attr name="currency" />
     </declare-styleable>
 
 
