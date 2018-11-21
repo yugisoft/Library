@@ -963,8 +963,13 @@ public class yugi
         //region DECLARE
         Dialog.mDialog dialog;
         Activity activity;
-        public String p1="0",p2="0",p3="0",Currency="";
+        int decimal = 2;
+        String[] _p;
+
+        public String p1="0",p2="0",p3="0",Currency="TL";
+
         public Double Ucret=0.0,totalUcret=0.0;
+
         boolean virgul=false,clear = true;
 
         public View view;
@@ -988,6 +993,8 @@ public class yugi
         //endregion
         public void Init() {
 
+
+
             txt_ucret=(TextView)view.findViewById(R.id.txt_ucret);
             npTotal=(TextView)view.findViewById(R.id.npTotal);
             npBack=(TextView)view.findViewById(R.id.npBack);
@@ -1007,6 +1014,8 @@ public class yugi
             npOk=(TextView)view.findViewById(R.id.npOk);
 
 
+
+            _p= new String[decimal+1];
 
 
             np1.setOnClickListener(this);
@@ -1051,20 +1060,35 @@ public class yugi
             mlistener=listener;
         }
 
+        public void setDecimal(int decimal) {
+            this.decimal = decimal;
+            _p = new String[decimal+1];
+            UcretToString();
+        }
 
         public void StringToUcret()
         {
-            String s = p1+"."+p2+p3;
+            //String s = p1+"."+p2+p3;
+            String s = _p[0]+".";
+            for (int i = 1; i <_p.length;i++)
+                s+=_p[i];
+
+
             Ucret=Double.parseDouble(s);
             UcretToString();
         }
         public void UcretToString() {
-            String sucret = yugi.NF2Replace(Ucret).replace(".","-");
+            String sucret = yugi.NFReplace(Ucret,decimal).replace(".","-");
             String s[] = sucret.split("-");
             p1=s[0];
             p2=s[1].substring(0,1);
             p3=s[1].substring(1,2);
-            txt_ucret.setText(yugi.NF2Replace(Ucret)+" "+Currency);
+            _p[0] = s[0];
+            for (int i = 1 ; i< _p.length; i++)
+            {
+                _p[i] = s[1].substring(i-1,i);
+            }
+            txt_ucret.setText(yugi.NFReplace(Ucret,decimal)+" "+Currency);
         }
 
 
@@ -1073,6 +1097,7 @@ public class yugi
         {
                 if (clear)
                 {
+                    for (String p : _p) { p = "0"; }
                     p1="0";
                     p2=p1;
                     p3=p1;
@@ -1090,6 +1115,16 @@ public class yugi
                         String s = ((TextView)v).getText().toString();
                         if (virgul)
                         {
+
+                            for (int i = 1; i< _p.length;i++)
+                            {
+                                if (_p[i].equals("0"))
+                                {
+                                    _p[i]= s;
+                                    break;
+                                }
+                            }
+
                             if(p2.equals("0"))p2=s;
                             else if(p3.equals("0"))p3=s;
                             StringToUcret();
@@ -1097,6 +1132,7 @@ public class yugi
                         else
                         {
                             p1+=s;
+                            _p[0]+= s;
                             StringToUcret();
                         }
                         break;
@@ -1106,9 +1142,12 @@ public class yugi
             catch (Exception e){}
             finally {
                 int i = v.getId();
-                if (i == R.id.npvirgul) {
-                    p2 = "0";
-                    p3 = "0";
+                if (i == R.id.npvirgul)
+                {
+                    String p_= _p[0];
+                    for (String p : _p) { p = "0"; }
+                    _p[0] = p_;
+
                     StringToUcret();
                     virgul = true;
 
@@ -1122,19 +1161,43 @@ public class yugi
                     UcretToString();
 
                 } else if (i == R.id.npBack) {
-                    if (true) {
+                    if (true)
+                    {
                         virgul = true;
+
+                        for (int k = _p.length -1 ;k >= 0 ;k--)
+                        {
+                            if (!_p[k].equals("0"))
+                            {
+
+                               if (k == 0 )
+                               {
+                                   virgul = false;
+                                   if (_p[k].length() > 1) _p[k] = _p[k].substring(0, _p[k].length() - 1);
+                                   else _p[k] = "0";
+                               }
+                               else
+                               {
+                                   _p[k] = "0";
+                               }
+                                break;
+                            }
+                        }
+
                         if (!p3.equals("0")) {
                             p3 = "0";
                         } else if (!p2.equals("0")) {
                             p2 = "0";
-                        } else {
+                        }
+                        else
+                        {
                             virgul = false;
                             if (p1.length() > 1) p1 = p1.substring(0, p1.length() - 1);
                             else p1 = "0";
                         }
                         StringToUcret();
-                    } else {
+                    }
+                    else {
                         if (p1.length() > 1) p1 = p1.substring(0, p1.length() - 1);
                         else p1 = "0";
                         StringToUcret();
@@ -1152,7 +1215,7 @@ public class yugi
             }
         }
         public void Show() {
-            npTotal.setText(yugi.NF2Replace(totalUcret)+" "+Currency);
+            npTotal.setText(yugi.NFReplace(totalUcret,decimal)+" "+Currency);
             UcretToString();
 
             dialog.dialog.show();
