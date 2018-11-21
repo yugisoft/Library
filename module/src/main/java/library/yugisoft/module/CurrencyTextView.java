@@ -11,6 +11,8 @@ import android.view.View;
 
 public class CurrencyTextView extends android.support.v7.widget.AppCompatTextView
 {
+
+    private int decimal = 2;
     yugi.mNumpad numpad ;
 
     public Double Tutar=0.0;
@@ -69,5 +71,14 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     {
         Tutar=t;
         CurrencyTextView.this.setText(yugi.NF2Replace(Tutar)+" "+Currency);
+    }
+
+    public int getDecimal() {
+        return decimal;
+    }
+
+    public void setDecimal(int decimal) {
+        this.decimal = decimal;
+        numpad.setDecimal(decimal);
     }
 }
