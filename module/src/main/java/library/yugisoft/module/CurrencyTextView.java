@@ -18,7 +18,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     yugi.mNumpad numpad ;
 
     public Double Tutar=0.0;
-    private String Currency ="";
+    public String Currency ="";
 
 
     public CurrencyTextView(Context context) {
