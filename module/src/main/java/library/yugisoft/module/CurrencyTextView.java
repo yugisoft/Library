@@ -14,12 +14,12 @@ import android.widget.TextView;
 public class CurrencyTextView extends android.support.v7.widget.AppCompatTextView
 {
 
-    private int decimal = 2;
+
     yugi.mNumpad numpad ;
 
     public Double Tutar=0.0;
+    private String Currency ="";
 
-    public String Currency="";
 
     public CurrencyTextView(Context context) {
         this(context,null,0);
@@ -50,7 +50,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
             {
 
                 Tutar=After;
-                CurrencyTextView.this.setText(yugi.NFReplace(Tutar,decimal)+" "+Currency);
+                CurrencyTextView.this.setText(yugi.NFReplace(Tutar,numpad.decimal)+" "+Currency);
                 if (onNumpadListener!=null)onNumpadListener.onResultOK(Before,After);
             }
         };
@@ -77,15 +77,20 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     public void setTutar(Double t)
     {
         Tutar=t;
-        CurrencyTextView.this.setText(yugi.NFReplace(Tutar,decimal)+" "+Currency);
+        CurrencyTextView.this.setText(yugi.NFReplace(Tutar,numpad.decimal)+" "+Currency);
     }
 
     public int getDecimal() {
-        return decimal;
+        try {
+            return numpad.decimal;
+        }
+        catch (Exception ee)
+        {
+            return 2;
+        }
     }
 
     public void setDecimal(int decimal) {
-        this.decimal = decimal;
         numpad.setDecimal(decimal);
     }
 }

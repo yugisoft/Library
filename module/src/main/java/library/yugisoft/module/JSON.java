@@ -93,7 +93,14 @@ public class JSON<T> {
                                 s[i] +="]";
                                 break;
                             default:
-                                s[i] = String.valueOf(f.get(ob));
+                                if (f.getType().isPrimitive())
+                                {
+                                    s[i] = String.valueOf(f.get(ob));
+                                }
+                                else
+                                {
+                                    s[i] = JSON.ToString(f.get(ob));
+                                }
                                 break;
                         }
 
