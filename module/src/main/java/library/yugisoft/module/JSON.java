@@ -92,7 +92,12 @@ public class JSON<T> {
                                 }
                                 s[i] +="]";
                                 break;
-                            default:
+                            case "datetime":
+                            case "string":
+                            case "char":
+                                s[i] = String.valueOf(f.get(ob));
+                                break;
+                                default:
                                 if (f.getType().isPrimitive())
                                 {
                                     s[i] = String.valueOf(f.get(ob));
