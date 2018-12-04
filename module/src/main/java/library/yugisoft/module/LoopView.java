@@ -43,7 +43,7 @@ public class LoopView extends View {
     private Paint mTopBottomTextPaint;  //paint that draw top and bottom text
     private Paint mCenterTextPaint;  // paint that draw center text
     private Paint mCenterLinePaint;  // paint that draw line besides center text
-    private ArrayList mDataList;
+    private ArrayList<Object> mDataList;
     private int mTextSize;
     private int mMaxTextWidth;
     private int mMaxTextHeight;
@@ -369,7 +369,7 @@ public class LoopView extends View {
      * @param list data list
      */
     public final void setDataList(List list) {
-        this.mDataList = (ArrayList) list;
+        this.mDataList = (ArrayList<Object>) list;
         initData();
     }
 
