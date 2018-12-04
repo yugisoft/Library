@@ -35,6 +35,7 @@ public class LoopView extends View {
     private ScheduledFuture<?> mScheduledFuture;
     private int mTotalScrollY;
     private LoopScrollListener mLoopListener;
+    private LoopListener mloopListener2;
     private GestureDetector mGestureDetector;
     private int mSelectedItem;
     private GestureDetector.SimpleOnGestureListener mOnGestureListener;
@@ -367,7 +368,7 @@ public class LoopView extends View {
      * All public method must be called before this method
      * @param list data list
      */
-    public final void setDataList(List<String> list) {
+    public final void setDataList(List<Object> list) {
         this.mDataList = (ArrayList) list;
         initData();
     }
@@ -376,10 +377,17 @@ public class LoopView extends View {
         return mSelectedItem;
     }
 
+    public Object getSelectedObject()
+    {
+        return mDataList.get(getSelectedItem());
+    }
 
     private void itemSelected() {
         if (mLoopListener != null) {
             postDelayed(new SelectedRunnable(), 200L);
+        }
+        if (mloopListener2 != null) {
+            postDelayed(new SelectedRunnable2(), 200L);
         }
     }
 
@@ -401,6 +409,14 @@ public class LoopView extends View {
         cancelSchedule();
         int velocityFling = 20;
         mScheduledFuture = mExecutor.scheduleWithFixedDelay(new FlingRunnable(velocityY), 0, velocityFling, TimeUnit.MILLISECONDS);
+    }
+
+    public LoopListener getMloopListener2() {
+        return mloopListener2;
+    }
+
+    public void setMloopListener2(LoopListener mloopListener2) {
+        this.mloopListener2 = mloopListener2;
     }
 
     class LoopViewGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -454,6 +470,14 @@ public class LoopView extends View {
             int selectedItem = getSelectedItem();
             mDataList.get(selectedItem);
             listener.onItemSelect(selectedItem);
+        }
+    }
+    class SelectedRunnable2 implements Runnable {
+
+        @Override
+        public final void run() {
+            LoopListener listener = LoopView.this.mloopListener2;
+            listener.onItemSelect(getSelectedObject());
         }
     }
 
@@ -563,5 +587,8 @@ public class LoopView extends View {
     }
     public interface LoopScrollListener {
         void onItemSelect(int item);
+    }
+    public interface LoopListener {
+        void onItemSelect(Object item);
     }
 }
