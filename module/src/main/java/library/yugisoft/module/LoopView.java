@@ -368,7 +368,7 @@ public class LoopView extends View {
      * All public method must be called before this method
      * @param list data list
      */
-    public final void setDataList(List<Object> list) {
+    public final void setDataList(List list) {
         this.mDataList = (ArrayList) list;
         initData();
     }
