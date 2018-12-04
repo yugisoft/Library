@@ -361,7 +361,7 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     //endregion
 
 
-    int width = 0;
+    public int width = 0;
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -446,7 +446,9 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
                 verLayout.removeAllViews();
                 return;
             } else {
-                if (getDataGridAdapter().getData().Parent == null) {
+                if (getDataGridAdapter().getData().Parent == null)
+                {
+                    getDataGridAdapter().calculateColumnHeight();
                     if (headerLayoutid == 0)
                         headerLayout.removeAllViews();
                     filterLayout.removeAllViews();

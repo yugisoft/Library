@@ -180,7 +180,7 @@ public class LoopView extends View {
     private void measureTextWidthHeight() {
         Rect rect = new Rect();
         for (int i = 0; i < mDataList.size(); i++) {
-            String s1 = (String) mDataList.get(i);
+            String s1 = mDataList.get(i).toString();
             mCenterTextPaint.getTextBounds(s1, 0, s1.length(), rect);
             int textWidth = rect.width();
             if (textWidth > mMaxTextWidth) {
@@ -256,13 +256,13 @@ public class LoopView extends View {
                 if (templateItem > mDataList.size() - 1) {
                     templateItem = templateItem - mDataList.size();
                 }
-                itemCount[count] = (String) mDataList.get(templateItem);
+                itemCount[count] = mDataList.get(templateItem).toString();
             } else if (templateItem < 0) {
                 itemCount[count] = "";
             } else if (templateItem > mDataList.size() - 1) {
                 itemCount[count] = "";
             } else {
-                itemCount[count] = (String) mDataList.get(templateItem);
+                itemCount[count] = mDataList.get(templateItem).toString();
             }
             count++;
         }

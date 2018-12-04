@@ -400,7 +400,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
                 textViews.add(textView);
             }
         }
-        if (vList.Sum(columLenght)< dataGridView.getWidth() && vList.Min(columLenght).value > 0)
+        if (vList.Sum(columLenght)< dataGridView.width && vList.Min(columLenght).value > 0)
         {
             columLenght.set(columLenght.indexOf(vList.Max(columLenght).item),-1);
         }
