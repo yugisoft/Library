@@ -21,6 +21,7 @@ import java.util.List;
 
 import library.yugisoft.module.DataTable;
 import library.yugisoft.module.DateTextView;
+import library.yugisoft.module.DateTime;
 import library.yugisoft.module.INTERFACES;
 import library.yugisoft.module.R;
 
@@ -141,14 +142,29 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         onChangeMap.remove(fieldName);
     }
 
+    private DataGridTextView.DataGridValueChanged onGridValueChanged;
     private DataGridTextView.DataGridValueChanged gridValueChanged = new DataGridTextView.DataGridValueChanged() {
         @Override
         public String onChange(int row, int cell, DataGridTextView textView, String value) {
 
-
-            try {
-                return onChangeMap.get(textView.getFieldName()).onChange(row, cell, textView, value);
-            } catch (Exception ex) {
+            if (onChangeMap.get("ALL")!=null)
+            {
+                return  onChangeMap.get("ALL").onChange(row,cell,textView,value);
+            }
+            else  if (onChangeMap.get(textView.getFieldName())!=null)
+            {
+                try {
+                    return onChangeMap.get(textView.getFieldName()).onChange(row, cell, textView, value);
+                } catch (Exception ex) {
+                    if (textView.getType() == 3)
+                        value = DateTime.fromDateTime(value).toShortDateString();
+                    return value;
+                }
+            }
+            else
+            {
+                if (textView.getType() == 3)
+                    value = DateTime.fromDateTime(value).toShortDateString();
                 return value;
             }
         }
@@ -495,4 +511,8 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         onLoad(null);
 
     }
+
+
+
+
 }

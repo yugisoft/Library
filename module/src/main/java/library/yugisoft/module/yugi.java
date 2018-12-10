@@ -959,7 +959,8 @@ public class yugi
 
     //endregion
     //region NUMPAD
-    public static class mNumpad implements View.OnClickListener {
+    public static class mNumpad implements View.OnClickListener
+    {
         //region DECLARE
         Dialog.mDialog dialog;
         Activity activity;

@@ -23,7 +23,18 @@ import java.util.List;
 public class DataTable
 {
 
+    public enum DataColumnType {
+        String(0),Int(1) , Double (2), Date(3),Long(4),Boolean(5);
 
+        private final int value;
+        private DataColumnType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
     private static final long DataTableVersiyon = 18032701;
     public List<DataRow> Rows = new SmartList<DataRow>();
     public List<DataRow> mRows = new SmartList<DataRow>();
@@ -79,7 +90,89 @@ public class DataTable
 
     int column = 0;
     @TargetApi(Build.VERSION_CODES.N)
-    public void vLoad(String str, String Key) {
+    public void vLoad(String str, String Key)
+    {
+        if (str !=null && str.length() > 0 && !str.equals("[]") )
+        {
+            if (!str.substring(0, 1).equals("[")) str = "[ " + str + " ]";
+            try
+            {
+                JSONArray array = new JSONArray(str);
+                JSONArray subArray = Key.length()>0 ?  array.getJSONObject(0).getJSONArray(Key) : array;
+
+                for (int i = 0; i < subArray.length() ; i++)
+                {
+                    DataRow row = new DataRow();
+                    JSONObject ob = ((JSONObject) subArray.get(i));
+
+
+
+                    Iterator it;
+                    if (i==0)
+                    {
+                        it = ob.keys();
+                        while (it.hasNext())
+                        {
+                            String s = it.next().toString();
+                            Columns.add(s.replace(" ",""));
+                            Captions.add(s);
+                        }
+                    }
+                    it = ob.keys();
+                    int column = 0;
+                    while (it.hasNext())
+                    {
+                        String itKey = it.next().toString();
+                        Object itValue = ob.get(itKey);
+
+                        DataColumn dataColumn =new DataColumn(Columns.get(column), ob.getString(itKey));
+
+                        if (itValue instanceof Double)
+                        {
+                            dataColumn.DataType = DataColumnType.Double;
+                        }
+                        else if (itValue instanceof Integer)
+                        {
+                            dataColumn.DataType = DataColumnType.Int;
+                        }
+                        else if (itValue instanceof Long)
+                        {
+                            dataColumn.DataType = DataColumnType.Long;
+                        }
+                        else if (itValue instanceof Boolean)
+                        {
+                            dataColumn.DataType = DataColumnType.Boolean;
+                        }
+                        else
+                        {
+                            if (dataColumn.Name.toLowerCase().contains("date"))
+                                dataColumn.DataType = DataColumnType.Date;
+                            else
+                                dataColumn.DataType = DataColumnType.String;
+                        }
+
+
+                        row.Cells.add(dataColumn);
+                        column++;
+                    }
+                    this.mRows.add(row);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally {
+                if(getFilterText().equals("")) Rows =mRows;
+                else
+                    setFilterText(getFilterText());
+            }
+        }
+    }
+
+
+    public void vvLoad(String str, String Key) {
         try {
             if (!str.equals("[]") && str != null)
             {
@@ -135,6 +228,8 @@ public class DataTable
                 setFilterText(getFilterText());
         }
     }
+
+
 
     public void vLoadParse(String str) {
         try {
@@ -679,14 +774,14 @@ public class DataTable
         }
     }
 
-    public static class DataColumn {
+    public static class DataColumn
+    {
         public String Name, Value, Format = "";
         public int gravity = Gravity.LEFT, Oran = 30;
-
+        public DataColumnType DataType = DataColumnType.String;
         public DataColumn() {
 
         }
-
         public DataColumn(String _name, String Deger) {
             Name = _name;
             Value = Deger;

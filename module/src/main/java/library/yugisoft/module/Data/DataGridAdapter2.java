@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import library.yugisoft.module.DataTable;
+import library.yugisoft.module.DateTime;
 import library.yugisoft.module.DialogBox;
 import library.yugisoft.module.ItemAdapter;
 import library.yugisoft.module.R;
@@ -128,12 +130,15 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
         @Override
         public String onChange(int row, int cell, DataGridTextView textView,String value)
         {
+
             try
             {
                 return dataGridValueChanged.onChange(row,cell,textView,value);
             }
             catch (Exception ex)
             {
+                if (textView.getType() == 3)
+                    value = DateTime.fromDateTime(value).toShortDateString();
                 return value;
             }
 
@@ -254,159 +259,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
 
     private List<DataGridTextView> textViews = new ArrayList<>();
 
-    String formatValue ="%s";
-    public void calculateColumnHeight() {
-        columLenght.clear();
-        if (textViews.size()>0)
-        {
-            for (int i  = 0 ; i<textViews.size();i++)
-            {
-                DataGridTextView textView =textViews.get(i);
-                textView.setDataGridView(dataGridView);
 
-                String caption = textView.getText().toString();
-                String fieldName = textView.getFieldName();
-                int cellIndex = getData().Columns.indexOf(fieldName);
-
-                if (textView.isAutoSize())
-                {
-                    if (textView.getFormat().indexOf("[")>0)
-                    {
-                        formatValue =textView.getFormat();
-
-                        for (String item : textView.getFormat().split("\\[")) {
-                            for (String item2 : item.split("\\]")) {
-                                String itemValue = "";
-                                try
-                                {
-                                    DataTable.DataRow row = vList.Max(getList(),p-> onGridValueChanged.onChange(-1,getColumns().indexOf(item2),textView,p.get(item2)).length()).item;
-                                    formatValue = formatValue.replace("[" + item2 + "]",row.get(item2));
-
-                                    DataGridTextView t = new DataGridTextView(context);
-                                    t.setRow(getList().indexOf(row));
-                                    t.setCell(getColumns().indexOf(item2));
-
-                                    formatValue = (formatValue.replace("[" + item2 + "]",  onGridValueChanged.onChange(t.getRow(), t.getCell(), t, itemValue)));
-
-                                } catch (Exception ex) {
-                                }
-                            }
-                        }
-
-                        DataTable.DataRow row = vList.Max(getList(), p-> onGridValueChanged.onChange(-1,textView.getCell(),textView,(p.get(fieldName))).length()).item;
-                        if (row == null)
-                        {
-                            columLenght.add(i,getTextLenght(caption));
-                        }
-                        else
-                        {
-                            String value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName));
-                            columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
-                        }
-                        String  value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName))+formatValue;
-                        columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
-
-                    }
-                    else
-                    {
-
-
-
-                        DataTable.DataRow row = vList.Max(getList(),p-> onGridValueChanged.onChange(-1,textView.getCell(),textView,p.get(fieldName)).length()).item;
-                        if (row == null)
-                        {
-                            columLenght.add(i,getTextLenght(caption));
-                        }
-                        else
-                        {
-                            String value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName));
-                            columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
-                        }
-
-                    }
-                }
-                else
-                {
-                    columLenght.add(textView.getLayoutParams().width);
-                }
-
-            }
-        }
-        else
-        {
-            for (int i  = 0 ; i<getColumns().size();i++)
-            {
-                DataGridTextView textView = new DataGridTextView(context);
-                textView.setDataGridView(dataGridView);
-                textView.setFieldName(getColumns().get(i));
-                textView.setText(getCaptions().get(i));
-                textView.setType(0);
-                String caption = getCaptions().get(i);
-                String fieldName = textView.getFieldName();
-                int cellIndex = i;
-
-
-                if (textView.getFormat().indexOf("[")>0)
-                {
-                    formatValue =textView.getFormat();
-                    for (String item : textView.getFormat().split("\\[")) {
-                        for (String item2 : item.split("\\]")) {
-                            String itemValue = "";
-                            try
-                            {
-                                DataTable.DataRow row = vList.Max(getList(),p-> onGridValueChanged.onChange(-1,getColumns().indexOf(item2),textView,p.get(item2)).length()).item;
-                                formatValue = formatValue.replace("[" + item2 + "]",row.get(item2));
-
-                                DataGridTextView t = new DataGridTextView(context);
-                                t.setRow(getList().indexOf(row));
-                                t.setCell(getColumns().indexOf(item2));
-
-                                formatValue = (formatValue.replace("[" + item2 + "]",  onGridValueChanged.onChange(t.getRow(), t.getCell(), t, itemValue)));
-
-                            } catch (Exception ex) {
-                            }
-                        }
-                    }
-
-                    DataTable.DataRow row = vList.Max(getList(), p-> onGridValueChanged.onChange(-1,textView.getCell(),textView,(p.get(fieldName))).length()).item;
-                    if (row == null)
-                    {
-                        columLenght.add(i,getTextLenght(caption));
-                    }
-                    else
-                    {
-                        String value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName));
-                        columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
-                    }
-
-
-                }
-                else
-                {
-                    DataTable.DataRow row = vList.Max(getList(),p-> onGridValueChanged.onChange(-1,textView.getCell(),textView,p.get(fieldName)).length()).item;
-                    if (row == null)
-                    {
-                        columLenght.add(i,getTextLenght(caption));
-                    }
-                    else
-                    {
-                        String value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName));
-                        columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
-                    }
-                }
-
-
-
-                textViews.add(textView);
-            }
-        }
-        if (vList.Sum(columLenght)< dataGridView.width && vList.Min(columLenght).value > 0)
-        {
-            columLenght.set(columLenght.indexOf(vList.Max(columLenght).item),-1);
-        }
-
-
-    }
     private int getTextLenght(String text) {
 
         try
@@ -449,7 +302,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
     private int getColumnLenght(int k) { return columLenght.get(k); }
 
     private DataGridTextView getTextView(int i, int k) {
-       DataGridTextView textView = CreateDataGridTextView(i,k,new DataGridTextView(context));
+        DataGridTextView textView = CreateDataGridTextView(i,k,new DataGridTextView(context));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             textView.setTextAlignment(textViews.get(k).getTextAlignment());
         }
@@ -466,7 +319,8 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
         textView.setOnLongClickListener(HeaderLongClick);
         return textView;
     }
-    private DataGridTextView CreateDataGridTextView(int i, int k,DataGridTextView textView) {
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private DataGridTextView CreateDataGridTextView(int i, int k, DataGridTextView textView) {
         //DataGridTextView textView = new DataGridTextView(context);
         // textView.setFormat(tView.getFormat());
         // textView.setType(tView.getType());
@@ -513,11 +367,35 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
         else
         {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textViews.get(k).getLayoutParams();
+            params.height = height +20;
             params.setMargins(3,5,3,5);
             textView.setLayoutParams(params);
         }
         //endregion
 
+        if (textView.isAutoAligment())
+        {
+            if (i>=0)
+                textView.setType(getData().Rows.get(i).Cells.get(k).DataType.getValue());
+            else if (getData().Rows.size() > 0)
+                textView.setType(getData().Rows.get(0).Cells.get(k).DataType.getValue());
+
+            textView.setAutoAligment(false);
+
+            switch (textView.getType())
+            {
+
+                case 1:
+                case 4:
+                  textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                    break;
+                case 2:
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                    break;
+            }
+
+            textViews.get(k).setTextAlignment(textView.getTextAlignment());
+        }
 
 
         return  textView;
@@ -626,4 +504,208 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
     {
         this.rowColor = rowColor;
     }
+
+
+    //region CALCULATE
+    String formatValue ="%s";
+
+
+    public void calculateColumnHeight() {
+        columLenght.clear();
+        //region if (textViews.size()>0)
+        if (textViews.size()>0)
+        {
+            for (int i  = 0 ; i<textViews.size();i++)
+            {
+                DataGridTextView textView =textViews.get(i);
+                textView.setDataGridView(dataGridView);
+
+                String caption = textView.getText().toString();
+                String fieldName = textView.getFieldName();
+                int cellIndex = getData().Columns.indexOf(fieldName);
+
+                if (textView.getType()==6)
+                {
+                    if (getData().Rows.size()>0)
+                        textView.setType(getData().Rows.get(0).Cells.get(cellIndex).DataType.getValue());
+                }
+
+                //region if (textView.isAutoSize())
+                if (textView.isAutoSize())
+                isAutoSize(i,textView,fieldName,caption);
+                //endregion
+                //region else
+                else
+                {
+                    columLenght.add(textView.getLayoutParams().width);
+                }
+                //endregion
+
+
+            }
+        }
+        //endregion
+        //region else
+        else
+        {
+            for (int i  = 0 ; i<getColumns().size();i++)
+            {
+                DataGridTextView textView = new DataGridTextView(context);
+                textView.setDataGridView(dataGridView);
+                textView.setFieldName(getColumns().get(i));
+                textView.setText(getCaptions().get(i));
+                String caption = getCaptions().get(i);
+                String fieldName = textView.getFieldName();
+                int cellIndex = i;
+
+                if (textView.getType()==6)
+                {
+                    if (getData().Rows.size()>0)
+                        textView.setType(getData().Rows.get(0).Cells.get(cellIndex).DataType.getValue());
+                }
+                isAutoSize(i,textView,fieldName,caption);
+
+
+
+                textViews.add(textView);
+            }
+        }
+        //endregion
+        if (vList.Sum(columLenght)< dataGridView.width && vList.Min(columLenght).value > 0)
+        {
+            columLenght.set(columLenght.indexOf(vList.Max(columLenght).item),-1);
+        }
+
+
+    }
+
+    public  void  isAutoSize(int i, DataGridTextView textView,String fieldName,String caption)
+    {
+        //region if (textView.isAutoSize())
+        if (textView.isAutoSize())
+        {
+            //region
+            if (textView.getFormat().indexOf("[")>0)
+            {
+                formatValue =textView.getFormat();
+
+                for (String item : textView.getFormat().split("\\[")) {
+                    for (String item2 : item.split("\\]")) {
+                        String itemValue = "";
+                        try
+                        {
+                            DataTable.DataRow row = vList.Max(getList(),p-> onGridValueChanged.onChange(-1,getColumns().indexOf(item2),textView,p.get(item2)).length()).item;
+                            formatValue = formatValue.replace("[" + item2 + "]",row.get(item2));
+
+                            DataGridTextView t = new DataGridTextView(context);
+                            t.setRow(getList().indexOf(row));
+                            t.setCell(getColumns().indexOf(item2));
+
+                            formatValue = (formatValue.replace("[" + item2 + "]",  onGridValueChanged.onChange(t.getRow(), t.getCell(), t, itemValue)));
+
+                        } catch (Exception ex) {
+                        }
+                    }
+                }
+
+                DataTable.DataRow row = vList.Max(getList(), p-> onGridValueChanged.onChange(-1,textView.getCell(),textView,(p.get(fieldName))).length()).item;
+                if (row == null)
+                {
+                    columLenght.add(i,getTextLenght(caption));
+                }
+                else
+                {
+                    String value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName));
+                    columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
+                }
+                String  value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName))+formatValue;
+                columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
+
+            }
+            else
+            {
+
+
+
+                DataTable.DataRow row = vList.Max(getList(),p-> onGridValueChanged.onChange(-1,textView.getCell(),textView,p.get(fieldName)).length()).item;
+                if (row == null)
+                {
+                    columLenght.add(i,getTextLenght(caption));
+                }
+                else
+                {
+                    String value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName));
+                    columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
+                }
+
+            }
+            //endregion
+        }
+        //endregion
+    }
+    public  void  isAutoSizeOld()
+    {
+        //region if (textView.isAutoSize())
+       // if (textView.isAutoSize())
+       // {
+       //     //region
+       //     if (textView.getFormat().indexOf("[")>0)
+       //     {
+       //         formatValue =textView.getFormat();
+//
+       //         for (String item : textView.getFormat().split("\\[")) {
+       //             for (String item2 : item.split("\\]")) {
+       //                 String itemValue = "";
+       //                 try
+       //                 {
+       //                     DataTable.DataRow row = vList.Max(getList(),p-> onGridValueChanged.onChange(-1,getColumns().indexOf(item2),textView,p.get(item2)).length()).item;
+       //                     formatValue = formatValue.replace("[" + item2 + "]",row.get(item2));
+//
+       //                     DataGridTextView t = new DataGridTextView(context);
+       //                     t.setRow(getList().indexOf(row));
+       //                     t.setCell(getColumns().indexOf(item2));
+//
+       //                     formatValue = (formatValue.replace("[" + item2 + "]",  onGridValueChanged.onChange(t.getRow(), t.getCell(), t, itemValue)));
+//
+       //                 } catch (Exception ex) {
+       //                 }
+       //             }
+       //         }
+//
+       //         DataTable.DataRow row = vList.Max(getList(), p-> onGridValueChanged.onChange(-1,textView.getCell(),textView,(p.get(fieldName))).length()).item;
+       //         if (row == null)
+       //         {
+       //             columLenght.add(i,getTextLenght(caption));
+       //         }
+       //         else
+       //         {
+       //             String value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName));
+       //             columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
+       //         }
+       //         String  value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName))+formatValue;
+       //         columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
+//
+       //     }
+       //     else
+       //     {
+//
+//
+//
+       //         DataTable.DataRow row = vList.Max(getList(),p-> onGridValueChanged.onChange(-1,textView.getCell(),textView,p.get(fieldName)).length()).item;
+       //         if (row == null)
+       //         {
+       //             columLenght.add(i,getTextLenght(caption));
+       //         }
+       //         else
+       //         {
+       //             String value = onGridValueChanged.onChange(-1,textView.getCell(),textView,row.get(fieldName));
+       //             columLenght.add(i,getTextLenght(value.length() > caption.length() ? value : caption));
+       //         }
+//
+       //     }
+       //     //endregion
+       // }
+        //endregion
+    }
+    //endregion
 }

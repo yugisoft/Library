@@ -1,8 +1,12 @@
 package library.yugisoft.module.Data;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.widget.TextView;
 
 import library.yugisoft.module.DataTable;
@@ -23,7 +27,8 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
         TypedArray typed = getContext().obtainStyledAttributes(attrs, R.styleable.DataGridTextView, defStyleAttr, 0);
         if (typed!=null)
         {
-            setType(typed.getInt(R.styleable.DataGridTextView_dataType,0));
+            setType(typed.getInt(R.styleable.DataGridTextView_dataType,6));
+            setAutoAligment(typed.getBoolean(R.styleable.DataGridTextView_autoAligment,getType()==6));
             setFormat(typed.getString(R.styleable.DataGridTextView_format));
             if (getFormat()==null)setFormat("");
             setFieldName(typed.getString(R.styleable.DataGridTextView_fieldName));
@@ -40,7 +45,7 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
 
     private String format="",fieldName="";
 
-    private boolean autoSize = true;
+    private boolean autoSize = true, autoAligment = false;
 
     public int getType() {
         return type;
@@ -75,6 +80,7 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
         this.autoSize = autoSize;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void setValue(String caption) {
         if (getRow() <  0)
         {
@@ -84,14 +90,19 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
             if (getFormat().equals("")) {
                 switch (getType()) {
                     case 0:
-                    case 1:
                         setText(caption);
+                        break;
+                    case 1:
+                    case 4:
+                        setText(caption);
+                       if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 2:
                         setText(yugi.NF2(caption));
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 3:
-                        setText(caption);
+                        setText(DateTime.fromDateTime(caption).toShortDateString());
                         break;
                 }
 
@@ -101,10 +112,17 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
                         setText(String.format(getFormat(), caption));
                     case 1:
                         setText(String.format(getFormat(), Integer.parseInt(caption)));
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
+                        break;
+                    case 4:
+                        setText(String.format(getFormat(), Long.parseLong(caption)));
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 2:
                         setText(String.format(getFormat(), Double.parseDouble(caption)));
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
+
                     case 3:
                         setText(String.format(getFormat(), DateTime.fromDateTime(caption)));
                         break;
@@ -135,7 +153,8 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
         }
     }
 
-    public void setValue(String caption,Object obj) {
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public void setValue(String caption, Object obj) {
         if (getRow() <  0)
         {
             setText(caption);
@@ -144,14 +163,19 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
             if (getFormat().equals("")) {
                 switch (getType()) {
                     case 0:
-                    case 1:
                         setText(caption);
+                        break;
+                    case 1:
+                    case 4:
+                        setText(caption);
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 2:
                         setText(yugi.NF2(caption));
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 3:
-                        setText(caption);
+                        setText(DateTime.fromDateTime(caption).toShortDateString());
                         break;
                 }
 
@@ -161,9 +185,15 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
                         setText(String.format(getFormat(), caption));
                     case 1:
                         setText(String.format(getFormat(), Integer.parseInt(caption)));
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
+                        break;
+                    case 4:
+                        setText(String.format(getFormat(), Long.parseLong(caption)));
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 2:
                         setText(String.format(getFormat(), Double.parseDouble(caption)));
+                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 3:
                         setText(String.format(getFormat(), DateTime.fromDateTime(caption)));
@@ -247,6 +277,14 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
 
     public void setOnDataGridValueChanged(DataGridValueChanged onDataGridValueChanged) {
         this.onDataGridValueChanged = onDataGridValueChanged;
+    }
+
+    public boolean isAutoAligment() {
+        return autoAligment;
+    }
+
+    public void setAutoAligment(boolean autoAligment) {
+        this.autoAligment = autoAligment;
     }
 
     public interface DataGridValueChanged
