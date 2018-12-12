@@ -943,8 +943,7 @@ public class DataTable
             }
         }
     }
-    public void vSetFiled(Object object,Field field,Object value)
-    {
+    public void vSetFiled(Object object,Field field,Object value) {
         field.setAccessible(true);
         String TypeName= field.getType().getSimpleName().toLowerCase();
 
