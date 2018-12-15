@@ -67,5 +67,10 @@ public class DateTextView extends android.support.v7.widget.AppCompatTextView im
     public DateTime getDateTime() {
         return dateTime;
     }
+    public void setDateTime(DateTime dateTime)
+    {
+        this.dateTime=dateTime;
+        this.setText(dateTime.toShortDateString());
+    }
 
 }
