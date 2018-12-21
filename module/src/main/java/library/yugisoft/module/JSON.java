@@ -311,7 +311,14 @@ public class JSON<T> {
                         break;
                     default:
                         if(value.equals("null")) value=null;
-                        f.set(object, value);
+                        if (f.getType().isPrimitive())
+                        {
+                            f.set(object, value);
+                        }
+                        else
+                        {
+                            set(f.getDeclaringClass().newInstance(),new JSONObject(value.toString()));
+                        }
                         break;
                 }
             }
