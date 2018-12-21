@@ -53,20 +53,20 @@ public class CustomImageButton extends myViews {
     }
 
     //region DECLARE
-        public TextView cib_baslik;
-        public ImageView cib_resim;
+    public TextView cib_baslik;
+    public ImageView cib_resim;
 
-        private View contentView;
-        private int contentViewID = R.layout.custom_image_button;
-        private float fontSize = 14;
-        private String baslik;
+    private View contentView;
+    private int contentViewID = R.layout.custom_image_button;
+    private float fontSize = 14;
+    private String baslik;
 
-        private int textColor
-                ,image_h
-                ,image_w
-                ,tintColor;
+    private int textColor
+            ,image_h
+            ,image_w
+            ,tintColor;
 
-        private Drawable image;
+    private Drawable image;
 
 
 

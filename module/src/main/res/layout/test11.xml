@@ -4,17 +4,44 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Listele"
-    android:onClick="onClick"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/buton6" />
+
+    <library.yugisoft.module.CustomImageButton
+        android:id="@+id/mdi_perakende_satis"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="1dp"
+        android:layout_weight="1"
+        android:background="#2ABC68"
+        android:backgroundTint="#2ABC68"
+        android:elevation="1dp"
+        android:onClick="onClick"
+        app:baslik="Satış Raporları"
+        app:fontsize="14dp"
+        app:image="@drawable/buton6" />
+
+    <library.yugisoft.module.CurrencyTextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:visibility="gone" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="Listele"
+        android:visibility="gone" />
+
     <library.yugisoft.module.Data.DataGridView
         android:id="@+id/dataGrid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/dotted"
-        app:showFilter="true"
-        android:fillViewport="true"
-        />
+        android:visibility="gone" />
 </LinearLayout>

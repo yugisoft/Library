@@ -25,6 +25,7 @@ public class ComboBox extends android.support.v7.widget.AppCompatSpinner {
     public void setAdapter(ItemAdapter adapter) {
         this.adapter = adapter;
         super.setAdapter(this.adapter);
+
     }
 
 

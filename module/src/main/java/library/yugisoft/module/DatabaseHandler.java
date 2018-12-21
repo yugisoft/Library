@@ -254,7 +254,7 @@ public class DatabaseHandler
                             SQL=SQL.replace("{"+name+"}","'"+fi.get(o).toString()+"'");
                             break;
                             default:
-                                SQL=SQL.replace("{"+name+"}","'"+JSON.DataTable(fi.get(o)).getJsonData()+"'");
+                                SQL=SQL.replace("{"+name+"}","'"+parse.toJson(fi.get(o))+"'");
                                 break;
 
                     }

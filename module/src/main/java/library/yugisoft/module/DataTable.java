@@ -832,7 +832,7 @@ public class DataTable
     }
     public static DataTable ToTable(Object ob)
     {
-        return  JSON.DataTable(ob);
+        return  parse.toDataTable(ob);
     }
     public static String[] fieldTo(Object ob,DataTable dt,Class c)
     {
