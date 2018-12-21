@@ -524,7 +524,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
                 String fieldName = textView.getFieldName();
                 int cellIndex = getData().Columns.indexOf(fieldName);
 
-                if (textView.getType()==6)
+                if (textView.getType()==6 && cellIndex >= 0)
                 {
                     if (getData().Rows.size()>0)
                         textView.setType(getData().Rows.get(0).Cells.get(cellIndex).DataType.getValue());
