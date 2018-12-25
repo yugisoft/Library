@@ -23,27 +23,50 @@ public class DateTime extends Date {
     private static String
             _popupFormat="yyyy[]MM[]dd",
             _dateFormat="dd[]MM[]yyyy",
+            _longDateFormat="dd MMMM yyyy",
             _shortDateTimeFormat="dd[]MM[]yyyy HH:mm",
-            _longDateTimeFormat="dd[]MM[]yyyy HH:mm:ss",
-            _timeFormat ="HH:mm",
-            _longTimeFormat ="HH:mm:ss";
+            _shortTimeFormat="HH:mm",
+            _longTimeFormat ="HH:mm:ss",
+            _longDateTimeFormat="dd MMMM yyyy HH:mm:ss"
+    ;
 
 
     public static String getPopupFormat() {
         return _popupFormat.replace("[]",getDateSeparator());
     }
-
     public static String getDateFormat() {
         return _dateFormat.replace("[]",getDateSeparator());
     }
+    public static String getLongDateFormat() {
+        return _longDateFormat.replace("[]",getDateSeparator());
+    }
+    public static String getShortTimeFormat() {
+        return _shortTimeFormat;
+    }
 
+    public static void setShortTimeFormat(String _shortTimeFormat) {
+        DateTime._shortTimeFormat = _shortTimeFormat;
+    }
+
+    public static String getLongTimeFormat() {
+        return _longTimeFormat;
+    }
+
+    public static void setSongTimeFormat(String _longTimeFormat) {
+        DateTime._longTimeFormat = _longTimeFormat;
+    }
+
+    public static void setLongDateFormat(String _longDateFormat) {
+        DateTime._longDateFormat = _longDateFormat;
+    }
     public static String getShortDateTimeFormat() {
         return _shortDateTimeFormat.replace("[]",getDateSeparator());
     }
-
     public static String getLongDateTimeFormat() {
         return _longDateTimeFormat.replace("[]",getDateSeparator());
     }
+
+
 
     TimeZone tz ;
     public static String dateSeparator=".";
@@ -102,6 +125,9 @@ public class DateTime extends Date {
         return dateTime;
     }
 
+
+
+
     @Override
     public String toString() {
                 return getIso8601();
@@ -110,28 +136,43 @@ public class DateTime extends Date {
 
         return getFormat(format);
     }
-    public String toLongDateTimeString() {
 
-        SimpleDateFormat format=new SimpleDateFormat(getLongDateTimeFormat());
-        return format.format(this);
-    }
-    public String toShortDateTimeString() {
 
-        SimpleDateFormat format=new SimpleDateFormat(getShortDateTimeFormat());
-        return format.format(this);
-    }
+
+
+
     public String toShortDateString() {
 
         SimpleDateFormat format=new SimpleDateFormat(getDateFormat());
         return format.format(this);
     }
-    public String toShortTimeString() {
+    public String toLongDateString() {
 
-        SimpleDateFormat format=new SimpleDateFormat(_timeFormat);
+        SimpleDateFormat format=new SimpleDateFormat(getLongDateFormat());
         return format.format(this);
     }
 
+    public String toShortDateTimeString() {
 
+        SimpleDateFormat format=new SimpleDateFormat(getShortDateTimeFormat());
+        return format.format(this);
+    }
+    public String toLongDateTimeString() {
+
+        SimpleDateFormat format=new SimpleDateFormat(getLongDateTimeFormat());
+        return format.format(this);
+    }
+
+    public String toLongTimeString() {
+
+        SimpleDateFormat format=new SimpleDateFormat(getLongTimeFormat());
+        return format.format(this);
+    }
+    public String toShortTimeString() {
+
+        SimpleDateFormat format=new SimpleDateFormat(getShortTimeFormat());
+        return format.format(this);
+    }
 
     public static DateTime Now()
     {
@@ -280,4 +321,6 @@ public class DateTime extends Date {
                 .build();
         timePickerPopWin.showPopWin(context);
     }
+
+
 }

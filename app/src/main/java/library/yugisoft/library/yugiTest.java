@@ -28,6 +28,9 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
             case R.id.btn_jsonparse:
                 startActivity(new Intent(this,sample_jsonparse.class));
                 break;
+            case R.id.btn_datetime:
+                startActivity(new Intent(this,sample_DateTime.class));
+                break;
         }
     }
 

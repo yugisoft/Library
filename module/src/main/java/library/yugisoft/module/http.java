@@ -328,7 +328,7 @@ public class http
 
                 }
             }
-            LOG += "Response : "+(response.Data.length() == 0 ? response.Data : response.getMessage());
+            LOG += "Response : "+(response.Data.length() != 0 ? response.Data : response.getMessage());
             yugi.Print("I", "httpExecuteResponse", LOG);
             return  response;
         }

@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".sample_jsonparse"></activity>
+        <activity android:name=".sample_jsonparse" />
+        <activity android:name=".sample_DateTime"></activity>
     </application>
 
 </manifest>
