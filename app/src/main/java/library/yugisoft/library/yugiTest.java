@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import library.yugisoft.module.DataAdapter;
 import library.yugisoft.module.yugi;
 
 public class yugiTest extends yugi.vActivity implements View.OnClickListener {
@@ -16,8 +20,7 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         setContentView(R.layout.mdi);
 
     }
-
-
+    
     @Override
     public void onClick(View v) {
         switch (v.getId())
@@ -27,6 +30,5 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
                 break;
         }
     }
-
 
 }

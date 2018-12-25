@@ -49,9 +49,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -1282,6 +1286,32 @@ public class yugi
     }
     //endregion
 
+    public static Field[] getDeclaredFields(Class clazz, boolean recursively) {
+        List<Field> fields = new LinkedList<Field>();
+        Field[] declaredFields = clazz.getDeclaredFields();
+        Collections.addAll(fields, declaredFields);
+
+        Class superClass = clazz.getSuperclass();
+
+        if(superClass != null && recursively) {
+            Field[] declaredFieldsOfSuper = getDeclaredFields(superClass, recursively);
+            if(declaredFieldsOfSuper.length > 0)
+                Collections.addAll(fields, declaredFieldsOfSuper);
+        }
+
+        return fields.toArray(new Field[fields.size()]);
+    }
+    public static Field[] getAnnotatedDeclaredFields(Class clazz, Class<? extends Annotation> annotationClass, boolean recursively) {
+        Field[] allFields = getDeclaredFields(clazz, recursively);
+        List<Field> annotatedFields = new LinkedList<Field>();
+
+        for (Field field : allFields) {
+            if(field.isAnnotationPresent(annotationClass))
+                annotatedFields.add(field);
+        }
+
+        return annotatedFields.toArray(new Field[annotatedFields.size()]);
+    }
 
 
 
