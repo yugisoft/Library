@@ -396,6 +396,11 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
 
             textViews.get(k).setTextAlignment(textView.getTextAlignment());
         }
+        else
+        {
+            textView.setTextAlignment(textViews.get(k).getTextAlignment());
+        }
+
 
 
         return  textView;
