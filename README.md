@@ -1,6 +1,6 @@
 ## Json to Model Parse [Document](https://github.com/yugisoft/Library/blob/master/Parse_JsonToModel.md)
 
-# Build.Gradle(PROJECT)
+### Build.Gradle(PROJECT)
 ```ruby
 allprojects {
 		repositories {
@@ -9,7 +9,7 @@ allprojects {
 		}
 	}
 ```
-# Build.Gradle(APP)
+### Build.Gradle(APP)
 ```ruby
 dependencies {
 	        implementation 'com.github.yugisoft:Library:2018.12.25.03'
