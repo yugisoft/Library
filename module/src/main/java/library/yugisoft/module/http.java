@@ -28,8 +28,7 @@ public class http
 {
 
 
-    public static class Response
-    {
+    public static class Response {
         public int HataKodu;
         public String HataAciklama, Data;
         public boolean isException;
@@ -139,7 +138,6 @@ public class http
 
             }
         }
-
         public static void Add(HttpEntityEnclosingRequestBase req, String bodys) {
 
             try
@@ -153,9 +151,8 @@ public class http
 
             }
         }
-
-
     }
+
     public static Response GET(String url, Hashtable headers) {
         Response response = null;
         HttpGet httpGet = new HttpGet(url);
@@ -315,19 +312,23 @@ public class http
                         if (st.getStatusCode() == 400)
                         {
                             DataTable dt = new DataTable(response.Data);
-                            response.HataAciklama = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
-                            if (response.HataAciklama.length()==0)
-                                response.HataAciklama = dt.get(0, "error");
+                            String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
+                            error = error.length()==0 ? dt.get(0, "error") : error;
+                            response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
                         }
-                    } else
+                    }
+                    else
+                    {
                         response.Data = "Beklenmeyen Bir Hata Oluştu!";
+
+                    }
                 }
                 catch (Exception Ex)
                 {
 
                 }
             }
-            LOG += "Response : "+response.Data;
+            LOG += "Response : "+(response.Data.length() == 0 ? response.Data : response.getMessage());
             yugi.Print("I", "httpExecuteResponse", LOG);
             return  response;
         }
@@ -380,7 +381,8 @@ public class http
         response.isException = !(statusCode >= 200 && statusCode < 300);
 
 
-       // switch (statusCode) {
+       switch (statusCode)
+       {
        //     case 400:
        //         Hata.isException = true;
        //         Hata.HataAciklama = "Sunucuya Yapılan İstek Hatalıdır";
@@ -389,10 +391,10 @@ public class http
        //         Hata.isException = true;
        //         Hata.HataAciklama = "Oturumunuzun Süresi Dolmuş! Lütfen Tekrar Giriş Yapınız.";
        //         break;
-       //     case 404:
-       //         Hata.isException = true;
-       //         Hata.HataAciklama = "İstek Yapılan Kaynak Veya Sayfa Bulunamadı! Lütfen Server Adresini Doğru Girdiğinizden Emin Olun!";
-       //         break;
+                 case 404:
+                     response.isException = true;
+                     response.HataAciklama = "İstek Yapılan Kaynak Veya Sayfa Bulunamadı! Lütfen Server Adresini Doğru Girdiğinizden Emin Olun!";
+                     break;
        //     case 408:
        //         Hata.isException = true;
        //         Hata.HataAciklama = "İstek Zaman Aşımına Uğradı! Lütfen İnternet Bağlantınızı Kontrol Edin.";
@@ -414,7 +416,8 @@ public class http
        //         Hata.HataAciklama = "Success";
        //         Hata.HataKodu = 0;
        //         break;
-       // }
+       //
+        }
         return response;
     }
     //endregion
@@ -766,7 +769,6 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
-
 
 
 }
