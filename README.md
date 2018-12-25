@@ -12,6 +12,6 @@ allprojects {
 ### Build.Gradle(APP)
 ```ruby
 dependencies {
-	        implementation 'com.github.yugisoft:Library:2018.12.25.03'
+	        implementation 'com.github.yugisoft:Library:2018.12.25.04'
 	}
 ```
