@@ -20,7 +20,7 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         setContentView(R.layout.mdi);
 
     }
-    
+
     @Override
     public void onClick(View v) {
         switch (v.getId())

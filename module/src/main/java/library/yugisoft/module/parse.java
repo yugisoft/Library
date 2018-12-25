@@ -268,14 +268,25 @@ public class parse
         return  list;
 
     }
+
     private static void set(Object object , JSONObject jsonObject) {
         Class objectClass = object.getClass();
-        Field[] fields = objectClass.getDeclaredFields();
+        setSub(object,jsonObject,objectClass.getDeclaredFields());
+        setSub(object,jsonObject,objectClass.getFields());
+        yugi.Print("i","JSON END SET");
+    }
+
+    private static void setSub(Object object, JSONObject jsonObject, Field[] fields) {
         for (Field f:fields)
         {
-            f.setAccessible(true);
             String fName = f.getName();
             String fType = f.getType().getSimpleName().toLowerCase();
+            if (fName.equals("$change") ||fName.equals("serialVersionUID"))
+            {
+                continue;
+            }
+            f.setAccessible(true);
+
             try
             {
                 Object value = jsonObject.get(fName);
@@ -341,8 +352,8 @@ public class parse
             }
             f.setAccessible(false);
         }
-        yugi.Print("i","JSON END SET");
     }
+
 
     private static int defaultInt = 0;
     public static int getDefaultInt() {
