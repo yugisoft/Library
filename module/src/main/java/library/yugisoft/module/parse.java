@@ -270,9 +270,10 @@ public class parse
     }
     private static void set(Object object , JSONObject jsonObject) {
         Class objectClass = object.getClass();
-        Field[] fields = objectClass.getFields();
+        Field[] fields = objectClass.getDeclaredFields();
         for (Field f:fields)
         {
+            f.setAccessible(true);
             String fName = f.getName();
             String fType = f.getType().getSimpleName().toLowerCase();
             try
@@ -338,6 +339,7 @@ public class parse
             {
                 yugi.Print("e","JSON PARSE SET EXCEOTION",ex.getMessage());
             }
+            f.setAccessible(false);
         }
         yugi.Print("i","JSON END SET");
     }

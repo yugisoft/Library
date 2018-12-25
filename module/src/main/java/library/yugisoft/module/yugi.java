@@ -130,7 +130,7 @@ public class yugi
         @Override
         public void setContentView(int layoutResID) {
             super.setContentView(layoutResID);
-            View v = findViewById(android.R.id.content);
+            View v = (View)findViewById(android.R.id.content);
             v.setOnTouchListener(new View.OnTouchListener()
             {
                 @Override
