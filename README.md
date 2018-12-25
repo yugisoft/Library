@@ -34,4 +34,4 @@ public static class TestModel {
             mPrivateIntField.setText("mPublicIntField : ");
             mPrivateTextField.setText("mPublicIntField : ");
         }
-    ```
+```
