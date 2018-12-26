@@ -30,7 +30,7 @@ public class http
 
     public static class Response {
         public int HataKodu;
-        public String HataAciklama, Data;
+        public String HataAciklama = "", Data= "";
         public boolean isException;
 
         @Override
@@ -328,9 +328,6 @@ public class http
 
                 }
             }
-            LOG += "Response : "+(response.Data.length() != 0 ? response.Data : response.getMessage());
-            yugi.Print("I", "httpExecuteResponse", LOG);
-            return  response;
         }
         catch (Exception ex)
         {
@@ -338,8 +335,10 @@ public class http
             response.HataKodu = -999;
             response.isException = true;
             response.HataAciklama=ex.getMessage();
+
         }
-        yugi.Print("I", "httpExecute", response.Data);
+        LOG += "Response : "+(response.Data.length() != 0 ? response.Data : response.getMessage());
+        yugi.Print("I", "httpExecuteResponse", LOG);
         return  response;
     }
 
