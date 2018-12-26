@@ -500,6 +500,23 @@ public class vList<E>  implements List<E>{
 
     //endregion
 
+
+    public static <T> vList<T> Merge(List<T>... list)
+    {
+        vList newList = new vList<T>();
+
+        for (List<T> lists:list)
+            for (T element : lists) {
+                if (!newList.contains(element)) {
+
+                newList.add(element);
+                }
+            }
+
+        return newList;
+    }
+
+
     public static class vListItem<V,VT>
     {
         public V item = null;

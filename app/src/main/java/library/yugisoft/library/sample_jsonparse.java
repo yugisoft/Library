@@ -66,6 +66,8 @@ public class sample_jsonparse extends AppCompatActivity {
             mPrivateTextField.setText("mPublicIntField : ");
         }
 
+        editJson.setText(parse.toJson(testModel));
+
     }
     private void SampleJson() {
         editJson.setText("{\n" +
@@ -90,6 +92,8 @@ public class sample_jsonparse extends AppCompatActivity {
             return mPrivateTextField;
         }
     }
+
+
 
 
 }

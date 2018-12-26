@@ -6,10 +6,14 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class parse
 {
+
+
 
     public static int toInt(Object p) {
         try
@@ -77,7 +81,8 @@ public class parse
 
     }
 
-    public static String toJson(Object item) {
+    public static String toJson(Object item)
+    {
         Class cls = item.getClass();
         String name = cls.getSimpleName().toLowerCase();
         String type = cls.getName().toLowerCase();
@@ -103,13 +108,16 @@ public class parse
         else
         {
             JSONObject object = new JSONObject();
-            for (Field f:cls.getFields())
+
+            for (Field f: vList.Merge(Arrays.asList(cls.getFields()),Arrays.asList(cls.getDeclaredFields())))
             {
+                f.setAccessible(true);
                 if(!f.getName().equals("$change") && !f.getName().equals("serialVersionUID"))
                     try
                     {
                         object.put(f.getName(),f.get(item));
                     } catch (Exception ex) {}
+                f.setAccessible(false);
             }
             jsonArray.put(object);
         }
