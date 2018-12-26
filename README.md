@@ -1,5 +1,7 @@
 ## Json to Model Parse [Document](https://github.com/yugisoft/Library/blob/master/Parse_JsonToModel.md)
 
+## DateTime [Document](https://github.com/yugisoft/Library/blob/master/Sample_DateTime.md)
+
 ### Build.Gradle(PROJECT)
 ```ruby
 allprojects {
@@ -12,6 +14,6 @@ allprojects {
 ### Build.Gradle(APP)
 ```ruby
 dependencies {
-	        implementation 'com.github.yugisoft:Library:2018.12.25.03'
+	        implementation 'com.github.yugisoft:Library:2018.12.25.04'
 	}
 ```
