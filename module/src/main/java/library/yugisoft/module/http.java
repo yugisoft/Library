@@ -301,32 +301,23 @@ public class http
             LOG+= "HttpURL : "+httpGet.getURI().toURL()+"\n";
             LOG+=log+"\n";
             LOG+= "HttpReponseStatusCode : "+st.getStatusCode()+"\n";
-            if (!response.isException || st.getStatusCode() == 400)
+            //if (!response.isException || st.getStatusCode() == 400) { try { } catch (Exception Ex) { } }
+            inputStream = httpResponse.getEntity().getContent();
+            if (inputStream != null)
             {
-                try
+                response.Data = convertInputStreamToString(inputStream);
+                if (st.getStatusCode() == 400)
                 {
-                    inputStream = httpResponse.getEntity().getContent();
-                    if (inputStream != null)
-                    {
-                        response.Data = convertInputStreamToString(inputStream);
-                        if (st.getStatusCode() == 400)
-                        {
-                            DataTable dt = new DataTable(response.Data);
-                            String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
-                            error = error.length()==0 ? dt.get(0, "error") : error;
-                            response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
-                        }
-                    }
-                    else
-                    {
-                        response.Data = "Beklenmeyen Bir Hata Oluştu!";
-
-                    }
+                    DataTable dt = new DataTable(response.Data);
+                    String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
+                    error = error.length()==0 ? dt.get(0, "error") : error;
+                    response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
                 }
-                catch (Exception Ex)
-                {
+            }
+            else
+            {
+                response.Data = "Beklenmeyen Bir Hata Oluştu!";
 
-                }
             }
         }
         catch (Exception ex)
