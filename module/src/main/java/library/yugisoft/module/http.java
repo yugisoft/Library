@@ -306,13 +306,11 @@ public class http
             if (inputStream != null)
             {
                 response.Data = convertInputStreamToString(inputStream);
-                if (st.getStatusCode() == 400)
-                {
-                    DataTable dt = new DataTable(response.Data);
-                    String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
-                    error = error.length()==0 ? dt.get(0, "error") : error;
-                    response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
-                }
+                //if (st.getStatusCode() == 400) {}
+                DataTable dt = new DataTable(response.Data);
+                String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
+                error = error.length()==0 ? dt.get(0, "error") : error;
+                response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
             }
             else
             {
