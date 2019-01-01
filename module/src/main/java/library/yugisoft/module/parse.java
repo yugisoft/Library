@@ -42,7 +42,31 @@ public class parse
         }
         catch (Exception ex)
         {
-            return  defaultDouble;
+            try
+            {
+                return Double.parseDouble(p.toString().replace(",","."));
+            }
+            catch (Exception exd)
+            {
+                return  defaultDouble;
+            }
+        }
+    }
+    public static float toFloat(Object p) {
+        try
+        {
+            return Float.parseFloat(p.toString());
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                return Float.parseFloat(p.toString().replace(",","."));
+            }
+            catch (Exception exd)
+            {
+                return  defaultFloat;
+            }
         }
     }
     public static boolean toBoolean(Object p) {
@@ -379,6 +403,8 @@ public class parse
         parse.defaultDouble = defaultDouble;
     }
 
+    private static float defaultFloat=0f;
+
     private static boolean defaultBoolean = false;
     public static boolean getDefaultBoolean() {
         return defaultBoolean;
@@ -396,4 +422,7 @@ public class parse
     }
 
 
+    public static float getDefaultFloat() {
+        return defaultFloat;
+    }
 }
