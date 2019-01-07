@@ -72,7 +72,10 @@ public class parse
     public static boolean toBoolean(Object p) {
         try
         {
-            return Boolean.parseBoolean(p.toString());
+            if (toInt(p)==1)
+                return  true;
+            else
+                return Boolean.parseBoolean(p.toString());
         }
         catch (Exception ex)
         {
