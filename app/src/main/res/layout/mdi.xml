@@ -21,4 +21,15 @@
         android:gravity="center_vertical"
         android:onClick="onClick"
         android:text="DATE  TIME" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <library.yugisoft.module.CurrencyTextView
+        android:id="@+id/currencyTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="55" />
 </LinearLayout>

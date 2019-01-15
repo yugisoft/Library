@@ -34,13 +34,16 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     public CurrencyTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         numpad = new yugi.mNumpad(yugi.activity);
-        final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CurrencyTextView, defStyleAttr, 0);
-        if (a != null) {
+       try {
+           final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CurrencyTextView, defStyleAttr, 0);
+           if (a != null) {
 
-            numpad.Currency = a.getString(R.styleable.CurrencyTextView_currency);
-            numpad.setDecimal(a.getInteger(R.styleable.CurrencyTextView_decimal,2));
+               numpad.Currency = a.getString(R.styleable.CurrencyTextView_currency);
+               numpad.setDecimal(a.getInteger(R.styleable.CurrencyTextView_decimal,2));
 
-        }
+           }
+       }catch (Exception ex)
+       {}
 
 
 
