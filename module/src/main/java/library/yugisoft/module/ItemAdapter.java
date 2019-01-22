@@ -76,17 +76,17 @@ public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapt
     //endregion
     @Override
     public int getCount() {
-        return list.size();
+        return getList().size();
     }
     @Override
     public Object getItem(int i) {
-        return list.get(i);
+        return getList().get(i);
     }
     @Override
     public long getItemId(int i) {
         try
         {
-            return Long.parseLong(list.get(getPrimaryCellIndex()).toString());
+            return Long.parseLong(getList().get(getPrimaryCellIndex()).toString());
         }
         catch (Exception e)
         {
@@ -110,7 +110,7 @@ public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapt
             if (Items.size()>0)
             {
                 for (ViewItem item:Items) {
-                    item.setViewRun(view,list.get(i));
+                    item.setViewRun(view,getList().get(i));
                 }
             }
         }
@@ -127,7 +127,7 @@ public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapt
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
         if (onAdapterDataLoad!=null)
-            onAdapterDataLoad.onLoad(list);
+            onAdapterDataLoad.onLoad(getList());
     }
 
     public void setItems(List<ViewItem> items) {
