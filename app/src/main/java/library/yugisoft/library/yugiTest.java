@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import library.yugisoft.module.DataAdapter;
+import library.yugisoft.module.DialogBox;
 import library.yugisoft.module.yugi;
 
 public class yugiTest extends yugi.vActivity implements View.OnClickListener {
@@ -18,7 +19,7 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mdi);
-
+        DialogBox.showOK("Yeni Tema Deneme!","",null);
     }
 
     @Override
