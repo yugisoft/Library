@@ -4,7 +4,7 @@ group ='com.github.yugisoft'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '26.0.2'
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 26
