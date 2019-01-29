@@ -6,39 +6,45 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class DialogBox {
-    public static void showOK(String mesaj,IDialogResult result) {showOK(yugi.activity,mesaj,"Uyarı",result);}
-    public static void showOK(Activity activity , String mesaj,String title, IDialogResult result) {showResult(activity,mesaj,title,EDialogButtons.OK,result);}
 
+    //region showOK
+    public static void showOK(String mesaj,IDialogResult result) {showOK(yugi.activity,mesaj,"Uyarı",result);}
+    public static void showOK(String mesaj,String title,IDialogResult result) {showOK(yugi.activity,mesaj,title,result);}
+    public static void showOK(Activity activity , String mesaj,String title, IDialogResult result) {showResult(activity,mesaj,title,EDialogButtons.OK,result);}
+    //endregion
+
+    //region showYES
     public static void showYES(String mesaj,IDialogResult result) {showYES(yugi.activity,mesaj,"Uyarı",result);}
     public static void showYES(String mesaj,String title,IDialogResult result) {showYES(yugi.activity,mesaj,title,result);}
-
-    public static void showYES(Activity activity ,String mesaj,IDialogResult result) {showResult(activity,mesaj,"Uyarı",EDialogButtons.YES,result);}
     public static void showYES(Activity activity ,String mesaj,String title,IDialogResult result) {showResult(activity,mesaj,title,EDialogButtons.YES,result);}
+    //endregion
 
+    //region showNO
     public static void showNO(String mesaj,IDialogResult result) {showNO(yugi.activity,mesaj,"Uyarı",result);}
     public static void showNO(String mesaj,String title,IDialogResult result) {showNO(yugi.activity,mesaj,title,result);}
-
     public static void showNO(Activity activity ,String mesaj,IDialogResult result) {showResult(activity,mesaj,"Uyarı",EDialogButtons.NO,result);}
     public static void showNO(Activity activity ,String mesaj,String title,IDialogResult result) {showResult(activity,mesaj,title,EDialogButtons.NO,result);}
+    //endregion
 
-
+    //region showYESNO
     public static void showYESNO(String mesaj,IDialogResult result) {showYESNO(yugi.activity,mesaj,"Uyarı",result);}
     public static void showYESNO(String mesaj,String title,IDialogResult result) {showYESNO(yugi.activity,mesaj,title,result);}
-
-
     public static void showYESNO(Activity activity ,String mesaj,IDialogResult result) {showResult(activity,mesaj,"Uyarı",EDialogButtons.YESNO,result);}
     public static void showYESNO(Activity activity ,String mesaj,String title,IDialogResult result) {showResult(activity,mesaj,title,EDialogButtons.YESNO,result);}
+    //endregion
 
+    //region showRESULTTEXT
     public static void showRESULTTEXT(String mesaj,IDialogResult result) {showRESULTTEXT(yugi.activity,mesaj,result);}
     public static void showRESULTTEXT(String mesaj,String title,IDialogResult result) {showRESULTTEXT(yugi.activity,mesaj,title,result);}
-
     public static void showRESULTTEXT(Activity activity ,String mesaj,IDialogResult result) {
         showResult(activity,mesaj,"Uyarı",EDialogButtons.RESULTTEXT,result);
     }
     public static void showRESULTTEXT(Activity activity ,String mesaj, String title,IDialogResult result) {
         showResult(activity,mesaj,title,EDialogButtons.RESULTTEXT,result);
     }
+    //endregion
 
+    //region showResult
     public static void showResult(Activity activity , String mesaj, String title, EDialogButtons buttons, IDialogResult result) {
 
         yugi.Dialog.mDialog dialog = new yugi.Dialog.mDialog(activity,R.layout.dialog_result1,true);
@@ -110,7 +116,7 @@ public class DialogBox {
         dialog.dialog.show();
 
     }
-
+    //endregion
 
     public enum EDialogButtons
     {
@@ -124,7 +130,5 @@ public class DialogBox {
     {
         void onResult(EDialogButtons buttons,String result);
     }
-
-
 
 }
