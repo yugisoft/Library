@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="library.yugisoft.library">
 
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +21,7 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".sample_jsonparse" />
-        <activity android:name=".sample_DateTime"></activity>
+        <activity android:name=".sample_DateTime"/>
     </application>
 
 </manifest>
