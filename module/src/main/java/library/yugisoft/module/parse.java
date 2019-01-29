@@ -247,44 +247,33 @@ public class parse
 
 
     private  static  Object jsonTo(Object parseItem,String Json, String key, int index) {
-        if (Json != null && Json.length() > 0 && !Json.equals("[]")) {
+        if (Json != null && Json.length() > 0 && !Json.equals("[]"))
+        {
             Class objectClass = parseItem.getClass();
-
-            if (objectClass.equals(Integer.class) || objectClass.equals(int.class))
-                parseItem = toInt(Json);
-            else if (objectClass.equals(Long.class) || objectClass.equals(long.class))
-                parseItem = toLong(Json);
-            else if (objectClass.equals(Double.class) || objectClass.equals(double.class))
-                parseItem = toDouble(Json);
-            else if (objectClass.equals(DataTable.class))
-                parseItem = toDataTable(Json);
-            else if (objectClass.equals(DateTime.class))
-                parseItem = toDateTime(Json);
-            else if (objectClass.equals(Boolean.class))
-                parseItem = toBoolean(Json);
-            else if (objectClass.equals(String.class))
-                parseItem = Json;
-            else {
-                String objectClassName = objectClass.getSimpleName().toLowerCase();
-                try {
-                    if (!Json.substring(0, 1).equals("[")) {
-                        Json = "[ " + Json + " ]";
-                    }
-                    JSONArray array = new JSONArray(Json);
-                    JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
+            String objectClassName= objectClass.getSimpleName().toLowerCase();
+            try
+            {
+                if (!Json.substring(0, 1).equals("[")) { Json = "[ " + Json + " ]"; }
+                JSONArray array = new JSONArray(Json);
+                JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
 
 
-                    JSONObject object = subArray.getJSONObject(index);
-
-                    set(parseItem, object);
 
 
-                } catch (Exception ex) {
+                JSONObject object = subArray.getJSONObject(index);
 
-                }
+                set(parseItem,object);
+
+
+
             }
+            catch (Exception ex)
+            {
+
+            }
+
         }
-        return parseItem;
+        return  parseItem;
 
     }
     private  static  List jsonToList(List list,String Json, String key, int index,Class parseClass) {

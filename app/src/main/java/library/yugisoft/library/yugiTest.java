@@ -19,7 +19,7 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mdi);
-        DialogBox.showOK("Yeni Tema Deneme!","Yeni Mesaj",null);
+
     }
 
     @Override
