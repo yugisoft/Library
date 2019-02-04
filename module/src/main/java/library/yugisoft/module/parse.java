@@ -1,5 +1,12 @@
 package library.yugisoft.module;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -247,33 +254,44 @@ public class parse
 
 
     private  static  Object jsonTo(Object parseItem,String Json, String key, int index) {
-        if (Json != null && Json.length() > 0 && !Json.equals("[]"))
-        {
+        if (Json != null && Json.length() > 0 && !Json.equals("[]")) {
             Class objectClass = parseItem.getClass();
-            String objectClassName= objectClass.getSimpleName().toLowerCase();
-            try
-            {
-                if (!Json.substring(0, 1).equals("[")) { Json = "[ " + Json + " ]"; }
-                JSONArray array = new JSONArray(Json);
-                JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
+
+            if (objectClass.equals(Integer.class) || objectClass.equals(int.class))
+                parseItem = toInt(Json);
+            else if (objectClass.equals(Long.class) || objectClass.equals(long.class))
+                parseItem = toLong(Json);
+            else if (objectClass.equals(Double.class) || objectClass.equals(double.class))
+                parseItem = toDouble(Json);
+            else if (objectClass.equals(DataTable.class))
+                parseItem = toDataTable(Json);
+            else if (objectClass.equals(DateTime.class))
+                parseItem = toDateTime(Json);
+            else if (objectClass.equals(Boolean.class))
+                parseItem = toBoolean(Json);
+            else if (objectClass.equals(String.class))
+                parseItem = Json;
+            else {
+                String objectClassName = objectClass.getSimpleName().toLowerCase();
+                try {
+                    if (!Json.substring(0, 1).equals("[")) {
+                        Json = "[ " + Json + " ]";
+                    }
+                    JSONArray array = new JSONArray(Json);
+                    JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
 
 
+                    JSONObject object = subArray.getJSONObject(index);
+
+                    set(parseItem, object);
 
 
-                JSONObject object = subArray.getJSONObject(index);
+                } catch (Exception ex) {
 
-                set(parseItem,object);
-
-
-
+                }
             }
-            catch (Exception ex)
-            {
-
-            }
-
         }
-        return  parseItem;
+        return parseItem;
 
     }
     private  static  List jsonToList(List list,String Json, String key, int index,Class parseClass) {
@@ -349,8 +367,8 @@ public class parse
                     JSONArray listJson = new JSONArray(value.toString());
                     for (int ds =0 ;ds<listJson.length();ds++)
                     {
-                        Object o = Generic.getGenericInstance(f);
-                        jsonTo(o,listJson.getString(ds),"",0);
+
+                        Object o  =  jsonTo(Generic.getGenericInstance(f),listJson.getString(ds),"",0);
                         l.add(o);
                     }
                     f.set(object,l);
@@ -427,5 +445,20 @@ public class parse
 
     public static float getDefaultFloat() {
         return defaultFloat;
+    }
+
+    public static void toLayoutParams(View view,int Wi,int He,int We)
+    {
+        Object params = view.getLayoutParams();
+        if(params.getClass().equals(LinearLayout.LayoutParams.class))
+            view.setLayoutParams(new LinearLayout.LayoutParams(Wi,He,We));
+        else if(params.getClass().equals(RelativeLayout.LayoutParams.class))
+            view.setLayoutParams(new RelativeLayout.LayoutParams(Wi,He));
+        else if(params.getClass().equals(ViewGroup.LayoutParams.class))
+            view.setLayoutParams(new ViewGroup.LayoutParams(Wi,He));
+        else if(params.getClass().equals(AbsListView.LayoutParams.class))
+            view.setLayoutParams(new AbsListView.LayoutParams(Wi,He));
+        else if(params.getClass().equals(FrameLayout.LayoutParams.class))
+            view.setLayoutParams(new FrameLayout.LayoutParams(Wi,He));
     }
 }
