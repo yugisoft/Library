@@ -60,10 +60,11 @@
                 android:id="@+id/lyYes"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/resultYES"
@@ -84,10 +85,11 @@
                 android:id="@+id/lyNO"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/resultNO"
