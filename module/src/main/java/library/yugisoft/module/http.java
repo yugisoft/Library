@@ -110,8 +110,9 @@ public class http
 
     }
     public static class Bodys {
-        public static void Add(HttpEntityEnclosingRequestBase req, Hashtable bodys) {
-            if (bodys==null)return;;
+        public static String Add(HttpEntityEnclosingRequestBase req, Hashtable bodys) {
+            String log = "";
+            if (bodys==null)return log;
             try
             {
                 Iterator<String> keys = bodys.keySet().iterator();
@@ -125,6 +126,7 @@ public class http
                     body += key + "=" + bodys.get(key).toString();
                     i++;
                 }
+                log = body;
                 StringEntity se = null;
                 try {
                     se = new StringEntity(body, HTTP.UTF_8);
@@ -135,8 +137,9 @@ public class http
             }
             catch (Exception Ex)
             {
-
+                    log += Ex.getMessage();
             }
+            return log;
         }
         public static void Add(HttpEntityEnclosingRequestBase req, String bodys) {
 
@@ -180,7 +183,7 @@ public class http
     public static Response POST(String url,Hashtable body,Hashtable headers) {
         Response response = null;
         HttpPost httpPost = new HttpPost(url);
-
+        String Log = "http-POST";
         //Content Type Belirlendi!
         Headers.urlencoded(httpPost);
 
@@ -197,16 +200,16 @@ public class http
         Headers.Add(httpPost, headers);
 
         //Body'e eklenmesi gereken bilgiler eklendi.
-        Bodys.Add(httpPost,body);
+        Log += "\n"+Bodys.Add(httpPost,body);
 
-        response = httpExecute(httpPost,"http-POST");
+        response = httpExecute(httpPost,Log);
         yugi.TempHttpHeader = null;
         return response;
     }
     public static Response POST(String url,String body,Hashtable headers) {
         Response response = null;
         HttpPost httpPost = new HttpPost(url);
-
+        String Log = "http-POST";
         //Content Type Belirlendi!
         Headers.json(httpPost);
 
@@ -225,14 +228,16 @@ public class http
         //Body'e eklenmesi gereken bilgiler eklendi.
         Bodys.Add(httpPost,body);
 
-        response = httpExecute(httpPost,"http-POST");
+        Log +="\n"+body;
+
+        response = httpExecute(httpPost,Log);
         yugi.TempHttpHeader = null;
         return response;
     }
     public static Response PUT(String url,Hashtable body,Hashtable headers) {
         Response response = null;
         HttpPut httpPut = new HttpPut(url);
-
+        String Log = "http-PUT";
         //Content Type Belirlendi!
         Headers.urlencoded(httpPut);
 
@@ -249,9 +254,9 @@ public class http
         Headers.Add(httpPut, headers);
 
         //Body'e eklenmesi gereken bilgiler eklendi.
-        Bodys.Add(httpPut,body);
+        Log+="\n"+ Bodys.Add(httpPut,body);
 
-        response = httpExecute(httpPut,"http-PUT");
+        response = httpExecute(httpPut,Log);
 
         yugi.TempHttpHeader = null;
         return response;
@@ -259,7 +264,7 @@ public class http
     public static Response PUT(String url,String body,Hashtable headers) {
         Response response = null;
         HttpPut httpPut = new HttpPut(url);
-
+        String Log = "http-PUT";
         //Content Type Belirlendi!
         Headers.json(httpPut);
 
@@ -278,7 +283,8 @@ public class http
         //Body'e eklenmesi gereken bilgiler eklendi.
         Bodys.Add(httpPut,body);
 
-        response = httpExecute(httpPut,"http-PUT");
+        Log +="\n"+body;
+        response = httpExecute(httpPut,Log);
 
         yugi.TempHttpHeader = null;
         return response;
@@ -302,20 +308,22 @@ public class http
             LOG+=log+"\n";
             LOG+= "HttpReponseStatusCode : "+st.getStatusCode()+"\n";
             //if (!response.isException || st.getStatusCode() == 400) { try { } catch (Exception Ex) { } }
-            inputStream = httpResponse.getEntity().getContent();
-            if (inputStream != null)
+            if (st.getStatusCode() != 204)
             {
-                response.Data = convertInputStreamToString(inputStream);
-                //if (st.getStatusCode() == 400) {}
-                DataTable dt = new DataTable(response.Data);
-                String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
-                error = error.length()==0 ? dt.get(0, "error") : error;
-                response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
-            }
-            else
-            {
-                response.Data = "Beklenmeyen Bir Hata Oluştu!";
-
+                inputStream = httpResponse.getEntity().getContent();
+                if (inputStream != null)
+                {
+                    response.Data = convertInputStreamToString(inputStream);
+                    //if (st.getStatusCode() == 400) {}
+                    DataTable dt = new DataTable(response.Data);
+                    String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
+                    error = error.length()==0 ? dt.get(0, "error") : error;
+                    response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
+                }
+                else
+                {
+                    response.Data = "Beklenmeyen Bir Hata Oluştu!";
+                }
             }
         }
         catch (Exception ex)
