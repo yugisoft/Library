@@ -253,7 +253,7 @@ public class parse
     }
 
 
-    private  static  Object jsonTo(Object parseItem,String Json, String key, int index) {
+    public   static  Object jsonTo(Object parseItem,String Json, String key, int index) {
         if (Json != null && Json.length() > 0 && !Json.equals("[]")) {
             Class objectClass = parseItem.getClass();
 
@@ -294,7 +294,7 @@ public class parse
         return parseItem;
 
     }
-    private  static  List jsonToList(List list,String Json, String key, int index,Class parseClass) {
+    public  static  List jsonToList(List list,String Json, String key, int index,Class parseClass) {
         if (Json != null && Json.length() > 0 && !Json.equals("[]"))
         {
             try
