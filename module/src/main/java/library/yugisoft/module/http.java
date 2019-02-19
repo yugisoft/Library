@@ -5,12 +5,7 @@ import android.os.AsyncTask;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
@@ -22,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class http
@@ -766,6 +762,171 @@ public class http
         }
     }
 
+    public static class Request extends AsyncTask<String,Void,Response> {
+        private OnHttpResponse onHttpResponse = null;
+        private Hashtable headers=null,bodys=null;
+        private String sbody="";
+        private boolean Json = false;
+        private String Log = "";
 
+        HttpRequestBase httpRequest;
+
+        public Request(OnHttpResponse pOnHttpResponse) { onHttpResponse=pOnHttpResponse; }
+        public Request(OnHttpResponse pOnHttpResponse,Hashtable pBodys) {
+            onHttpResponse=pOnHttpResponse;
+            bodys=pBodys;
+        }
+        public Request(OnHttpResponse pOnHttpResponseTable,String pBodys,Hashtable pheaders) {
+            onHttpResponse=pOnHttpResponseTable;
+            sbody=pBodys;
+            headers=pheaders;
+            Json=true;
+        }
+        public Request(OnHttpResponse pOnHttpResponse,String pBodys) {
+            onHttpResponse=pOnHttpResponse;
+            sbody=pBodys;
+            Json=true;
+        }
+        public Request(OnHttpResponse pOnHttpResponseTable,Hashtable pBodys,Hashtable pheaders) {
+            onHttpResponse=pOnHttpResponseTable;
+            bodys=pBodys;
+            headers=pheaders;
+        }
+
+        public Request setOnHttpResponse(OnHttpResponse onHttpResponse) {
+            this.onHttpResponse = onHttpResponse;
+            return  this;
+        }
+
+        public Request setHeaders(Hashtable headers) {
+            this.headers = headers;
+            return  this;
+        }
+
+        public Request setBodys(Hashtable bodys) {
+            this.bodys = bodys;
+            if (bodys.size()>0)
+                Json = false;
+            return  this;
+        }
+
+        public Request setBodys(String sbody) {
+            this.sbody = sbody;
+            if (sbody.length()>0)
+                Json = true;
+            return  this;
+        }
+
+        public Request setLog(String log) {
+            Log = log;
+            return  this;
+        }
+
+        public void GET(String url)  {
+            Execute(new HttpGet(url));
+        }
+        public void DELETE(String url) {
+            Execute(new HttpDelete(url));
+        }
+        public void HEAD(String url) {
+            Execute(new HttpHead(url));
+        }
+        public void OPTIONS(String url) {
+            Execute(new HttpOptions(url));
+        }
+        public void POST(String url) {
+            Execute(new HttpPost(url));
+        }
+        public void PUT(String url) {
+            Execute(new HttpPut(url));
+        }
+
+        public <T> void JsonTo(INTERFACES.OnResponse<T> listener, Class cl)
+        {
+            OnHttpResponse httpResponse = onHttpResponse;
+
+            setOnHttpResponse(new OnHttpResponse() {
+                @Override
+                public void onResponse(Response response) {
+                    if (response.isException)
+                    {
+                        if (httpResponse!= null)
+                            httpResponse.onResponse(response);
+                    }
+                    else
+                    {
+                        if (listener!=null)
+                        {
+                            listener.onResponse(parse.jsonTo(response.Data,cl));
+                        }
+                    }
+                }
+            });
+        }
+        public <T> void JsonToList(INTERFACES.OnResponse<List<T>> listener, Class cl)
+        {
+            OnHttpResponse httpResponse = onHttpResponse;
+
+            setOnHttpResponse(new OnHttpResponse() {
+                @Override
+                public void onResponse(Response response) {
+                    if (response.isException)
+                    {
+                        if (httpResponse!= null)
+                            httpResponse.onResponse(response);
+                    }
+                    else
+                    {
+                        if (listener!=null)
+                        {
+                            listener.onResponse(parse.jsonToList(response.Data,cl));
+                        }
+                    }
+                }
+            });
+        }
+        public void Execute(HttpEntityEnclosingRequestBase http) {
+
+            //Content Type Belirlendi!
+            if (Json)
+            {
+                Headers.json(http);
+                Log += "\n"+Bodys.Add(http,bodys);
+            }
+            else
+            {
+                Headers.urlencoded(http);
+                Bodys.Add(http,sbody);
+            }
+
+            Execute(((HttpRequestBase)(http)));
+
+        }
+        public void Execute(HttpRequestBase http) {
+
+            if (Log.equals(""))
+            {
+                Log = "http-"+http.getMethod();
+                Headers.urlencoded(http);
+            }
+            Headers.ConstHttpHeader(http);
+            Headers.TempHttpHeader(http);
+            Headers.DeviceInfo(http);
+            Headers.Add(http, headers);
+            httpRequest = http;
+            this.execute();
+        }
+
+        @Override
+        protected Response doInBackground(String... strings) {
+            return httpExecute(httpRequest,Log);
+        }
+        @Override
+        protected void onPostExecute(Response response) {
+            super.onPostExecute(response);
+            if (onHttpResponse!=null)
+                onHttpResponse.onResponse(response);
+        }
+    }
 
 }

@@ -73,4 +73,10 @@ public class INTERFACES
         void onLoad(List<T> data);
     }
 
+
+    public interface OnResponse<T>
+    {
+        void onResponse(T item);
+    }
+
 }

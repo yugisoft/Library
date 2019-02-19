@@ -20,8 +20,6 @@ import java.util.List;
 public class parse
 {
 
-
-
     public static int toInt(Object p) {
         try
         {
