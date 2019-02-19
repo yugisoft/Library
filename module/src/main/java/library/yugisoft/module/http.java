@@ -841,7 +841,7 @@ public class http
             Execute(new HttpPut(url));
         }
 
-        public <T> void JsonTo(INTERFACES.OnResponse<T> listener, Class cl)
+        public <T> Request JsonTo(INTERFACES.OnResponse<T> listener, Class cl)
         {
             OnHttpResponse httpResponse = onHttpResponse;
 
@@ -862,8 +862,9 @@ public class http
                     }
                 }
             });
+            return this;
         }
-        public <T> void JsonToList(INTERFACES.OnResponse<List<T>> listener, Class cl)
+        public <T> Request JsonToList(INTERFACES.OnResponse<List<T>> listener, Class cl)
         {
             OnHttpResponse httpResponse = onHttpResponse;
 
@@ -884,6 +885,7 @@ public class http
                     }
                 }
             });
+            return  this;
         }
         public void Execute(HttpEntityEnclosingRequestBase http) {
 
