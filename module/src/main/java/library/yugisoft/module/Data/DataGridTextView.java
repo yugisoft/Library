@@ -94,7 +94,7 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
                         break;
                     case 1:
                     case 4:
-                        setText(caption);
+                        setText(yugi.NF(caption,0));
                        if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 2:
@@ -167,7 +167,7 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
                         break;
                     case 1:
                     case 4:
-                        setText(caption);
+                        setText(yugi.NF(caption,0));
                         if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
                         break;
                     case 2:
