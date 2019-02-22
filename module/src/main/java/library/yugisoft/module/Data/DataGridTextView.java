@@ -110,6 +110,7 @@ public class DataGridTextView extends android.support.v7.widget.AppCompatTextVie
                 switch (getType()) {
                     case 0:
                         setText(String.format(getFormat(), caption));
+                        break;
                     case 1:
                         setText(String.format(getFormat(), Integer.parseInt(caption)));
                         if(autoAligment) setTextAlignment(TEXT_ALIGNMENT_TEXT_END);
