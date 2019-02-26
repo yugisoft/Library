@@ -147,7 +147,31 @@ public class parse
                 if(!f.getName().equals("$change") && !f.getName().equals("serialVersionUID"))
                     try
                     {
-                        object.put(f.getName(),f.get(item));
+                        Object pObject = f.get(item);
+                        Class objectClass = pObject.getClass();
+                        if (objectClass.equals(Integer.class) || objectClass.equals(int.class))
+                            object.put(f.getName(),toInt(pObject));
+                        else if (objectClass.equals(Long.class) || objectClass.equals(long.class))
+                            object.put(f.getName(),toLong(pObject));
+                        else if (objectClass.equals(Double.class) || objectClass.equals(double.class))
+                            object.put(f.getName(),toDouble(pObject));
+                        else if (objectClass.equals(DataTable.class))
+                            object.put(f.getName(),((DataTable)pObject).getJsonData());
+                        else if (objectClass.equals(DateTime.class))
+                            object.put(f.getName(),((DateTime)pObject).toString());
+                        else if (objectClass.equals(Boolean.class))
+                            object.put(f.getName(),(pObject));
+                        else if (objectClass.equals(String.class))
+                            object.put(f.getName(),pObject);
+                        else if(pObject instanceof List)
+                        {
+                            object.put(f.getName(),new JSONArray(toJson(pObject)));
+                        }
+                        else
+                            object.put(f.getName(),pObject);
+
+
+
                     } catch (Exception ex) {}
                 f.setAccessible(false);
             }
