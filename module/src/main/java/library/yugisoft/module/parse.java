@@ -164,11 +164,15 @@ public class parse
                         else if (objectClass.equals(String.class))
                             object.put(f.getName(),pObject);
                         else if(pObject instanceof List)
-                        {
                             object.put(f.getName(),new JSONArray(toJson(pObject)));
-                        }
                         else
-                            object.put(f.getName(),pObject);
+                        {
+                            if (pObject.toString().split("\\.").length>2 && pObject.toString().indexOf("@") != -1)
+                                object.put(f.getName(),new JSONObject(toJson(pObject)));
+                            else
+                                object.put(f.getName(),pObject);
+                        }
+
 
 
 
