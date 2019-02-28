@@ -1,420 +1,462 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.9"
+        android:minWidth="250dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:gravity="center_vertical"
+            android:layout_height="40dp"
+            android:background="@drawable/radius_tl_tr"
+            android:backgroundTint="@color/color_PayPad_nums"
+            android:elevation="8dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/txt_ucret"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/dotted"
-                android:padding="10dp"
-                android:text="0,00 TL"
-                android:textAlignment="textEnd"
-                android:textSize="18sp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text=""
+                android:textColor="@android:color/white"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:elevation="8dp"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_ucret"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/dotted"
+                    android:gravity="right|center_vertical"
+                    android:padding="3dp"
+                    android:text="₺0,00"
+                    android:textAlignment="textEnd"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
+                    android:minWidth="200dp"
+                    android:minHeight="200dp"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/npTotal"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:text="0.00 TL"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
+                        <TextView
+                            android:id="@+id/np7"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="7"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/npBack"
+                        <TextView
+                            android:id="@+id/np8"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="8"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/np9"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="9"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:text="Sil"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:id="@+id/np4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="4"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/np5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="5"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/np6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="6"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/np1"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="1"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
+                        <TextView
+                            android:id="@+id/np1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="1"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/np2"
+                        <TextView
+                            android:id="@+id/np2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="2"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/np3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="3"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="2"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
+                        <TextView
+                            android:id="@+id/npclear"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk(Clear)"
+                            android:text="C"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/np3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="3"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/np0"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk[numpad(((TextView)p).getText())]"
+                            android:text="0"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/npvirgul"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="2dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple"
+                            android:backgroundTint="@color/color_PayPad_nums"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:tag="clk(onVirgulClick)"
+                            android:text=","
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-            </LinearLayout>
+                    </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
-
-                    <TextView
-                        android:id="@+id/np4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="4"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
-
-                    <TextView
-                        android:id="@+id/np5"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="5"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
-
-                    <TextView
-                        android:id="@+id/np6"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="6"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
-
-                    <TextView
-                        android:id="@+id/np7"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="7"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
-
-                    <TextView
-                        android:id="@+id/np8"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="8"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#CC6600">
-
-                    <TextView
-                        android:id="@+id/np9"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="9"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/npBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/color_PayPad_nums"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:minWidth="60dp"
+                    android:padding="3dp"
+                    android:tag="clk(Del)"
+                    android:text="@string/str_Sil"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/npTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/color_PayPad_nums"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:minWidth="60dp"
+                    android:padding="3dp"
+                    android:tag="clk[nAmount(((TextView)p).getText())]"
+                    android:text="TAM"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/n2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                    android:layout_margin="2dp"
                     android:layout_weight="1"
-                    android:background="#CC6600">
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/color_PayPad_nums"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:minWidth="60dp"
+                    android:padding="3dp"
+                    android:tag="clk[nAmount(((TextView)p).getText())]"
+                    android:text="1 / 2"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/npclear"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:text="C"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/n3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                    android:layout_margin="2dp"
                     android:layout_weight="1"
-                    android:background="#CC6600">
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/color_PayPad_nums"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:minWidth="60dp"
+                    android:padding="3dp"
+                    android:tag="clk[nAmount(((TextView)p).getText())]"
+                    android:text="1 / 3"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/np0"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:tag="numpad"
-                        android:text="0"
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/n4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                    android:layout_margin="2dp"
                     android:layout_weight="1"
-                    android:background="#CC6600">
-
-                    <TextView
-                        android:id="@+id/npvirgul"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:text=","
-                        android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/color_PayPad_nums"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:minWidth="60dp"
+                    android:padding="3dp"
+                    android:tag="clk[nAmount(((TextView)p).getText())]"
+                    android:text="1 / 4"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/radius_bl_br"
+            android:backgroundTint="#d6d6d6"
+            android:elevation="8dp"
+            android:orientation="horizontal"
+            android:padding="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_weight="1"
+                android:background="@drawable/radius_bl_br"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#D25050">
+                    android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/ly_kapat"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:text="KAPAT"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:tag="clk(Close)"
+                        android:text="@string/str_Kapat"
                         android:textAlignment="center"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/colorAccent"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#d6d6d6"
+                    android:orientation="horizontal"></LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="#70B872">
+                    android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/npOk"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/ripple1"
-                        android:gravity="center_vertical"
-                        android:text="TAMAM"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:tag="clk(Ok)"
+                        android:text="@string/kaydet"
                         android:textAlignment="center"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/color_new_green"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
-        </LinearLayout>
 
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

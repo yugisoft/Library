@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import library.yugisoft.module.Base.DLG_Numpad;
+
 
 /**
  * Created by Yusuf on 12.01.2018.
@@ -15,8 +17,8 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
 {
 
 
-    yugi.mNumpad numpad ;
 
+    DLG_Numpad numpad;
     public Double Tutar=0.0;
     public String Currency ="";
 
@@ -33,37 +35,36 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
 
     public CurrencyTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        numpad = new yugi.mNumpad(yugi.activity);
+        numpad = new DLG_Numpad();
        try {
            final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CurrencyTextView, defStyleAttr, 0);
            if (a != null) {
 
-               numpad.Currency = a.getString(R.styleable.CurrencyTextView_currency);
-               numpad.setDecimal(a.getInteger(R.styleable.CurrencyTextView_decimal,2));
+               Currency =a.getString(R.styleable.CurrencyTextView_currency);
+               numpad.setCurrency(Currency);
+               numpad.setDigit(a.getInteger(R.styleable.CurrencyTextView_decimal,2));
 
            }
        }catch (Exception ex)
        {}
 
 
+       numpad.setListener(new INTERFACES.OnResponse<Double>() {
+           @Override
+           public void onResponse(Double item) {
 
-        numpad.mlistener=new INTERFACES.OnNumpadListener() {
-            @Override
-            public void onResultOK(double Before, double After)
-            {
+               CurrencyTextView.this.setText(yugi.NFReplace(Tutar,numpad.getDigit())+" "+Currency);
+               if (onNumpadListener!=null)onNumpadListener.onResultOK(Tutar,item);
+               Tutar=item;
+           }
+       });
 
-                Tutar=After;
-                CurrencyTextView.this.setText(yugi.NFReplace(Tutar,numpad.decimal)+" "+Currency);
-                if (onNumpadListener!=null)onNumpadListener.onResultOK(Before,After);
-            }
-        };
+
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                numpad.Ucret=Tutar;
-                numpad.totalUcret=Tutar;
-                numpad.Currency= Currency;
-                numpad.Show();
+               numpad.setTotalAmount(Tutar);
+               numpad.show();
             }
         });
     }
@@ -80,12 +81,12 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     public void setTutar(Double t)
     {
         Tutar=t;
-        CurrencyTextView.this.setText(yugi.NFReplace(Tutar,numpad.decimal)+" "+Currency);
+        CurrencyTextView.this.setText(yugi.NFReplace(Tutar,numpad.getDigit())+" "+Currency);
     }
 
     public int getDecimal() {
         try {
-            return numpad.decimal;
+            return numpad.getDigit();
         }
         catch (Exception ee)
         {
@@ -94,6 +95,6 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
     }
 
     public void setDecimal(int decimal) {
-        numpad.setDecimal(decimal);
+        numpad.setDigit(decimal);
     }
 }

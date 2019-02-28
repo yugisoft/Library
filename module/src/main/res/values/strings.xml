@@ -6,4 +6,6 @@
     <string name="yil">YIL</string>
     <string name="ay">AY</string>
     <string name="gun">GÜN</string>
+    <string name="str_Kapat">Kapat</string>
+    <string name="str_Sil">Sil</string>
 </resources>

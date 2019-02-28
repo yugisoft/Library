@@ -2,4 +2,12 @@
 <resources>
     <color name="btn_cancel_color">#999999</color>
     <color name="btn_confirm_color">#303F9F</color>
+
+    <color name="odeme_tipi">#54697a</color>
+    <color name="odeme_tipi_pasif">#6d8aa1</color>
+    <color name="color_PayPad_nums">#444444</color>
+
+    <color name="colorAccent">#FF4081</color>
+    <color name="color_new_green">#28a52d</color>
+
 </resources>
