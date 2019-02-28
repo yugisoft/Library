@@ -55,7 +55,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
            @Override
            public void onResponse(Double item) {
 
-               CurrencyTextView.this.setText(yugi.NFReplace(Tutar,numpad.getDigit())+" "+Currency);
+               CurrencyTextView.this.setText(yugi.NFReplace(item,numpad.getDigit())+" "+Currency);
                if (onNumpadListener!=null)onNumpadListener.onResultOK(Tutar,item);
                Tutar=item;
            }
