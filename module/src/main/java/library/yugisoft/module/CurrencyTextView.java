@@ -40,7 +40,9 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
            final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CurrencyTextView, defStyleAttr, 0);
            if (a != null) {
 
-               Currency =a.getString(R.styleable.CurrencyTextView_currency);
+               Currency = a.getString(R.styleable.CurrencyTextView_currency);
+               Currency = (Currency == null ? "" : Currency);
+
                numpad.setCurrency(Currency);
                numpad.setDigit(a.getInteger(R.styleable.CurrencyTextView_decimal,2));
 
