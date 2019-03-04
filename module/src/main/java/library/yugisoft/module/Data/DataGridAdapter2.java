@@ -303,9 +303,11 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
 
     private DataGridTextView getTextView(int i, int k) {
         DataGridTextView textView = CreateDataGridTextView(i,k,new DataGridTextView(context));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             textView.setTextAlignment(textViews.get(k).getTextAlignment());
         }
+
         textView.setValue(getData().get(i,textView.getFieldName()));
 
        return textView;
@@ -328,7 +330,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
         // {
         //     textView.setLayoutParams(tView.getLayoutParams());
         // }
-
+        textView.setAutoAligment(textViews.get(k).isAutoAligment());
         textView.setType(textViews.get(k).getType());
         textView.setFormat(textViews.get(k).getFormat());
         String name = getColumns().get(k);
