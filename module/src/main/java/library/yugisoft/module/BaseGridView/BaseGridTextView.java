@@ -47,7 +47,8 @@ public class BaseGridTextView extends android.support.v7.widget.AppCompatTextVie
         this.baseGridCell = baseGridCell;
         if (baseGridCell!=null)
         {
-             baseGridCell.addListner(p-> baseGridCell.getFormatValue());
+           baseGridCell.setFormat(baseGridCell.getFormatString().length() == 0 ? "${"+baseGridCell.getFieldName()+"}" : baseGridCell.getFormatString());
+             baseGridCell.addListner(p-> this.setText(baseGridCell.getFormatValue()));
 
             this.setBackgroundColor(baseGridCell.getBackColor());
             this.setTextColor(baseGridCell.getForeColor());

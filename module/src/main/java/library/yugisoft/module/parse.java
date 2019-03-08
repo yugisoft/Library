@@ -501,50 +501,58 @@ public class parse
         public static String purify(String format,Object object) {
 
 
-            /*Modeldeki alanları bulma*/
-            //region Field
-            while (format.contains("${")) {
-                try {
-                    String f, fieldName, fieldFormat;
-                    f = format.replace("${", "~").split("~")[1].split("\\}")[0];
-                    String[] fieldArea = f.split(":");
-                    fieldName = fieldArea[0];
-                    fieldFormat = fieldArea.length > 1 ? fieldArea[1] : "";
-                    try {
-                        Field ff = null;
-                        try {
-                            ff = object.getClass().getField(fieldName);
-                        } catch (Exception e) {
-                        }
-                        if (ff == null)
-                            ff = object.getClass().getDeclaredField(fieldName);
-                        if (ff != null) {
-                            ff.setAccessible(true);
-                            Object value = ff.get(object);
-                            if (fieldFormat.length() > 0) {
-                                if (fieldFormat.substring(0, 1).equals("n")) {
-                                    int len = toInt(fieldFormat.substring(1, fieldFormat.length()));
-                                    format = format.replace("${" + fieldName + (fieldFormat.length() > 0 ? ":" + fieldFormat : "") + "}", yugi.NF(value, len));
-                                }
-                            } else {
-                                format = format.replace("${" + fieldName + "}", value.toString());
-                            }
-                            ff.setAccessible(false);
-                        } else {
-                            format = format.replace("${" + fieldName + "}", "");
-                        }
+         try
+         {
+             /*Modeldeki alanları bulma*/
+             //region Field
+             while (format.contains("${")) {
+                 try {
+                     String f, fieldName, fieldFormat;
+                     f = format.replace("${", "~").split("~")[1].split("\\}")[0];
+                     String[] fieldArea = f.split(":");
+                     fieldName = fieldArea[0];
+                     fieldFormat = fieldArea.length > 1 ? fieldArea[1] : "";
+                     try {
+                         Field ff = null;
+                         try {
+                             ff = object.getClass().getField(fieldName);
+                         } catch (Exception e) {
+                         }
+                         if (ff == null)
+                             ff = object.getClass().getDeclaredField(fieldName);
+                         if (ff != null) {
+                             ff.setAccessible(true);
+                             Object value = ff.get(object);
+                             if (fieldFormat.length() > 0)
+                             {
+                                 if (fieldFormat.substring(0, 1).equals("n")) {
+                                     int len = toInt(fieldFormat.substring(1, fieldFormat.length()));
+                                     format = format.replace("${" + f+ "}", yugi.NF(value, len));
+                                 }
+                             } else {
+                                 format = format.replace("${" + f + "}", value.toString());
+                             }
+                             ff.setAccessible(false);
+                         } else {
+                             format = format.replace("${" + f + "}", "");
+                         }
 
-                    } catch (Exception ex) {
-                        format = format.replace("${" + fieldName + "}", "");
-                    }
-                } catch (Exception e) {
-                    break;
-                }
-            }
-            //endregion
+                     } catch (Exception ex) {
+                         format = format.replace("${" + f + "}", "");
+                     }
+                 } catch (Exception e) {
+                     break;
+                 }
+             }
+             //endregion
 
-            /*String Resource Okuma*/
-            format = purifyS(format);
+             /*String Resource Okuma*/
+             format = purifyS(format);
+         }
+         catch (Exception ex)
+         {
+
+         }
 
 
             return format;
@@ -552,76 +560,83 @@ public class parse
         public static String purifyDR(String format, DataTable.DataRow row) {
 
 
-            /*Modeldeki alanları bulma*/
-            //region Field
-            if (format.length()>0)
+            try
             {
-                while (format.contains("${")) {
-                    try {
-                        String f, fieldName, fieldFormat;
-                        f = format.replace("${", "~").split("~")[1].split("\\}")[0];
-                        String[] fieldArea = f.split(":");
-                        fieldName = fieldArea[0];
-                        fieldFormat = fieldArea.length > 1 ? fieldArea[1] : "";
+                /*Modeldeki alanları bulma*/
+                //region Field
+                if (format.length()>0)
+                {
+                    while (format.contains("${")) {
+                        try {
+                            String f, fieldName, fieldFormat;
+                            f = format.replace("${", "~").split("~")[1].split("\\}")[0];
+                            String[] fieldArea = f.split(":");
+                            fieldName = fieldArea[0];
+                            fieldFormat = fieldArea.length > 1 ? fieldArea[1] : "";
+                            String fS = "${" + f + "}";
+                            String value = row.get(fieldName);
 
-                        String value = row.get(fieldName);
+                            if (value.length() ==0 )
+                            {
+                                format = format.replace("${" + fieldName + "}", "");
+                            }
+                            else if (fieldFormat.length() > 0)
+                            {
 
-                        if (value.length() ==0 )
-                        {
-                            format = format.replace("${" + fieldName + "}", "");
-                        }
-                        else if (fieldFormat.length() > 0)
-                        {
-                            String fS = "${" + fieldName + (fieldFormat.length() > 0 ? ":" + fieldFormat : "") + "}";
-                            if (fieldFormat.substring(0, 1).equals("n")) {
-                                int len = toInt(fieldFormat.substring(1, fieldFormat.length()));
+                                if (fieldFormat.substring(0, 1).equals("n")) {
+                                    int len = toInt(fieldFormat.substring(1, fieldFormat.length()));
 
-                                format = format.replace(fS, yugi.NF(value, len));
+                                    format = format.replace(fS, yugi.NF(value, len));
+                                }
+                                else
+                                {
+                                    switch (fieldFormat) {
+
+                                        case "DS":
+                                            format = format.replace(fS, DateTime.fromISO8601UTC(value).toShortDateString());
+                                            break;
+                                        case "DL":
+                                            format = format.replace(fS, DateTime.fromISO8601UTC(value).toLongDateString());
+                                            break;
+                                        case "TS":
+                                            format = format.replace(fS, DateTime.fromISO8601UTC(value).toShortTimeString());
+                                            break;
+                                        case "TL":
+                                            format = format.replace(fS, DateTime.fromISO8601UTC(value).toLongTimeString());
+                                            break;
+                                        case "DTS":
+                                            format = format.replace(fS, DateTime.fromISO8601UTC(value).toShortDateTimeString());
+                                            break;
+                                        case "DTL":
+                                            format = format.replace(fS, DateTime.fromISO8601UTC(value).toLongDateTimeString());
+                                            break;
+                                    }
+                                }
+
                             }
                             else
                             {
-                                switch (fieldFormat) {
-
-                                    case "DS":
-                                        format = format.replace(fS, DateTime.fromISO8601UTC(value).toShortDateString());
-                                        break;
-                                    case "DL":
-                                        format = format.replace(fS, DateTime.fromISO8601UTC(value).toLongDateString());
-                                        break;
-                                    case "TS":
-                                        format = format.replace(fS, DateTime.fromISO8601UTC(value).toShortTimeString());
-                                        break;
-                                    case "TL":
-                                        format = format.replace(fS, DateTime.fromISO8601UTC(value).toLongTimeString());
-                                        break;
-                                    case "DTS":
-                                        format = format.replace(fS, DateTime.fromISO8601UTC(value).toShortDateTimeString());
-                                        break;
-                                    case "DTL":
-                                        format = format.replace(fS, DateTime.fromISO8601UTC(value).toLongDateTimeString());
-                                        break;
-                                }
+                                format = format.replace(fS, value);
                             }
 
+                        } catch (Exception e) {
+                            break;
                         }
-                        else
-                            {
-                            format = format.replace("${" + fieldName + "}", value);
-                        }
-
-                    } catch (Exception e) {
-                        break;
                     }
                 }
+                else
+                {
+
+                }
+                //endregion
+
+                /*String Resource Okuma*/
+                format = purifyS(format);
             }
-            else
+            catch (Exception ex)
             {
-
+                
             }
-            //endregion
-
-            /*String Resource Okuma*/
-            format = purifyS(format);
 
 
             return format;

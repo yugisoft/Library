@@ -49,8 +49,10 @@ public class BaseGridCell implements IFormatter, ISerializable
         return fieldName;
     }
 
-    public void setFieldName(String fieldName) {
+    public void setFieldName(String fieldName)
+    {
         this.fieldName = fieldName;
+
     }
 
     public void setFormat(String format) {
@@ -187,11 +189,15 @@ public class BaseGridCell implements IFormatter, ISerializable
     }
 
     @Override
-    public String getFormatValue() {
-        return parse.Formatter.get(getFormatString(),getFormatObject());
-       //Object args = getFormatObject();
-       //String format = args instanceof DataTable.DataRow ? parse.Formatter.purifyDR(getFormatString(), (DataTable.DataRow) args) : parse.Formatter.purify(getFormatString(),args);
-       //return  String.format(format,args);
+    public String getFormatValue()
+    {
+        if (getObject() != null && getFormatObject() != null)
+            return parse.Formatter.get(getFormatString(), getFormatObject());
+        else
+            return getFormatString();
+        //Object args = getFormatObject();
+        //String format = args instanceof DataTable.DataRow ? parse.Formatter.purifyDR(getFormatString(), (DataTable.DataRow) args) : parse.Formatter.purify(getFormatString(),args);
+        //return  String.format(format,args);
     }
 
     private List<INTERFACES.OnResponse<String>> onValueChangeListener = new ArrayList<>();
@@ -234,7 +240,7 @@ public class BaseGridCell implements IFormatter, ISerializable
         return parse.jsonTo(Json,this.getClass());
     }
 
-    private Object object;
+    private Object object = null;
 
     public Object getObject() {
         return object;
