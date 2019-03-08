@@ -61,9 +61,9 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         inflate(getContext(), R.layout.view_datagridview, this);
 
         verLayout = (LinearLayout) findViewById(R.id.layout);
-
         headerLayout = (LinearLayout) findViewById(R.id.headerLayout);
         filterLayout = (LinearLayout) findViewById(R.id.filterLayout);
+
         if (dataGridAdapter == null)
             setDataGridAdapter(new DataGridAdapter2(getContext(), this));
 

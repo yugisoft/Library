@@ -47,6 +47,7 @@
     <attr name="autoWidth" format="boolean"/>
     <attr name="autoAligment" format="boolean"/>
     <attr name="headerLayout" format="reference"/>
+    <attr name="detailLayout" format="reference"/>
     <attr name="textColor" format="color|reference"/>
     <attr name="rowColor" format="color|reference"/>
 
@@ -86,7 +87,16 @@
 
     </declare-styleable>
 
+    <declare-styleable name="BaseGridTextView">
 
+        <attr name="dataType" />
+        <attr name="format"   />
+        <attr name="fieldName"/>
+        <attr name="autoWidth"/>
+        <attr name="autoAligment" />
+
+
+    </declare-styleable>
     <declare-styleable name="FloatingActionMenuButton">
         <attr name="fab_colorPressed" format="color"/>
         <attr name="fab_colorDisabled" format="color"/>
@@ -126,6 +136,22 @@
         <attr name="fab_collapseForClick" format="boolean"/>
     </declare-styleable>
 
+
+    <declare-styleable name="BaseDataGridView">
+
+        <attr name="showHeader" />
+        <attr name="showFilter" />
+        <attr name="textSize"   />
+        <attr name="textColor"   />
+        <attr name="headerLayout" />
+        <attr name="detailLayout" />
+        <attr name="rowColor1" />
+        <attr name="rowColor2" />
+        <attr name="headerBackColor" />
+        <attr name="headerForeColor" />
+        <attr name="rowColor" />
+
+    </declare-styleable>
 
 
 </resources>

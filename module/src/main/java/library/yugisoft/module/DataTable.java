@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class DataTable
     public List<DataRow> mRows = new SmartList<DataRow>();
     public List<String> Captions = new SmartList<String>();
     public List<String> Columns = new SmartList<String>();
+    public List<DataColumn> ColumnInfo = new ArrayList<>();
     public void add(Object... values) {
         DataRow row = new DataRow();
         for (int i = 0; i < values.length; i++)
@@ -62,6 +64,9 @@ public class DataTable
     private String FilterText="";
     private int PrimaryCell=0;
     private String PrimaryCellName = "";
+
+
+
     //region Constr
     public DataTable() {
     }
@@ -83,7 +88,8 @@ public class DataTable
 
     //endregion
     // region JSON_LOAD
-    public void vLoad(String str) {
+    public void vLoad(String str)
+    {
         vLoad(str, "");
     }
 
@@ -113,9 +119,52 @@ public class DataTable
                         it = ob.keys();
                         while (it.hasNext())
                         {
-                            String s = it.next().toString();
-                            Columns.add(s.replace(" ",""));
-                            Captions.add(s);
+
+                            String itKey = it.next().toString();
+                            Object itValue = ob.get(itKey);
+
+                            DataColumn dataColumn =new DataColumn();
+
+                            if (itValue instanceof Integer   )
+                            {
+                                dataColumn.DataType = DataColumnType.Int;
+                                dataColumn.gravity =(Gravity.CENTER);
+                            }
+                            else if (itValue instanceof Long)
+                            {
+                                dataColumn.DataType = DataColumnType.Long;
+                                dataColumn.gravity =(Gravity.CENTER);
+                            }
+                            else if (itValue instanceof Boolean)
+                            {
+                                dataColumn.DataType = DataColumnType.Boolean;
+                                dataColumn.gravity =(Gravity.CENTER);
+                            }
+                            else if (itValue instanceof Float || itValue instanceof Double)
+                            {
+                                dataColumn.DataType = DataColumnType.Double;
+                                dataColumn.gravity =(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
+                            }
+                            else if (itValue instanceof Date || itValue instanceof java.sql.Date || itValue instanceof DateTime)
+                            {
+                                dataColumn.DataType = DataColumnType.Date;
+                                dataColumn.gravity =(Gravity.CENTER_VERTICAL|Gravity.LEFT);
+                            }
+                            else
+                            {
+                                dataColumn.DataType = DataColumnType.String;
+                                dataColumn.gravity =(Gravity.CENTER_VERTICAL|Gravity.LEFT);
+                            }
+
+
+                            dataColumn.Name  = itKey.replace(" ","");
+                            dataColumn.Value = itKey.toString();
+                            dataColumn.objectValue = itValue;
+
+                            ColumnInfo.add(dataColumn);
+                            Columns.add(dataColumn.Name);
+                            Captions.add(dataColumn.Value);
+
                         }
                     }
                     it = ob.keys();
@@ -151,6 +200,7 @@ public class DataTable
                                 dataColumn.DataType = DataColumnType.String;
                         }
 
+                        dataColumn.objectValue = itValue;
 
                         row.Cells.add(dataColumn);
                         column++;
@@ -777,6 +827,7 @@ public class DataTable
     public static class DataColumn
     {
         public String Name, Value, Format = "";
+        public Object objectValue;
         public int gravity = Gravity.LEFT, Oran = 30;
         public DataColumnType DataType = DataColumnType.String;
         public DataColumn() {

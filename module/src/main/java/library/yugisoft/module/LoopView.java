@@ -100,16 +100,16 @@ public class LoopView extends View {
     }
 
 
-    private void initView(Context context,AttributeSet attrs) {
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.LoopView);
+    private void initView(Context context, AttributeSet attrs) {
+        TypedArray array = context.obtainStyledAttributes(attrs, library.yugisoft.module.R.styleable.LoopView);
         if (array != null) {
-            mTopBottomTextColor = array.getColor(R.styleable.LoopView_topBottomTextColor, 0xffafafaf);
-            mCenterTextColor = array.getColor(R.styleable.LoopView_centerTextColor, 0xff313131);
-            mCenterLineColor = array.getColor(R.styleable.LoopView_lineColor, 0xffc5c5c5);
-            mCanLoop = array.getBoolean(R.styleable.LoopView_canLoop, true);
-            mInitPosition = array.getInt(R.styleable.LoopView_initPosition, -1);
-            mTextSize = array.getDimensionPixelSize(R.styleable.LoopView_textSize, sp2px(context, 16));
-            mDrawItemsCount = array.getInt(R.styleable.LoopView_drawItemCount, 7);
+            mTopBottomTextColor = array.getColor(library.yugisoft.module.R.styleable.LoopView_topBottomTextColor, 0xffafafaf);
+            mCenterTextColor = array.getColor(library.yugisoft.module.R.styleable.LoopView_centerTextColor, 0xff313131);
+            mCenterLineColor = array.getColor(library.yugisoft.module.R.styleable.LoopView_lineColor, 0xffc5c5c5);
+            mCanLoop = array.getBoolean(library.yugisoft.module.R.styleable.LoopView_canLoop, true);
+            mInitPosition = array.getInt(library.yugisoft.module.R.styleable.LoopView_initPosition, -1);
+            mTextSize = array.getDimensionPixelSize(library.yugisoft.module.R.styleable.LoopView_textSize, sp2px(context, 16));
+            mDrawItemsCount = array.getInt(library.yugisoft.module.R.styleable.LoopView_drawItemCount, 7);
             array.recycle();
         }
 
@@ -172,6 +172,7 @@ public class LoopView extends View {
             } else {
                 mInitPosition = 0;
             }
+            mInitPosition = 0;
         }
         mCurrentIndex = mInitPosition;
         invalidate();
@@ -248,21 +249,30 @@ public class LoopView extends View {
         String itemCount[] = new String[mDrawItemsCount];
         //reconfirm each item's value from dataList according to currentIndex,
         while (count < mDrawItemsCount) {
-            int templateItem = mCurrentIndex - (mDrawItemsCount / 2 - count);
-            if (mCanLoop) {
-                if (templateItem < 0) {
-                    templateItem = templateItem + mDataList.size();
+            try {
+                int templateItem = mCurrentIndex - (mDrawItemsCount / 2 - count);
+                if (mCanLoop)
+                {
+                    while (templateItem < 0) {
+                        templateItem = templateItem + mDataList.size();
+                    }
+
+                    while (templateItem > mDataList.size() - 1){
+                        templateItem = templateItem - mDataList.size();
+                    }
+                    itemCount[count] = mDataList.get(templateItem).toString();
+                } else if (templateItem < 0) {
+                    itemCount[count] = "";
+                } else if (templateItem > mDataList.size() - 1) {
+                    itemCount[count] = "";
+                } else {
+                    itemCount[count] = mDataList.get(templateItem).toString();
                 }
-                if (templateItem > mDataList.size() - 1) {
-                    templateItem = templateItem - mDataList.size();
-                }
-                itemCount[count] = mDataList.get(templateItem).toString();
-            } else if (templateItem < 0) {
-                itemCount[count] = "";
-            } else if (templateItem > mDataList.size() - 1) {
-                itemCount[count] = "";
-            } else {
-                itemCount[count] = mDataList.get(templateItem).toString();
+            }
+            catch (Exception ex)
+            {
+                yugi.Print("e","LoopView2 / Burayı İhmal Etme!!! ",ex.getMessage());
+
             }
             count++;
         }
@@ -295,30 +305,50 @@ public class LoopView extends View {
                 canvas.scale(1.0F, (float) Math.sin(radian));
                 if (translateY <= mTopLineY) {
                     //draw text y between 0 -> mTopLineY,include incomplete text
-                    canvas.save();
-                    canvas.clipRect(0, 0, mWidgetWidth, mTopLineY - translateY);
-                    canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mTopBottomTextPaint);
-                    canvas.restore();
-                    canvas.save();
-                    canvas.clipRect(0, mTopLineY - translateY, mWidgetWidth, (int) (itemHeight));
-                    canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mCenterTextPaint);
-                    canvas.restore();
+                    try {
+                        canvas.save();
+                        canvas.clipRect(0, 0, mWidgetWidth, mTopLineY - translateY);
+                        canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mTopBottomTextPaint);
+                        canvas.restore();
+                        canvas.save();
+                        canvas.clipRect(0, mTopLineY - translateY, mWidgetWidth, (int) (itemHeight));
+                        canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mCenterTextPaint);
+                        canvas.restore();
+                    }
+                    catch (Exception ex)
+                    {
+                        yugi.Print("e","LoopView2 / Burayı İhmal Etme!!! ",ex.getMessage());
+                    }
                 } else if (mMaxTextHeight + translateY >= mBottomLineY) {
                     //draw text y between  mTopLineY -> mBottomLineY ,include incomplete text
-                    canvas.save();
-                    canvas.clipRect(0, 0, mWidgetWidth, mBottomLineY - translateY);
-                    canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mCenterTextPaint);
-                    canvas.restore();
-                    canvas.save();
-                    canvas.clipRect(0, mBottomLineY - translateY, mWidgetWidth, (int) (itemHeight));
-                    canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mTopBottomTextPaint);
-                    canvas.restore();
+                    try {
+                        canvas.save();
+                        canvas.clipRect(0, 0, mWidgetWidth, mBottomLineY - translateY);
+                        canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mCenterTextPaint);
+                        canvas.restore();
+                        canvas.save();
+                        canvas.clipRect(0, mBottomLineY - translateY, mWidgetWidth, (int) (itemHeight));
+                        canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mTopBottomTextPaint);
+                        canvas.restore();
+                    }
+                    catch (Exception ex)
+                    {
+                        yugi.Print("e","LoopView2 / Burayı İhmal Etme!!! ",ex.getMessage());
+                    }
                 } else if (translateY >= mTopLineY && mMaxTextHeight + translateY <= mBottomLineY) {
                     //draw center complete text
-                    canvas.clipRect(0, 0, mWidgetWidth, (int) (itemHeight));
-                    canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mCenterTextPaint);
-                    //center one indicate selected item
-                    mSelectedItem = mDataList.indexOf(itemCount[count]);
+                    try {
+                        canvas.clipRect(0, 0, mWidgetWidth, (int) (itemHeight));
+                        canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mCenterTextPaint);
+                        //center one indicate selected item
+                        int finalCount = count;
+                        ;
+                        mSelectedItem = mDataList.indexOf(vList.Filter(mDataList, p-> p.toString().equals(itemCount[finalCount])).get(0));
+                    }
+                    catch (Exception ex)
+                    {
+                        yugi.Print("e","LoopView2 / Burayı İhmal Etme!!! ",ex.getMessage());
+                    }
                 }
                 canvas.restore();
             }
