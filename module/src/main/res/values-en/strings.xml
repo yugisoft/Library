@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Module</string>
+    <string name="testText">TURKISH</string>
+    <string name="kaydet">Done</string>
+    <string name="iptal">Cancel</string>
+    <string name="yil">YEAR</string>
+    <string name="ay">MOUNTH</string>
+    <string name="gun">DAY</string>
+    <string name="str_Kapat">Close</string>
+    <string name="str_Sil">Del</string>
+
+    <string name="str_evet">Yes</string>
+    <string name="str_hayir">No</string>
+    <string name="str_tamam">Confirm</string>
+    <string name="str_bir_deger_girin">Enter a Value</string>
+</resources>

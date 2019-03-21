@@ -8,4 +8,8 @@
     <string name="gun">GÜN</string>
     <string name="str_Kapat">Kapat</string>
     <string name="str_Sil">Sil</string>
+    <string name="str_evet">Evet</string>
+    <string name="str_hayir">Hayır</string>
+    <string name="str_tamam">Tamam</string>
+    <string name="str_bir_deger_girin">Bir Deger Girin</string>
 </resources>
