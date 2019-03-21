@@ -46,7 +46,7 @@ public class CustomImageButton extends myViews {
         typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.myViews, defStyleAttr, 0);
         if (typedArray!=null)
         {
-            setContentViewID(typedArray.getInteger(R.styleable.myViews_contentView,R.layout.custom_image_button));
+            setContentViewID(typedArray.getResourceId(R.styleable.myViews_contentView,R.layout.custom_image_button));
         }
         else
             setContentViewID(R.layout.custom_image_button);
