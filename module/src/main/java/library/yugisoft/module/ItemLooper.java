@@ -3,6 +3,7 @@ package library.yugisoft.module;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ public class ItemLooper<T>  extends DLG_UI_view_item_looper{
     public ItemLooper()
     {
         this(yugi.activity);
-    }
+    }(R.id.loop)
 
     @Override
     public void onConfirm() {
@@ -42,6 +43,11 @@ public class ItemLooper<T>  extends DLG_UI_view_item_looper{
         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        try
+        {
+            ((ViewGroup)itemView.getParent()).removeView(itemView);
+        }
+        catch (Exception ex){}
         dialog.setContentView(itemView);
     }
 
