@@ -21,7 +21,7 @@ public class ItemLooper<T>  extends DLG_UI_view_item_looper{
     public ItemLooper()
     {
         this(yugi.activity);
-    }(R.id.loop)
+    }
 
     @Override
     public void onConfirm() {
