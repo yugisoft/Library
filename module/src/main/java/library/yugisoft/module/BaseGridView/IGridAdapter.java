@@ -16,6 +16,7 @@ import java.util.List;
 
 import library.yugisoft.module.DataTable;
 import library.yugisoft.module.ItemAdapter;
+import library.yugisoft.module.R;
 import library.yugisoft.module.parse;
 import library.yugisoft.module.vList;
 import library.yugisoft.module.yugi;
@@ -140,7 +141,8 @@ public abstract class IGridAdapter extends ItemAdapter<DataTable.DataRow> {
         {
             return getHeaderView();
         }
-        else
+
+        else if (i < super.getCount() )
         {
             if (getHeaderLayout() == null) {
                 i--;
@@ -153,6 +155,10 @@ public abstract class IGridAdapter extends ItemAdapter<DataTable.DataRow> {
                 return getView(i);//;
             else
                 return  getView(i,super.getView(i, view, viewGroup));
+        }
+        else
+        {
+            return  getLayoutInflater().inflate(R.layout.list_item_empty,null);
         }
 
     }
@@ -223,7 +229,7 @@ public abstract class IGridAdapter extends ItemAdapter<DataTable.DataRow> {
 
     @Override
     public int getCount() {
-        if (super.getCount() == 0)
+        if (super.getCount() < 10)
             return 0;
         else
             return super.getCount() + (getHeaderLayout() ==null ? 1 : 0);
