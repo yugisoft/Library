@@ -902,14 +902,14 @@ public class http
             }
 
             Execute(((HttpRequestBase)(http)));
-
         }
         public void Execute(HttpRequestBase http) {
 
             if (Log.equals(""))
             {
                 Log = "http-"+http.getMethod();
-                Headers.urlencoded(http);
+                if (!Json)
+                    Headers.urlencoded(http);
             }
             Headers.ConstHttpHeader(http);
             Headers.TempHttpHeader(http);
