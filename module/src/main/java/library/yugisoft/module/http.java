@@ -890,14 +890,14 @@ public class http
         public void Execute(HttpEntityEnclosingRequestBase http) {
 
             //Content Type Belirlendi!
-            if (Json)
+            if (!Json)
             {
-                Headers.json(http);
+                Headers.urlencoded(http);
                 Log += "\n"+Bodys.Add(http,bodys);
             }
             else
             {
-                Headers.urlencoded(http);
+                Headers.json(http);
                 Bodys.Add(http,sbody);
             }
 
