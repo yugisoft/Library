@@ -1,6 +1,18 @@
 package library.yugisoft.module.Interfaces;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import library.yugisoft.module.DataTable;
+import library.yugisoft.module.DateTime;
 import library.yugisoft.module.parse;
+import library.yugisoft.module.vList;
 
 public interface ISerializable
 {
@@ -32,6 +44,81 @@ public interface ISerializable
         return  parse.toJson(this);
     }
 
+
+    default JSONObject SerializeJsonObject( Object item) {
+        Class cls = item.getClass();
+        String name = cls.getSimpleName().toLowerCase();
+        String type = cls.getName().toLowerCase();
+
+        JSONArray jsonArray = new JSONArray();
+        boolean isArray = (item instanceof List);
+        if (isArray) {
+            ArrayList list = (ArrayList) item;
+            for (Object i : list) {
+                try {
+
+                   //if (json.substring(0, 1).equals("["))
+                   //    jsonArray.put(new JSONArray(json));
+                   //else
+                        jsonArray.put(SerializeJsonObject(i));
+
+                } catch (Exception e) {
+                }
+            }
+        } else {
+            JSONObject object = new JSONObject();
+
+            for (Field f : vList.Merge(Arrays.asList(cls.getFields()), Arrays.asList(cls.getDeclaredFields()))) {
+                f.setAccessible(true);
+                if (!f.getName().equals("$change") && !f.getName().equals("serialVersionUID"))
+                    try {
+                        Object pObject = f.get(item);
+                        Class objectClass = pObject.getClass();
+                        if (objectClass.equals(Integer.class) || objectClass.equals(int.class))
+                            object.put(f.getName(), parse.toInt(pObject));
+                        else if (objectClass.equals(Long.class) || objectClass.equals(long.class))
+                            object.put(f.getName(), parse.toLong(pObject));
+                        else if (objectClass.equals(Double.class) || objectClass.equals(double.class))
+                            object.put(f.getName(), parse.toDouble(pObject));
+                        else if (objectClass.equals(DataTable.class))
+                            object.put(f.getName(), ((DataTable) pObject).getJsonData());
+                        else if (objectClass.equals(DateTime.class))
+                            object.put(f.getName(), ((DateTime) pObject).toString());
+                        else if (objectClass.equals(Boolean.class))
+                            object.put(f.getName(), (pObject));
+                        else if (objectClass.equals(String.class))
+                            object.put(f.getName(), pObject);
+                        else if (pObject instanceof List)
+                            object.put(f.getName(), new JSONArray(SerializeJsonObject(pObject)));
+                        else {
+
+                            if (pObject instanceof ASerializable)
+                                object.put(f.getName(), ((ASerializable) pObject).Serialize());
+                            else if (pObject instanceof ISerializable)
+                                object.put(f.getName(), ((ISerializable) pObject).Serialize());
+                            else if (pObject.toString().split("\\.").length > 2 && pObject.toString().indexOf("@") != -1)
+                                object.put(f.getName(), (SerializeJsonObject(pObject)));
+                            else
+                                object.put(f.getName(), pObject);
+                        }
+
+
+                    } catch (Exception ex) {
+                    }
+                f.setAccessible(false);
+            }
+            jsonArray.put(object);
+        }
+
+
+        try {
+            return  jsonArray.getJSONObject(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    default JSONObject SerializeJsonObject() { return  SerializeJsonObject(this); }
 
 
 

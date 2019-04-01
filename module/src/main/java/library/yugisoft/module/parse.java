@@ -145,9 +145,9 @@ public class parse {
                         else {
 
                             if (pObject instanceof ASerializable)
-                                object.put(f.getName(), ((ASerializable) pObject).Serialize());
+                                object.put(f.getName(), ((ASerializable) pObject).SerializeJsonObject());
                             else if (pObject instanceof ISerializable)
-                                object.put(f.getName(), ((ISerializable) pObject).Serialize());
+                                object.put(f.getName(), ((ISerializable) pObject).SerializeJsonObject());
                             else if (pObject.toString().split("\\.").length > 2 && pObject.toString().indexOf("@") != -1)
                                 object.put(f.getName(), new JSONObject(toJson(pObject)));
                             else
