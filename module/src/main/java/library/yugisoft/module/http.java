@@ -8,6 +8,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
@@ -768,8 +769,22 @@ public class http
         private String sbody="";
         private boolean Json = false;
         private String Log = "";
+        private int timeOut = 0;
 
         HttpRequestBase httpRequest;
+
+        public Request setTimeOut(int timeOut) {
+            this.timeOut = timeOut;
+            return  this;
+        }
+        public Request setTimeOutSecond(int timeOut) {
+            this.timeOut = timeOut * 1000;
+            return  this;
+        }
+
+        public int getTimeOut() {
+            return timeOut;
+        }
 
         public Request(OnHttpResponse pOnHttpResponse) { onHttpResponse=pOnHttpResponse; }
         public Request(OnHttpResponse pOnHttpResponse,Hashtable pBodys) {
@@ -916,6 +931,8 @@ public class http
             Headers.DeviceInfo(http);
             Headers.Add(http, headers);
             httpRequest = http;
+            if (timeOut > 0)
+            HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
             this.execute();
         }
 
