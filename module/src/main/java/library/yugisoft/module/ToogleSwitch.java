@@ -48,7 +48,7 @@ public class ToogleSwitch extends LinearLayout implements View.OnClickListener
         if (attrs != null)
         {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.ToogleSwitch);
-            setSelection(typedArray.getInt(R.styleable.ToogleSwitch_Selection,0));
+            setSelection(typedArray.getInt(R.styleable.ToogleSwitch_Selection,0),true);
 
             setText1(typedArray.getString(R.styleable.ToogleSwitch_text1));
             setText2(typedArray.getString(R.styleable.ToogleSwitch_text2));
@@ -64,11 +64,11 @@ public class ToogleSwitch extends LinearLayout implements View.OnClickListener
 
     public void setSelection(Selection selection) {
         this.selection = selection;
-        setSelection(selection.getValue());
+        setSelection(selection.getValue(),true);
 
     }
-    private void setSelection(int selection) {
-
+    private void setSelection(int selection,boolean isTrig)
+    {
         if (selection==0)
         {
 
@@ -87,11 +87,17 @@ public class ToogleSwitch extends LinearLayout implements View.OnClickListener
             txt1.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
             txt1.setTextColor(Color.parseColor("#0B81BC"));
         }
+        if (isTrig && getOnResponse()!=null)
+            getOnResponse().onResponse( selection == 0 ? Selection.LEFT : Selection.RIGHT );
+
+    }
+    private void setSelection(int selection) {
+        setSelection(selection,false);
     }
 
     @Override
     public void onClick(View v) {
-        setSelection(((ViewGroup)this.getChildAt(0)).indexOfChild(v));
+        setSelection(((ViewGroup)this.getChildAt(0)).indexOfChild(v),true);
     }
 
     public String getText1() {
@@ -113,6 +119,14 @@ public class ToogleSwitch extends LinearLayout implements View.OnClickListener
 
     }
 
+    public INTERFACES.OnResponse<Selection> getOnResponse() {
+        return onResponse;
+    }
+
+    public void setOnResponse(INTERFACES.OnResponse<Selection> onResponse) {
+        this.onResponse = onResponse;
+    }
+
     public enum Selection {
         LEFT(0), RIGHT(1);
 
@@ -125,6 +139,8 @@ public class ToogleSwitch extends LinearLayout implements View.OnClickListener
             return value;
         }
     }
+
+    private INTERFACES.OnResponse<Selection> onResponse;
 }
 
 
