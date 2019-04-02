@@ -66,6 +66,10 @@ public class LoopView extends View {
     private int mWidgetWidth;
 
 
+    public void setDrawItemsCount(int drawItemsCount) {
+        this.mDrawItemsCount = drawItemsCount;
+    }
+
     public Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
