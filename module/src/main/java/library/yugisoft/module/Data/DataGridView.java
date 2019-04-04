@@ -55,6 +55,24 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
     private LinearLayout verLayout, filterLayout;
     private LinearLayout headerLayout;
 
+
+    public void setHeaderLayoutid(int headerLayoutid) {
+        this.headerLayoutid = headerLayoutid;
+        if (headerLayoutid > 0) {
+            useHeaderLayout = true;
+            headerLayout = (LinearLayout) inflate(getContext(), headerLayoutid, (ViewGroup) findViewById(R.id.headerLayout));
+            getDataGridAdapter().setContentView(headerLayoutid);
+            setDataGridAdapterHeaderInfo();
+        }
+        else
+        {
+            useHeaderLayout = false;
+            headerLayout = (LinearLayout) findViewById(R.id.headerLayout);
+            getDataGridAdapter().setContentView(0);
+            setDataGridAdapterHeaderInfo();
+        }
+    }
+
     private void init() {
 
         isLoad = false;
