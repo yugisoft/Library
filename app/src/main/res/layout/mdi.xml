@@ -22,24 +22,22 @@
         android:onClick="onClick"
         android:text="DATE  TIME" />
 
-    <TextView
-        android:id="@+id/textView2"
+    <Button
+        android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onClick"
-        android:text="asdasda" />
+        android:text="Button" />
 
-    <library.yugisoft.module.CurrencyTextView
-        android:id="@+id/currencyTextView"
+    <Button
+        android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="55" />
+        android:text="Button" />
 
-    <library.yugisoft.module.BaseGridView.BaseDataGridView
-        android:id="@+id/listview"
+    <Button
+        android:id="@+id/button4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:headerLayout="@layout/header_test"
-        app:detailLayout="@layout/detail_test"
-        />
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
 </LinearLayout>

@@ -14,4 +14,5 @@
     <string name="str_hayir">No</string>
     <string name="str_tamam">Confirm</string>
     <string name="str_bir_deger_girin">Enter a Value</string>
+    <string name="str_onayla_sec">Confirm</string>
 </resources>

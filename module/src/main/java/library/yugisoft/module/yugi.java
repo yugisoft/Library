@@ -261,7 +261,6 @@ public class yugi
 
             }
         }
-
         public static  mDialog Loading(Activity activity) {
             mDialog dialog = new mDialog(activity, R.layout.ly_loading,true);
            ImageView im = (ImageView) dialog.view.findViewById(R.id.img_loading);

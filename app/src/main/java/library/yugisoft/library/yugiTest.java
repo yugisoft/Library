@@ -16,6 +16,7 @@ import library.yugisoft.module.DataAdapter;
 import library.yugisoft.module.DateTime;
 import library.yugisoft.module.DialogBox;
 import library.yugisoft.module.Interfaces.IFormatter;
+import library.yugisoft.module.ItemLooper;
 import library.yugisoft.module.parse;
 import library.yugisoft.module.yugi;
 
@@ -28,7 +29,6 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         setContentView(R.layout.mdi);
 
 
-        BaseDataGridView listView = (BaseDataGridView)findViewById(R.id.listview);
 
         List<Test> list = new ArrayList<>();
         list.add(new Test());
@@ -40,36 +40,12 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         list.add(new Test());
         list.add(new Test());
         list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
 
-        adapter = new BaseGridAdapter(listView);
-        listView.setAdapter(adapter);
-        adapter.addFormat("Tarih","DL");
+        ItemLooper<Test> testItemLooper = new ItemLooper<Test>(list);
 
-        adapter.setData(parse.toJson(list));
+        findViewById(R.id.button2).setOnClickListener(p->{testItemLooper.show(findViewById(R.id.button2));});
+        findViewById(R.id.button3).setOnClickListener(p->{testItemLooper.show();});
+        findViewById(R.id.button4).setOnClickListener(p->{testItemLooper.showDialod();});
 
 
     }
@@ -96,6 +72,10 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         public String ID = "₺";
         public Double Tutar = 10.99;
 
+        @Override
+        public String toString() {
+            return ID;
+        }
     }
 
 }
