@@ -239,6 +239,7 @@ class IL_ListPopup<T> extends ListPopupWindow
         };
         setAdapter(adapter);
         adapter.setList(looper.getList());
+        this.setModal(true);
     }
 }
 
