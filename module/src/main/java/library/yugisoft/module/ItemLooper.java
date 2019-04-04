@@ -1,6 +1,9 @@
 package library.yugisoft.module;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +41,10 @@ public class ItemLooper<T>
     private Context context;
     private List<T> list;
     private LoopView loopView = null;
-    private int textSize = 12,drawItemsCount = 7;
+    private int textSize = 12,drawItemsCount = 7,textAlignment = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL,textColor = Color.BLACK,BackColor = Color.TRANSPARENT;
     private boolean canLoop;
+
+
 
     private OnItemLooperSelected<T> onItemLooperSelected;
 
@@ -54,8 +59,7 @@ public class ItemLooper<T>
     //region Builds
 
         public ItemLooper<T> setContext(Context context) { this.context = context; return this;}
-        public ItemLooper<T> setList(List<T> list)
-        {
+        public ItemLooper<T> setList(List<T> list) {
             this.list = list;
             if (loopView ==null)
                 createLoopView();
@@ -65,6 +69,9 @@ public class ItemLooper<T>
         public ItemLooper<T> setCanLoop(boolean canLoop) { this.canLoop = canLoop; return this;}
         public ItemLooper<T> setTextSize(int textSize) { this.textSize = textSize; return this;}
         public ItemLooper<T> setDrawItemsCount(int drawItemsCount) { this.drawItemsCount = drawItemsCount; return this;}
+        public ItemLooper<T> setTextAlignment(int textAlignment) { this.textAlignment = textAlignment;  return  this;}
+        public ItemLooper<T> setTextColor(int textColor) { this.textColor = textColor; return  this;}
+        public ItemLooper<T> setBackColor(int backColor) { BackColor = backColor; return  this;}
 
     //endregion
     //region Getters
@@ -81,9 +88,17 @@ public class ItemLooper<T>
     public int getDrawItemsCount() {
         return drawItemsCount;
     }
-
     public LoopView getLoopView() {
         return loopView;
+    }
+    public int getTextAlignment() {
+        return textAlignment;
+    }
+    public int getTextColor() {
+        return textColor;
+    }
+    public int getBackColor() {
+        return BackColor;
     }
     //endregion
 
@@ -160,6 +175,8 @@ public class ItemLooper<T>
         dialog.txt_dialog_title.setText(title);
         dialog.show();
     }
+
+
     //endregion
 
 
@@ -204,7 +221,11 @@ class IL_ListPopup<T> extends ListPopupWindow
                 {
                     TextView tview = new TextView(context);
                     tview.setTextSize(IL_ListPopup.this.looper.getTextSize());
+                    tview.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tview.setGravity(looper.getTextAlignment());
                     tview.setText(item instanceof IItemLooper ? ((IItemLooper)item).toLooperString() : item.toString());
+                    tview.setTextColor(looper.getTextColor());
+                    tview.setBackgroundColor(looper.getBackColor());
                     view = tview;
                 }
                 else

@@ -185,7 +185,7 @@ public class LoopView extends View {
     private void measureTextWidthHeight() {
         Rect rect = new Rect();
         for (int i = 0; i < mDataList.size(); i++) {
-            String s1 = mDataList.get(i).toString();
+            String s1 = mDataList.get(i) instanceof IItemLooper ? ((IItemLooper)mDataList.get(i)).toLooperString() :  mDataList.get(i).toString();
             mCenterTextPaint.getTextBounds(s1, 0, s1.length(), rect);
             int textWidth = rect.width();
             if (textWidth > mMaxTextWidth) {
