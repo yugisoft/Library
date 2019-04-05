@@ -256,8 +256,8 @@ class IL_Dialog extends BaseDialog
     //region DECLARE
 
     public TextView txt_dialog_title;
-    public ImageView btn_confirm;
-    public ImageView btn_cancel;
+    public View btn_confirm;
+    public View btn_cancel;
     public LoopView loop;
     public LinearLayout bar_loop;
 //endregion
@@ -267,9 +267,9 @@ class IL_Dialog extends BaseDialog
     public void Initilialize() {
 
         txt_dialog_title = (TextView)itemView.findViewById(R.id.txt_dialog_title);
-        btn_confirm = (ImageView)itemView.findViewById(R.id.btn_confirm);
+        btn_confirm = itemView.findViewById(R.id.btn_confirm);
         btn_confirm.setOnClickListener(p->onConfirm());
-        btn_cancel = (ImageView)itemView.findViewById(R.id.btn_cancel);
+        btn_cancel = itemView.findViewById(R.id.btn_cancel);
         btn_cancel.setOnClickListener(p->onCancel());
 
         bar_loop = (LinearLayout)itemView.findViewById(R.id.bar_loop);
