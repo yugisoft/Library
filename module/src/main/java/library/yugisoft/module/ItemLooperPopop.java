@@ -57,8 +57,8 @@ public class ItemLooperPopop  extends PopupWindow {
             @Override
             public void onClick(View v)
             {
-               // if (looper[0].getOnItemLooperSelected() != null)
-               //     looper[0].getOnItemLooperSelected().onSelected(loopViews[0].getSelectedItem(),looper[0].getList().get(loopViews[0].getSelectedItem()));
+                if (looper[0].getOnItemLooperSelected() != null)
+                    looper[0].getOnItemLooperSelected().onSelected(loopViews[0].getSelectedItem(),looper[0].getList().get(loopViews[0].getSelectedItem()));
                 dismiss();
             }
         });
