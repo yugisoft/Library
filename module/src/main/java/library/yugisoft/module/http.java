@@ -770,7 +770,7 @@ public class http
         private boolean Json = false;
         private String Log = "";
         private int timeOut = 0;
-
+        public static int defaultTimeOut = 0;
         HttpRequestBase httpRequest;
 
         public Request setTimeOut(int timeOut) {
@@ -786,52 +786,55 @@ public class http
             return timeOut;
         }
 
-        public Request(OnHttpResponse pOnHttpResponse) { onHttpResponse=pOnHttpResponse; }
+        public Request(OnHttpResponse pOnHttpResponse) {
+            onHttpResponse=pOnHttpResponse;
+            timeOut = defaultTimeOut;
+        }
         public Request(OnHttpResponse pOnHttpResponse,Hashtable pBodys) {
             onHttpResponse=pOnHttpResponse;
             bodys=pBodys;
+            timeOut = defaultTimeOut;
         }
         public Request(OnHttpResponse pOnHttpResponseTable,String pBodys,Hashtable pheaders) {
             onHttpResponse=pOnHttpResponseTable;
             sbody=pBodys;
             headers=pheaders;
             Json=true;
+            timeOut = defaultTimeOut;
         }
         public Request(OnHttpResponse pOnHttpResponse,String pBodys) {
             onHttpResponse=pOnHttpResponse;
             sbody=pBodys;
             Json=true;
+            timeOut = defaultTimeOut;
         }
         public Request(OnHttpResponse pOnHttpResponseTable,Hashtable pBodys,Hashtable pheaders) {
             onHttpResponse=pOnHttpResponseTable;
             bodys=pBodys;
             headers=pheaders;
+            timeOut = defaultTimeOut;
         }
 
         public Request setOnHttpResponse(OnHttpResponse onHttpResponse) {
             this.onHttpResponse = onHttpResponse;
             return  this;
         }
-
         public Request setHeaders(Hashtable headers) {
             this.headers = headers;
             return  this;
         }
-
         public Request setBodys(Hashtable bodys) {
             this.bodys = bodys;
             if (bodys.size()>0)
                 Json = false;
             return  this;
         }
-
         public Request setBodys(String sbody) {
             this.sbody = sbody;
             if (sbody.length()>0)
                 Json = true;
             return  this;
         }
-
         public Request setLog(String log) {
             Log = log;
             return  this;
@@ -856,8 +859,7 @@ public class http
             Execute(new HttpPut(url));
         }
 
-        public <T> Request JsonTo(INTERFACES.OnResponse<T> listener, Class cl)
-        {
+        public <T> Request JsonTo(INTERFACES.OnResponse<T> listener, Class cl) {
             OnHttpResponse httpResponse = onHttpResponse;
 
             setOnHttpResponse(new OnHttpResponse() {
@@ -879,8 +881,7 @@ public class http
             });
             return this;
         }
-        public <T> Request JsonToList(INTERFACES.OnResponse<List<T>> listener, Class cl)
-        {
+        public <T> Request JsonToList(INTERFACES.OnResponse<List<T>> listener, Class cl) {
             OnHttpResponse httpResponse = onHttpResponse;
 
             setOnHttpResponse(new OnHttpResponse() {
@@ -902,6 +903,7 @@ public class http
             });
             return  this;
         }
+
         public void Execute(HttpEntityEnclosingRequestBase http) {
 
             //Content Type Belirlendi!
@@ -936,12 +938,10 @@ public class http
             this.execute();
         }
 
-        @Override
-        protected Response doInBackground(String... strings) {
+        @Override protected Response    doInBackground(String... strings) {
             return httpExecute(httpRequest,Log);
         }
-        @Override
-        protected void onPostExecute(Response response) {
+        @Override protected void        onPostExecute(Response response) {
             super.onPostExecute(response);
             if (onHttpResponse!=null)
                 onHttpResponse.onResponse(response);

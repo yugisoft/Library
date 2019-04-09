@@ -166,6 +166,7 @@ public class ItemLooper<T>
                     {
                         getOnItemLooperSelected().onSelected(loopView.getSelectedItem(),getList().get(loopView.getSelectedItem()));
                     }
+                    dismiss();
                 }
             };
             dialog.loop = loopView;
