@@ -133,6 +133,7 @@ public class ItemLooper<T>
         popup.show();
     }
     //endregion
+
     //region ListPopup
     IL_ListPopup<T> listPopup;
     public void show(View anchorView) {
@@ -154,6 +155,7 @@ public class ItemLooper<T>
         listPopup.show();;
     }
     //endregion
+
     //region Dialog
     IL_Dialog dialog;
     public void showDialog(String title) {
@@ -171,6 +173,11 @@ public class ItemLooper<T>
                 }
             };
             dialog.loop = loopView;
+        }
+        else
+        {
+            dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height)));
+            dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         try{((ViewGroup)loopView.getParent()).removeAllViews();}catch (Exception ex){}
         dialog.bar_loop.addView(loopView);
@@ -194,10 +201,23 @@ public class ItemLooper<T>
             dialog.loop = loopView;
             dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         }
+        else
+        {
+            dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        }
         try{((ViewGroup)loopView.getParent()).removeAllViews();}catch (Exception ex){}
         dialog.bar_loop.addView(loopView);
         dialog.txt_dialog_title.setText(title);
         dialog.show();
+    }
+
+    public static int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT ,WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+    public void showDialog(String title,int witdh,int height)
+    {
+        showDialog(title);
+        dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT,1));
+        dialog.dialog.getWindow().setLayout(witdh,height);
     }
 
 
