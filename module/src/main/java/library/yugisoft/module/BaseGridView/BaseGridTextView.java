@@ -26,13 +26,16 @@ public class BaseGridTextView extends android.support.v7.widget.AppCompatTextVie
             baseGridCell.setFieldName(typed.getString(R.styleable.BaseGridTextView_fieldName));
             baseGridCell.setType(typed.getInt(R.styleable.BaseGridTextView_dataType,0));
             baseGridCell.setAutoSize(typed.getBoolean(R.styleable.BaseGridTextView_autoWidth,false));
+
         }
+        baseGridCell.setForeColor(this.getTextColors().getDefaultColor());
         baseGridCell.setTextAlign(getGravity());
         baseGridCell.setVisible(this.getVisibility() == VISIBLE);
         baseGridCell.setPaddingLeft(this.getPaddingLeft());
         baseGridCell.setPaddingRight(this.getPaddingRight());
         baseGridCell.setPaddingTop(this.getPaddingTop());
         baseGridCell.setPaddingBottom(this.getPaddingBottom());
+
         setBaseGridCell(baseGridCell);
     }
     public BaseGridTextView(Context context, AttributeSet attrs, int defStyleAttr,BaseGridCell baseGridCell)  {
@@ -67,8 +70,7 @@ public class BaseGridTextView extends android.support.v7.widget.AppCompatTextVie
         }
     }
 
-    public static void setLayoutParams(View view,int w,int h , int s)
-    {
+    public static void setLayoutParams(View view,int w,int h , int s) {
         ViewGroup.LayoutParams param = view.getLayoutParams();
         if (param != null) {
             param.width = w;
