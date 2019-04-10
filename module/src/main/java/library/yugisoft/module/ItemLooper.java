@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -155,7 +156,7 @@ public class ItemLooper<T>
     //endregion
     //region Dialog
     IL_Dialog dialog;
-    public void showDialod(String title) {
+    public void showDialog(String title) {
         if (dialog == null)
         {
             dialog = new IL_Dialog(getContext())
@@ -170,6 +171,28 @@ public class ItemLooper<T>
                 }
             };
             dialog.loop = loopView;
+        }
+        try{((ViewGroup)loopView.getParent()).removeAllViews();}catch (Exception ex){}
+        dialog.bar_loop.addView(loopView);
+        dialog.txt_dialog_title.setText(title);
+        dialog.show();
+    }
+    public void showFullScreen(String title) {
+        if (dialog == null)
+        {
+            dialog = new IL_Dialog(getContext())
+            {
+                @Override
+                public void onConfirm() {
+                    if (getOnItemLooperSelected() != null)
+                    {
+                        getOnItemLooperSelected().onSelected(loopView.getSelectedItem(),getList().get(loopView.getSelectedItem()));
+                    }
+                    dismiss();
+                }
+            };
+            dialog.loop = loopView;
+            dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         }
         try{((ViewGroup)loopView.getParent()).removeAllViews();}catch (Exception ex){}
         dialog.bar_loop.addView(loopView);
