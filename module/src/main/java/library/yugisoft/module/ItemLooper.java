@@ -199,12 +199,10 @@ public class ItemLooper<T>
                 }
             };
             dialog.loop = loopView;
-            dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         }
-        else
-        {
-            dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        }
+        dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MATCH_PARENT));
+
         try{((ViewGroup)loopView.getParent()).removeAllViews();}catch (Exception ex){}
         dialog.bar_loop.addView(loopView);
         dialog.txt_dialog_title.setText(title);
