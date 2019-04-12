@@ -2002,7 +2002,7 @@ public class ViewPager extends ViewGroup
 
             do{
                 ViewGroup vg = (ViewGroup) view;
-                if (vg.getChildCount()>0)
+                    if (vg.getChildCount()>0)
                     for (int i = 0 ; i < vg.getChildCount()  ; i++)
                     {
                         view = getViewPager(vg.getChildAt(i));
@@ -2022,7 +2022,7 @@ public class ViewPager extends ViewGroup
 
         if(checkV)
         {
-            ViewPager vp = getViewPager(v);
+            ViewPager vp =  yugi.findViewByClassReference(v,ViewPager.class);
             if(vp != null)
             {
 

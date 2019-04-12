@@ -34,7 +34,7 @@ import android.content.Intent;
 
         pager=  ((ViewPager)findViewById(R.id.page2));
 
-        pager.setScrollable(false);
+       // pager.setScrollable(false);
 
 
 

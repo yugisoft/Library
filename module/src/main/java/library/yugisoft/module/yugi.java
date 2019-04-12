@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -54,7 +55,9 @@ import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -76,6 +79,68 @@ public class yugi
     public static boolean TestMode = true;
     public static String culture_Ondalik_ayrac=".";
     public static FloatingNumPadView floatingNumPadView;
+    /**
+     * Finds the first child in #rootView that is an instance of #clazz
+     *
+     * @param rootView The View whose hierarchy should be examined for instances of #clazz.
+     * @param clazz    The Class to search for within #rootView.
+     * @param <T>      The type of View subclass to search for.
+     * @return The first child in #rootView this is an instance of #clazz.
+     */
+    public static <T extends View> T findViewByClassReference(View rootView, Class<T> clazz) {
+        if(clazz.isInstance(rootView)) {
+            return clazz.cast(rootView);
+        }
+        if(rootView instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) rootView;
+            for(int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                T match = findViewByClassReference(child, clazz);
+                if(match != null) {
+                    return match;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns a Collection of View subclasses instances of type T found within #rootView.
+     *
+     * @param rootView The View whose hierarchy should be examined for instances of #clazz.
+     * @param clazz    The Class to search for within #rootView.
+     * @param out      A Collection of View subclasses of type T that will be populated with matches found in #rootView.
+     * @param <T>      The type of View subclass to search for.
+     * @return A Collection of View subclasses instances of type T found within #rootView.
+     */
+    public static <T extends View> Collection<T> findViewsByClassReference(View rootView, Class<T> clazz, Collection<T> out) {
+        if(out == null) {
+            out = new HashSet<>();
+        }
+        if(clazz.isInstance(rootView)) {
+            out.add(clazz.cast(rootView));
+        }
+        if(rootView instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) rootView;
+            for(int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                findViewsByClassReference(child, clazz, out);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Returns a Collection of View subclasses instances of type T found within #rootView.
+     *
+     * @param rootView The View whose hierarchy should be examined for instances of #clazz.
+     * @param clazz    The Class to search for within #rootView.
+     * @param <T>      The type of View subclass to search for.
+     * @return A Collection of View subclasses instances of type T found within #rootView.
+     */
+    public static <T extends View> Collection<T> findViewsByClassReference(View rootView, Class<T> clazz) {
+        return findViewsByClassReference(rootView, clazz, null);
+    }
     //endregion
     //region APP
 
