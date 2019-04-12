@@ -1,15 +1,19 @@
 package library.yugisoft.module.popwindow;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -26,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import library.yugisoft.module.Base.BaseDialog;
 import library.yugisoft.module.DateTime;
 import library.yugisoft.module.LoopView;
 import library.yugisoft.module.R;
@@ -308,6 +313,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
      *
      * @param activity
      */
+    Dialog  dialog;
     public void showPopWin(Activity activity) {
 
         if (null != activity) {
@@ -317,12 +323,37 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
                     0, Animation.RELATIVE_TO_SELF, 1,
                     Animation.RELATIVE_TO_SELF, 0);
 
-            showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM,
-                    0, 0);
+
+            if (BaseDialog.isShowing())
+            {
+                try{((ViewGroup)pickerContainerV.getParent()).removeView(pickerContainerV);}catch (Exception ignored){}
+                dialog = new Dialog(activity);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(pickerContainerV);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+                wmlp.gravity = Gravity.BOTTOM;
+                dialog.show();
+            }
+            else
+            {
+                try{((ViewGroup)pickerContainerV.getParent()).removeView(pickerContainerV);}catch (Exception ignored){}
+                ((ViewGroup)getContentView()).addView(pickerContainerV);
+                showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+            }
+
             trans.setDuration(400);
             trans.setInterpolator(new AccelerateDecelerateInterpolator());
 
+
+
+
             pickerContainerV.startAnimation(trans);
+            update();
+
+
+
         }
     }
 
@@ -356,6 +387,10 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
         });
 
         pickerContainerV.startAnimation(trans);
+
+
+        if (BaseDialog.isShowing())
+            dialog.dismiss();
     }
 
     @Override
@@ -440,4 +475,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
         void onDatePickCompleted(int year, int month, int day,
                                  String dateDesc);
     }
+
+
+
 }

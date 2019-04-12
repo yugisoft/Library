@@ -55,7 +55,7 @@ public class DateTextView extends android.support.v7.widget.AppCompatTextView im
         {
             a= yugi.activity;
         }
-        dateTime.showDatePopup(a);
+        dateTime.showDatePopup(yugi.activity);
     }
 
     @Override

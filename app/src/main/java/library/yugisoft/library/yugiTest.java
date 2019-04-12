@@ -43,9 +43,8 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
 
         ItemLooper<Test> testItemLooper = new ItemLooper<Test>(list);
 
-        findViewById(R.id.button2).setOnClickListener(p->{testItemLooper.show(findViewById(R.id.button2));});
-        findViewById(R.id.button3).setOnClickListener(p->{testItemLooper.showFullScreen("");});
-        findViewById(R.id.button4).setOnClickListener(p->{testItemLooper.showDialog("");});
+        findViewById(R.id.button2).setOnClickListener(p-> new testDialog(this).show());
+
 
 
     }
