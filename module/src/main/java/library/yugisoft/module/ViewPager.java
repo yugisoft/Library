@@ -294,7 +294,7 @@ public class ViewPager extends ViewGroup
         }
         if (mAdapterChangeListener != null && oldAdapter != adapter) {
             mAdapterChangeListener.onAdapterChanged(oldAdapter, adapter);
-    }
+        }
     }
     private void removeNonDecorViews() {
         for (int i = 0; i < getChildCount(); i++) {
@@ -346,7 +346,7 @@ public class ViewPager extends ViewGroup
     }
 
     void setCurrentItemInternal(int item, boolean smoothScroll, boolean always, int velocity) {
-        if (getAdapter() == null || getAdapter().getCount() <= 0)
+        if (getAdapter() == null || getCount() <= 0)
         {
             setScrollingCacheEnabled(false);
             return;
@@ -357,8 +357,8 @@ public class ViewPager extends ViewGroup
         }
         if (item < 0) {
             item = 0;
-        } else if (item >= getAdapter().getCount()) {
-            item = getAdapter().getCount() - 1;
+        } else if (item >= getCount()) {
+            item = getCount() - 1;
         }
         final int pageLimit = mOffscreenPageLimit;
         if (item > (mCurItem + pageLimit) || item < (mCurItem - pageLimit)) {
@@ -585,7 +585,7 @@ public class ViewPager extends ViewGroup
     void dataSetChanged() {
         // This method only gets called if our observer is attached, so getAdapter() is non-null.
         boolean needPopulate = mItems.size() < mOffscreenPageLimit * 2 + 1 &&
-                mItems.size() < getAdapter().getCount();
+                mItems.size() < getCount();
         int newCurrItem = mCurItem;
         boolean isUpdating = false;
         for (int i = 0; i < mItems.size(); i++) {
@@ -605,7 +605,7 @@ public class ViewPager extends ViewGroup
                 needPopulate = true;
                 if (mCurItem == ii.position) {
                     // Keep the current item in the valid range
-                    newCurrItem = Math.max(0, Math.min(mCurItem, getAdapter().getCount() - 1));
+                    newCurrItem = Math.max(0, Math.min(mCurItem, getCount() - 1));
                     needPopulate = true;
                 }
                 continue;
@@ -666,7 +666,7 @@ public class ViewPager extends ViewGroup
         getAdapter().startUpdate(this);
         final int pageLimit = mOffscreenPageLimit;
         final int startPos = Math.max(0, mCurItem - pageLimit);
-        final int N = getAdapter().getCount();
+        final int N = getCount();
         final int endPos = Math.min(N-1, mCurItem + pageLimit);
         // Locate the currently focused item or add it if needed.
         int curIndex = -1;
@@ -778,7 +778,7 @@ public class ViewPager extends ViewGroup
         }
     }
     private void calculatePageOffsets(ItemInfo curItem, int curIndex, ItemInfo oldCurInfo) {
-        final int N = getAdapter().getCount();
+        final int N = getCount();
         final int width = getWidth();
         final float marginOffset = width > 0 ? (float) mPageMargin / width : 0;
         // Fix up offsets for later layout.
@@ -1504,7 +1504,7 @@ public class ViewPager extends ViewGroup
             // descendants.
             return false;
         }
-        if (getAdapter() == null || getAdapter().getCount() == 0) {
+        if (getAdapter() == null || getCount() == 0) {
             // Nothing to present or scroll; nothing to touch.
             return false;
         }
@@ -1619,7 +1619,7 @@ public class ViewPager extends ViewGroup
             leftAbsolute = false;
             leftBound = firstItem.offset * width;
         }
-        if (lastItem.position != getAdapter().getCount() - 1) {
+        if (lastItem.position != getCount() - 1) {
             rightAbsolute = false;
             rightBound = lastItem.offset * width;
         }
@@ -1706,7 +1706,7 @@ public class ViewPager extends ViewGroup
         final int overScrollMode = ViewCompat.getOverScrollMode(this);
         if (overScrollMode == ViewCompat.OVER_SCROLL_ALWAYS ||
                 (overScrollMode == ViewCompat.OVER_SCROLL_IF_CONTENT_SCROLLS &&
-                        getAdapter() != null && getAdapter().getCount() > 1)) {
+                        getAdapter() != null && getCount() > 1)) {
             if (!mLeftEdge.isFinished()) {
                 final int restoreCount = canvas.save();
                 final int height = getHeight() - getPaddingTop() - getPaddingBottom();
@@ -1859,7 +1859,7 @@ public class ViewPager extends ViewGroup
         if (firstItem.position != 0) {
             leftBound = firstItem.offset * width;
         }
-        if (lastItem.position != getAdapter().getCount() - 1) {
+        if (lastItem.position != getCount() - 1) {
             rightBound = lastItem.offset * width;
         }
         if (scrollX < leftBound) {
@@ -2073,7 +2073,7 @@ public class ViewPager extends ViewGroup
         return false;
     }
     boolean pageRight() {
-        if (getAdapter() != null && mCurItem < (getAdapter().getCount()-1)) {
+        if (getAdapter() != null && mCurItem < (getCount()-1)) {
             setCurrentItem(mCurItem+1, true);
             return true;
         }
@@ -2214,11 +2214,11 @@ public class ViewPager extends ViewGroup
         public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
             super.onInitializeAccessibilityNodeInfo(host, info);
             info.setClassName(ViewPager.class.getName());
-            info.setScrollable(getAdapter() != null && getAdapter().getCount() > 1);
-            if (getAdapter() != null && mCurItem >= 0 && mCurItem < getAdapter().getCount() - 1) {
+            info.setScrollable(getAdapter() != null && getCount() > 1);
+            if (getAdapter() != null && mCurItem >= 0 && mCurItem < getCount() - 1) {
                 info.addAction(AccessibilityNodeInfoCompat.ACTION_SCROLL_FORWARD);
             }
-            if (getAdapter() != null && mCurItem > 0 && mCurItem < getAdapter().getCount()) {
+            if (getAdapter() != null && mCurItem > 0 && mCurItem < getCount()) {
                 info.addAction(AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD);
             }
         }
@@ -2229,13 +2229,13 @@ public class ViewPager extends ViewGroup
             }
             switch (action) {
                 case AccessibilityNodeInfoCompat.ACTION_SCROLL_FORWARD: {
-                    if (getAdapter() != null && mCurItem >= 0 && mCurItem < getAdapter().getCount() - 1) {
+                    if (getAdapter() != null && mCurItem >= 0 && mCurItem < getCount() - 1) {
                         setCurrentItem(mCurItem + 1);
                         return true;
                     }
                 } return false;
                 case AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD: {
-                    if (getAdapter() != null && mCurItem > 0 && mCurItem < getAdapter().getCount()) {
+                    if (getAdapter() != null && mCurItem > 0 && mCurItem < getCount()) {
                         setCurrentItem(mCurItem - 1);
                         return true;
                     }
@@ -2244,6 +2244,11 @@ public class ViewPager extends ViewGroup
             return false;
         }
     }
+
+    private int getCount() {
+        return getAdapter()==null ? 0 : getAdapter().getCount();
+    }
+
     private class PagerObserver extends DataSetObserver {
         @Override
         public void onChanged() {
