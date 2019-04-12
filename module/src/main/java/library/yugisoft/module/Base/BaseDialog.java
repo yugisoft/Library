@@ -22,24 +22,12 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
         super(yugi.activity.getLayoutInflater().inflate(id, null));
         this.context = context;
 
-        dialog = new Dialog(context)
-        {
-            @Override
-            public boolean onTouchEvent(@NonNull MotionEvent event) {
-                if (MotionEvent.ACTION_OUTSIDE == event.getAction())
-                {
-                    dialog = null;
-                }
-                return super.onTouchEvent(event);
-            }
-        };
+
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(itemView);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         Initilialize();
 
-        dialog.setOnCancelListener(d-> dialog = null);
-        dialog.setOnDismissListener(d-> dialog = null);
 
 
 

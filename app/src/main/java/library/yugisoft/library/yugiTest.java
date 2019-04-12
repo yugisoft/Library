@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +25,14 @@ import library.yugisoft.module.yugi;
 public class yugiTest extends yugi.vActivity implements View.OnClickListener {
 
     BaseGridAdapter adapter;
+    ViewPager pager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
+        pager=  ((ViewPager)findViewById(R.id.page1));
 
 
 
@@ -39,18 +42,24 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId())
+    public void onClick(View v)
+    {
+        if (v instanceof TextView)
         {
-            case R.id.btn_jsonparse:
-                startActivity(new Intent(this,sample_jsonparse.class));
-                break;
-            case R.id.btn_datetime:
-                startActivity(new Intent(this,sample_DateTime.class));
-                break;
+            pager.setCurrentItem(parse.toInt(((TextView)v).getText()) -1 );
+        }
+        else {
+            switch (v.getId()) {
+                case R.id.btn_jsonparse:
+                    startActivity(new Intent(this, sample_jsonparse.class));
+                    break;
+                case R.id.btn_datetime:
+                    startActivity(new Intent(this, sample_DateTime.class));
+                    break;
                 default:
                     adapter.notifyDataSetChanged();
                     break;
+            }
         }
     }
 
