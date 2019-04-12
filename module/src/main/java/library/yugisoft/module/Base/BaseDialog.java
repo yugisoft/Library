@@ -21,8 +21,7 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
     public BaseDialog(Context context, int id) {
         super(yugi.activity.getLayoutInflater().inflate(id, null));
         this.context = context;
-
-
+        dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(itemView);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
