@@ -841,22 +841,22 @@ public class http
         }
 
         public void GET(String url)  {
-            Execute(new HttpGet(url));
+            Execute(new HttpGet(url.replace(" ", "")));
         }
         public void DELETE(String url) {
-            Execute(new HttpDelete(url));
+            Execute(new HttpDelete(url.replace(" ", "")));
         }
         public void HEAD(String url) {
-            Execute(new HttpHead(url));
+            Execute(new HttpHead(url.replace(" ", "")));
         }
         public void OPTIONS(String url) {
-            Execute(new HttpOptions(url));
+            Execute(new HttpOptions(url.replace(" ", "")));
         }
         public void POST(String url) {
-            Execute(new HttpPost(url));
+            Execute(new HttpPost(url.replace(" ", "")));
         }
         public void PUT(String url) {
-            Execute(new HttpPut(url));
+            Execute(new HttpPut(url.replace(" ", "")));
         }
 
         public <T> Request JsonTo(INTERFACES.OnResponse<T> listener, Class cl) {

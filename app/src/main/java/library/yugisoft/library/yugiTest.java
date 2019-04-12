@@ -25,14 +25,16 @@ import android.content.Intent;
         public class yugiTest extends yugi.vActivity implements View.OnClickListener {
 
         BaseGridAdapter adapter;
-        ViewPager pager;
+        ViewPager pager,pager2;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        pager=  ((ViewPager)findViewById(R.id.page1));
+        pager=  ((ViewPager)findViewById(R.id.page2));
+
+        pager.setScrollable(false);
 
 
 
