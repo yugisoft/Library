@@ -312,7 +312,7 @@ public class ViewPager extends ViewGroup
      * @return The currently registered PagerAdapter
      */
     public PagerAdapter getAdapter() {
-        return isEnabled() ? getAdapter() : null;
+        return isEnabled() ? mAdapter : null;
     }
     void setOnAdapterChangeListener(OnAdapterChangeListener listener) {
         mAdapterChangeListener = listener;
