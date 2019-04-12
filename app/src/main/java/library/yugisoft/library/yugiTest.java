@@ -17,6 +17,7 @@ import library.yugisoft.module.DateTime;
 import library.yugisoft.module.DialogBox;
 import library.yugisoft.module.Interfaces.IFormatter;
 import library.yugisoft.module.ItemLooper;
+import library.yugisoft.module.ViewPager;
 import library.yugisoft.module.parse;
 import library.yugisoft.module.yugi;
 
@@ -26,24 +27,12 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mdi);
+        setContentView(R.layout.activity_main);
 
 
 
-        List<Test> list = new ArrayList<>();
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
-        list.add(new Test());
 
-        ItemLooper<Test> testItemLooper = new ItemLooper<Test>(list);
 
-        findViewById(R.id.button2).setOnClickListener(p-> new testDialog(this).show());
 
 
 

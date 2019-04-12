@@ -49,6 +49,7 @@ import java.util.List;
 public class ViewPager extends ViewGroup
 {
 
+    private boolean scrollable = true;
 
     private static final String TAG = "ViewPager";
     private static final boolean DEBUG = false;
@@ -58,6 +59,15 @@ public class ViewPager extends ViewGroup
     private static final int MIN_DISTANCE_FOR_FLING = 25; // dips
     private static final int DEFAULT_GUTTER_SIZE = 16; // dips
     private static final int[] LAYOUT_ATTRS = new int[] {android.R.attr.layout_gravity};
+
+    public boolean isScrollable() {
+        return scrollable;
+    }
+
+    public void setScrollable(boolean scrollable) {
+        this.scrollable = scrollable;
+    }
+
 
     static class ItemInfo {
         Object object;
@@ -273,17 +283,18 @@ public class ViewPager extends ViewGroup
     public void setAdapter(SlidePageAdapter adapter)
     {
 
-        final PagerAdapter oldAdapter = getAdapter();
+        final PagerAdapter oldAdapter = mAdapter;
         mAdapter = adapter;
-        if (getAdapter() != null) {
+        if (mAdapter != null)
+        {
             if (mObserver == null) {
                 mObserver = new PagerObserver();
             }
-            getAdapter().registerDataSetObserver(mObserver);
+            mAdapter.registerDataSetObserver(mObserver);
             mPopulatePending = false;
             mFirstLayout = true;
             if (mRestoredCurItem >= 0) {
-                getAdapter().restoreState(mRestoredAdapterState, mRestoredClassLoader);
+                mAdapter.restoreState(mRestoredAdapterState, mRestoredClassLoader);
                 setCurrentItemInternal(mRestoredCurItem, false, true);
                 mRestoredCurItem = -1;
                 mRestoredAdapterState = null;
@@ -312,7 +323,7 @@ public class ViewPager extends ViewGroup
      * @return The currently registered PagerAdapter
      */
     public PagerAdapter getAdapter() {
-        return isEnabled() ? mAdapter : null;
+        return mAdapter;
     }
     void setOnAdapterChangeListener(OnAdapterChangeListener listener) {
         mAdapterChangeListener = listener;
@@ -345,7 +356,8 @@ public class ViewPager extends ViewGroup
         setCurrentItemInternal(item, smoothScroll, always, 0);
     }
 
-    void setCurrentItemInternal(int item, boolean smoothScroll, boolean always, int velocity) {
+    void setCurrentItemInternal(int item, boolean smoothScroll, boolean always, int velocity)
+    {
         if (getAdapter() == null || getCount() <= 0)
         {
             setScrollingCacheEnabled(false);
@@ -1112,7 +1124,7 @@ public class ViewPager extends ViewGroup
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        if (getAdapter()==null)
+        if (mAdapter==null)
         {
             mAdapter = new SlidePageAdapter();
             for (int i=0;i<this.getChildCount();i++)
@@ -1489,11 +1501,12 @@ public class ViewPager extends ViewGroup
     @Override
     public boolean onTouchEvent(MotionEvent ev)
     {
-        if (!isEnabled())
+
+        if (!isScrollable())
         {
             return false;
         }
-        if (mFakeDragging) {
+        if (mFakeDragging ) {
             // A fake drag is in progress already, ignore this real one
             // but still eat the touch events.
             // (It is likely that the user is multi-touching the screen.)
@@ -1504,7 +1517,7 @@ public class ViewPager extends ViewGroup
             // descendants.
             return false;
         }
-        if (getAdapter() == null || getCount() == 0) {
+        if (getCount() == 0) {
             // Nothing to present or scroll; nothing to touch.
             return false;
         }
@@ -1937,26 +1950,47 @@ public class ViewPager extends ViewGroup
      * @param y Y coordinate of the active touch point
      * @return true if child views of v can be scrolled by delta of dx.
      */
-    protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
-        if (v instanceof ViewGroup) {
-            final ViewGroup group = (ViewGroup) v;
-            final int scrollX = v.getScrollX();
-            final int scrollY = v.getScrollY();
-            final int count = group.getChildCount();
-            // Count backwards - let topmost views consume scroll distance first.
-            for (int i = count - 1; i >= 0; i--) {
-                // TODO: Add versioned support here for transformed views.
-                // This will not work for transformed views in Honeycomb+
-                final View child = group.getChildAt(i);
-                if (x + scrollX >= child.getLeft() && x + scrollX < child.getRight() &&
-                        y + scrollY >= child.getTop() && y + scrollY < child.getBottom() &&
-                        canScroll(child, true, dx, x + scrollX - child.getLeft(),
-                                y + scrollY - child.getTop())) {
-                    return true;
-                }
+    protected boolean canScroll(View v, boolean checkV, int dx, int x, int y)
+    {
+
+        if(v != this && v instanceof ViewPager)
+        {
+            ViewPager vp = (ViewPager) v;
+            if (!isScrollable())
+                return false;
+            if (dx>0)
+            {
+               return vp.getCurrentItem() != 0;
+            }
+            else
+            {
+                return vp.getCurrentItem() != (vp.getCount()-1);
             }
         }
-        return checkV && ViewCompat.canScrollHorizontally(v, -dx);
+        else
+         {
+             if (!isScrollable())
+                 return false;
+         if (v instanceof ViewGroup) {
+                final ViewGroup group = (ViewGroup) v;
+                final int scrollX = v.getScrollX();
+                final int scrollY = v.getScrollY();
+                final int count = group.getChildCount();
+                // Count backwards - let topmost views consume scroll distance first.
+                for (int i = count - 1; i >= 0; i--) {
+                    // TODO: Add versioned support here for transformed views.
+                    // This will not work for transformed views in Honeycomb+
+                    final View child = group.getChildAt(i);
+                    if (x + scrollX >= child.getLeft() && x + scrollX < child.getRight() &&
+                            y + scrollY >= child.getTop() && y + scrollY < child.getBottom() &&
+                            canScroll(child, true, dx, x + scrollX - child.getLeft(),
+                                    y + scrollY - child.getTop())) {
+                        return true;
+                    }
+                }
+            }
+            return checkV && ViewCompat.canScrollHorizontally(v, -dx);
+        }
     }
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
