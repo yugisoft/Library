@@ -12,7 +12,8 @@ import library.yugisoft.module.yugi;
 
 public abstract class BaseDialog  extends RecyclerView.ViewHolder {
     public Context context;
-    public static Dialog dialog;
+    public  Dialog dialog;
+    public  static Dialog mDialog;
 
     public BaseDialog(int id) {
         this(yugi.activity, id);
@@ -36,6 +37,7 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
 
     public void show()
     {
+        mDialog = dialog;
         dialog.show();
     }
     public void dismiss()
@@ -45,6 +47,6 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
 
     public static boolean isShowing()
     {
-        return dialog!=null && dialog.isShowing();
+        return mDialog!=null && mDialog.isShowing();
     }
 }

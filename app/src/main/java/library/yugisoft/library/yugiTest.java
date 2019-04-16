@@ -24,57 +24,31 @@ import android.content.Intent;
 
         public class yugiTest extends yugi.vActivity implements View.OnClickListener {
 
-        BaseGridAdapter adapter;
-        ViewPager pager,pager2;
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+            testDialog t1;
+            testDialog2 t2;
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_main);
 
-        pager=  ((ViewPager)findViewById(R.id.page2));
+                t1 = new testDialog(this);
+                t2 = new testDialog2(this);
+            }
 
-       // pager.setScrollable(false);
-
-
-
-
-
-
-        }
-
-        @Override
-        public void onClick(View v)
-        {
-        if (v instanceof TextView)
-        {
-        pager.setCurrentItem(parse.toInt(((TextView)v).getText()) -1 );
-        }
-        else {
-        switch (v.getId()) {
-        case R.id.btn_jsonparse:
-        startActivity(new Intent(this, sample_jsonparse.class));
-        break;
-        case R.id.btn_datetime:
-        startActivity(new Intent(this, sample_DateTime.class));
-        break;
-        default:
-        adapter.notifyDataSetChanged();
-        break;
-        }
-        }
-        }
-
-        public static class Test
-        {
-        public DateTime Tarih = DateTime.Now();
-        public String ID = "₺";
-        public Double Tutar = 10.99;
-
-        @Override
-        public String toString() {
-        return ID;
-        }
-        }
-
+            @Override
+            public void onClick(View v) {
+                if (v instanceof TextView)
+                {
+                    switch (parse.toInt(((TextView)v).getText()) -1 )
+                    {
+                        case 0:
+                            t1.show();
+                            break;
+                        case 1:
+                            t2.show();
+                            break;
+                    }
+                }
+            }
         }
