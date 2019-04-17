@@ -176,7 +176,7 @@ package library.yugisoft.module;
         }
         else
         {
-        dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height)));
+        dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height),0));
         dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         try{((ViewGroup)loopView.getParent()).removeAllViews();}catch (Exception ex){}
@@ -187,8 +187,8 @@ package library.yugisoft.module;
         public void showFullScreen(String title) {
         if (dialog == null)
         {
-        dialog = new IL_Dialog(getContext())
-        {
+                dialog = new IL_Dialog(getContext())
+                {
         @Override
         public void onConfirm() {
         if (getOnItemLooperSelected() != null)
@@ -198,15 +198,15 @@ package library.yugisoft.module;
         dismiss();
         }
         };
-        dialog.loop = loopView;
+                dialog.loop = loopView;
         }
-        dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MATCH_PARENT));
 
-        try{((ViewGroup)loopView.getParent()).removeAllViews();}catch (Exception ex){}
-        dialog.bar_loop.addView(loopView);
-        dialog.txt_dialog_title.setText(title);
-        dialog.show();
+                 dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                 dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MATCH_PARENT,1));
+                 try{((ViewGroup)loopView.getParent()).removeAllViews();}catch (Exception ex){}
+                 dialog.bar_loop.addView(loopView);
+                 dialog.txt_dialog_title.setText(title);
+                 dialog.show();
         }
 
         public static int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT ,WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
