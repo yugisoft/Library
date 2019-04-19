@@ -67,14 +67,15 @@ package library.yugisoft.module;
         else
         loopView.setDataList(list);
         return this;}
-        public ItemLooper<T> setCanLoop(boolean canLoop) { this.canLoop = canLoop; return this;}
-        public ItemLooper<T> setTextSize(int textSize) { this.textSize = textSize; return this;}
-        public ItemLooper<T> setDrawItemsCount(int drawItemsCount) { this.drawItemsCount = drawItemsCount; return this;}
-        public ItemLooper<T> setTextAlignment(int textAlignment) { this.textAlignment = textAlignment;  return  this;}
-        public ItemLooper<T> setTextColor(int textColor) { this.textColor = textColor; return  this;}
-        public ItemLooper<T> setBackColor(int backColor) { BackColor = backColor; return  this;}
+        public ItemLooper<T> setCanLoop(boolean canLoop) { loopView = null;  this.canLoop = canLoop;  return this; }
+        public ItemLooper<T> setTextSize(int textSize) {loopView = null; this.textSize = textSize; return this;}
+        public ItemLooper<T> setDrawItemsCount(int drawItemsCount) {loopView = null; this.drawItemsCount = drawItemsCount; return this;}
+        public ItemLooper<T> setTextAlignment(int textAlignment) { loopView = null; this.textAlignment = textAlignment;  return  this;}
+        public ItemLooper<T> setTextColor(int textColor) { loopView = null; this.textColor = textColor; return  this;}
+        public ItemLooper<T> setBackColor(int backColor) { loopView = null; BackColor = backColor; return  this;}
+        public ItemLooper<T> setLoopView(LoopView loopView) { this.loopView = loopView;  return  this;}
 
-        //endregion
+                //endregion
         //region Getters
         public Context getContext() {
         return context;
