@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 
 import library.yugisoft.module.yugi;
 
@@ -43,10 +44,17 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
     public void dismiss()
     {
         dialog.dismiss();
+        yugi.activity.hideKeyboard();
     }
 
     public static boolean isShowing()
     {
         return mDialog!=null && mDialog.isShowing();
+    }
+
+    public void hideKeyboard()
+    {
+        InputMethodManager in = (InputMethodManager) yugi.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(dialog.getWindow().peekDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

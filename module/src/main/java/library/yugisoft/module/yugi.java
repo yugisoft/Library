@@ -64,6 +64,8 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import library.yugisoft.module.Base.BaseDialog;
+
 import static android.util.DisplayMetrics.DENSITY_DEFAULT;
 
 /**
@@ -215,11 +217,15 @@ public class yugi
         {
             InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             in.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            if (BaseDialog.isShowing())
+                in.hideSoftInputFromWindow(BaseDialog.mDialog.getWindow().peekDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
         public void hideKeyboard(View view)
         {
             InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            if (BaseDialog.isShowing())
+                in.hideSoftInputFromWindow(BaseDialog.mDialog.getWindow().peekDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
 
         public Object get(String key) {

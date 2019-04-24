@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="detailViewID" format="reference" />
+    <attr name="emptyViewID" format="reference" />
+    <attr name="emtyParentID" format="reference" />
+    <attr name="emptyRowCount" format="integer|reference" />
+    <attr name="showDivider" format="boolean" />
+
+    <declare-styleable name="BindingGridView">
+        <attr name="detailViewID" />
+        <attr name="emptyViewID"   />
+        <attr name="emtyParentID"  />
+        <attr name="emptyRowCount" />
+        <attr name="showDivider"  />
+    </declare-styleable>
+
+</resources>

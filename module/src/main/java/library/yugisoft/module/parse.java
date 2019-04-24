@@ -97,7 +97,8 @@ public class parse {
 
     }
 
-    public static String toJson(Object item) {
+    public static String toJson(Object item)
+    {
         Class cls = item.getClass();
         String name = cls.getSimpleName().toLowerCase();
         String type = cls.getName().toLowerCase();
@@ -124,34 +125,49 @@ public class parse {
                 f.setAccessible(true);
                 if (!f.getName().equals("$change") && !f.getName().equals("serialVersionUID"))
                     try {
+
+                        String fName = f.getName();
+                        if(f.isAnnotationPresent(Json.class))
+                        {
+                            Json json = f.getAnnotation(Json.class);
+
+                            if (json.ignoreToJson())
+                                continue;
+
+                            String jName = f.getAnnotation(Json.class).name();
+                            if (jName.length()>0)
+                                fName = jName;
+
+                        }
+
                         Object pObject = f.get(item);
                         Class objectClass = pObject.getClass();
                         if (objectClass.equals(Integer.class) || objectClass.equals(int.class))
-                            object.put(f.getName(), toInt(pObject));
+                            object.put(fName, toInt(pObject));
                         else if (objectClass.equals(Long.class) || objectClass.equals(long.class))
-                            object.put(f.getName(), toLong(pObject));
+                            object.put(fName, toLong(pObject));
                         else if (objectClass.equals(Double.class) || objectClass.equals(double.class))
-                            object.put(f.getName(), toDouble(pObject));
+                            object.put(fName, toDouble(pObject));
                         else if (objectClass.equals(DataTable.class))
-                            object.put(f.getName(), ((DataTable) pObject).getJsonData());
+                            object.put(fName, ((DataTable) pObject).getJsonData());
                         else if (objectClass.equals(DateTime.class))
-                            object.put(f.getName(), ((DateTime) pObject).toString());
+                            object.put(fName, ((DateTime) pObject).toString());
                         else if (objectClass.equals(Boolean.class))
-                            object.put(f.getName(), (pObject));
+                            object.put(fName, (pObject));
                         else if (objectClass.equals(String.class))
-                            object.put(f.getName(), pObject);
+                            object.put(fName, pObject);
                         else if (pObject instanceof List)
-                            object.put(f.getName(), new JSONArray(toJson(pObject)));
+                            object.put(fName, new JSONArray(toJson(pObject)));
                         else {
 
                             if (pObject instanceof ASerializable)
-                                object.put(f.getName(), ((ASerializable) pObject).SerializeJsonObject());
+                                object.put(fName, ((ASerializable) pObject).SerializeJsonObject());
                             else if (pObject instanceof ISerializable)
-                                object.put(f.getName(), ((ISerializable) pObject).SerializeJsonObject());
+                                object.put(fName, ((ISerializable) pObject).SerializeJsonObject());
                             else if (pObject.toString().split("\\.").length > 2 && pObject.toString().indexOf("@") != -1)
-                                object.put(f.getName(), new JSONObject(toJson(pObject)));
+                                object.put(fName, new JSONObject(toJson(pObject)));
                             else
-                                object.put(f.getName(), pObject);
+                                object.put(fName, pObject);
                         }
 
 
@@ -314,13 +330,30 @@ public class parse {
     }
 
     private static void setSub(Object object, JSONObject jsonObject, Field[] fields) {
-        for (Field f : fields) {
+        for (Field f : fields)
+        {
             String fName = f.getName();
+
+
             String fType = f.getType().getSimpleName().toLowerCase();
             if (fName.equals("$change") || fName.equals("serialVersionUID")) {
                 continue;
             }
             f.setAccessible(true);
+
+            if(f.isAnnotationPresent(Json.class))
+            {
+                Json json = f.getAnnotation(Json.class);
+
+                if (json.ignoreJsonTo())
+                    continue;
+
+                String jName = json.name();
+
+                if (jName.length()>0)
+                    fName = jName;
+
+            }
 
             try {
                 Object value = jsonObject.get(fName);
