@@ -314,6 +314,7 @@ BindingGridView bindingGridView = null;
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         if (getOnItemLooperSelected() != null)
                                 getOnItemLooperSelected().onSelected(position,getList().get(position));
+                        listDialog.dismiss();
                 }
         });
 
@@ -341,6 +342,7 @@ BindingGridView bindingGridView = null;
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 if (getOnItemLooperSelected() != null)
                                         getOnItemLooperSelected().onSelected(position,getList().get(position));
+                            listDialog.dismiss();
                         }
                 });
 
