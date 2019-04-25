@@ -293,14 +293,14 @@ public void showDialog(String title, int witdh, int height) {
 
 //region ListDialog
 
-IL_Dialog listDialog;
-BindingGridView bindingGridView;
+IL_Dialog listDialog = null;
+BindingGridView bindingGridView = null;
 
         public BindingGridView showListDialog(String title) {
         if (listDialog == null)
                 listDialog = new IL_Dialog(getContext());
         else
-                dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
+                listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
 
         if (bindingGridView == null)
                 bindingGridView = new BindingGridView(getContext());
@@ -315,11 +315,11 @@ BindingGridView bindingGridView;
                 }
         });
 
-        dialog.bar_loop.removeAllViews();
-        dialog.bar_loop.addView(bindingGridView);
+                listDialog.bar_loop.removeAllViews();
+                listDialog.bar_loop.addView(bindingGridView);
 
-        dialog.txt_dialog_title.setText(title);
-        dialog.show();
+                listDialog.txt_dialog_title.setText(title);
+                listDialog.show();
         return bindingGridView;
 }
 
@@ -327,7 +327,7 @@ BindingGridView bindingGridView;
                 if (listDialog == null)
                         listDialog = new IL_Dialog(getContext());
                 else
-                        dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
+                        listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
 
                 if (bindingGridView == null)
                         bindingGridView = new BindingGridView(getContext());
@@ -342,11 +342,11 @@ BindingGridView bindingGridView;
                         }
                 });
 
-                dialog.bar_loop.removeAllViews();
-                dialog.bar_loop.addView(bindingGridView);
+                listDialog.bar_loop.removeAllViews();
+                listDialog.bar_loop.addView(bindingGridView);
 
-                dialog.txt_dialog_title.setText(title);
-                dialog.show();
+                listDialog.txt_dialog_title.setText(title);
+                listDialog.show();
                 return bindingGridView;
         }
 
