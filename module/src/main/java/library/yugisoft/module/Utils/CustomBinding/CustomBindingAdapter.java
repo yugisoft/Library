@@ -184,7 +184,7 @@ public class CustomBindingAdapter
         }
 
         if (onViewDrawings.get(fieldName) != null)
-            onViewDrawings.get(fieldName).onDraw(getRow(),view,fieldName);
+            onViewDrawings.get(fieldName).onDraw(getRow(),view,fieldName,pValue);
 
 
     }
@@ -218,12 +218,12 @@ public class CustomBindingAdapter
 
     private Hashtable<String, OnViewDrawing> onViewDrawings = new Hashtable<>();
 
-    public CustomBindingAdapter addOnViewDrawing (String name , OnViewDrawing onViewDrawing) {
+    public <T> CustomBindingAdapter addOnViewDrawing (String name , OnViewDrawing<T> onViewDrawing) {
         onViewDrawings.put(name,onViewDrawing);
         return  this;
     }
 
-    public OnViewDrawing getOnViewDrawing(String name)
+    public <T> OnViewDrawing<T> getOnViewDrawing(String name)
     {
         return onViewDrawings.get(name);
     }
@@ -251,8 +251,8 @@ public class CustomBindingAdapter
         return  this;
     }
 
-    public interface OnViewDrawing
+    public interface OnViewDrawing<Type>
     {
-        void onDraw(int index,View view,String fieldName);
+        void onDraw(int index,View view,String fieldName,Type value);
     }
 }

@@ -149,6 +149,7 @@ public class yugi
     public static class vActivity extends AppCompatActivity {
 
         public static boolean LoadMainConfig  = false;
+        public boolean   isFinisForCatchExtras(){return false;}
 
         public  boolean isLoad=false;
 
@@ -234,6 +235,7 @@ public class yugi
                 Bundle extras = getIntent().getExtras();
                 return  extras.getString(key);
             } catch (Exception ex) {
+                if(isFinisForCatchExtras())
                 this.finish();
             }
             return  "";

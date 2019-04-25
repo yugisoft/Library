@@ -56,7 +56,7 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
                 }
             }
             else
-                adapter = new CustomBindingAdapter(context,view);
+                adapter = new CustomBindingAdapter(context, view).setOnViewDrawings(onViewDrawings).setRow(i);
 
             if (super.getCount() > i)
                 adapter.bind(getList().get(i));
@@ -186,12 +186,12 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
 
     private Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings = new Hashtable<>();
 
-    public BindingItemAdapter addOnViewDrawing(String name , CustomBindingAdapter.OnViewDrawing onViewDrawing) {
+    public <T> BindingItemAdapter addOnViewDrawing(String name , CustomBindingAdapter.OnViewDrawing<T> onViewDrawing) {
         onViewDrawings.put(name,onViewDrawing);
         return  this;
     }
 
-    public CustomBindingAdapter.OnViewDrawing getOnViewDrawing(String name) {
+    public <T> CustomBindingAdapter.OnViewDrawing<T> getOnViewDrawing(String name) {
         return onViewDrawings.get(name);
     }
 

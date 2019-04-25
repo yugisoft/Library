@@ -296,63 +296,67 @@ public void showDialog(String title, int witdh, int height) {
 IL_Dialog listDialog = null;
 BindingGridView bindingGridView = null;
 
-        public BindingGridView showListDialog(String title) {
-        if (listDialog == null)
-                listDialog = new IL_Dialog(getContext());
-                listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
+        public BindingGridView showListDialog(String title) { return  showListDialog(title,R.layout.view_item_looper); }
 
-                listDialog.btn_confirm.setVisibility(View.GONE);
+        public BindingGridView showListFullDialog(String title) { return showListFullDialog(title,R.layout.view_item_looper); }
+
+        public BindingGridView showListDialog(String title,int id) {
+        if (listDialog == null)
+            listDialog = new IL_Dialog(getContext());
+        listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
+
+        listDialog.btn_confirm.setVisibility(View.GONE);
 
         if (bindingGridView == null)
-                bindingGridView = new BindingGridView(getContext());
+            bindingGridView = new BindingGridView(getContext());
         bindingGridView.setDetailViewID(getDetailViewID());
         bindingGridView.setData(getList());
 
         bindingGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if (getOnItemLooperSelected() != null)
-                                getOnItemLooperSelected().onSelected(position,getList().get(position));
-                        listDialog.dismiss();
-                }
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (getOnItemLooperSelected() != null)
+                    getOnItemLooperSelected().onSelected(position,getList().get(position));
+                listDialog.dismiss();
+            }
         });
 
-                listDialog.bar_loop.removeAllViews();
-                listDialog.bar_loop.addView(bindingGridView);
+        listDialog.bar_loop.removeAllViews();
+        listDialog.bar_loop.addView(bindingGridView);
 
-                listDialog.txt_dialog_title.setText(title);
-                listDialog.show();
+        listDialog.txt_dialog_title.setText(title);
+        listDialog.show();
         return bindingGridView;
-}
+    }
 
-        public BindingGridView showListFullDialog(String title) {
-                if (listDialog == null)
-                        listDialog = new IL_Dialog(getContext());
-                        listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-                        listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
-            listDialog.btn_confirm.setVisibility(View.GONE);
-                if (bindingGridView == null)
-                        bindingGridView = new BindingGridView(getContext());
-                bindingGridView.setDetailViewID(getDetailViewID());
-                bindingGridView.setData(getList());
+        public BindingGridView showListFullDialog(String title,int id) {
+        if (listDialog == null)
+            listDialog = new IL_Dialog(getContext());
+        listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
+        listDialog.btn_confirm.setVisibility(View.GONE);
+        if (bindingGridView == null)
+            bindingGridView = new BindingGridView(getContext());
+        bindingGridView.setDetailViewID(getDetailViewID());
+        bindingGridView.setData(getList());
 
-                bindingGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                if (getOnItemLooperSelected() != null)
-                                        getOnItemLooperSelected().onSelected(position,getList().get(position));
-                            listDialog.dismiss();
-                        }
-                });
+        bindingGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (getOnItemLooperSelected() != null)
+                    getOnItemLooperSelected().onSelected(position,getList().get(position));
+                listDialog.dismiss();
+            }
+        });
 
-                listDialog.bar_loop.removeAllViews();
-                listDialog.bar_loop.addView(bindingGridView);
+        listDialog.bar_loop.removeAllViews();
+        listDialog.bar_loop.addView(bindingGridView);
 
-                listDialog.txt_dialog_title.setText(title);
-                listDialog.show();
-                return bindingGridView;
-        }
+        listDialog.txt_dialog_title.setText(title);
+        listDialog.show();
+        return bindingGridView;
+    }
 
         public int getDetailViewID() {
                 return detailViewID;
@@ -429,7 +433,12 @@ public IL_Dialog() {
 public IL_Dialog(Context context) {
         super(context, R.layout.view_item_looper);
 }
-
+     public IL_Dialog(int id) {
+         super(yugi.activity, id);
+     }
+     public IL_Dialog(Context context,int id) {
+         super(context, id);
+     }
 //region DECLARE
 
 public TextView txt_dialog_title;

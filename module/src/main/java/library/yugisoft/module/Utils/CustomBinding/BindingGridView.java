@@ -203,13 +203,13 @@ public class BindingGridView extends GridView
 
     private Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings = new Hashtable<>();
 
-    public BindingGridView addOnViewDrawing(String name , CustomBindingAdapter.OnViewDrawing onViewDrawing) {
+    public <T> BindingGridView addOnViewDrawing(String name , CustomBindingAdapter.OnViewDrawing<T> onViewDrawing) {
         onViewDrawings.put(name,onViewDrawing);
         setAdapter(getAdapter());
         return  this;
     }
 
-    public CustomBindingAdapter.OnViewDrawing getOnViewDrawing(String name) {
+    public <T> CustomBindingAdapter.OnViewDrawing<T> getOnViewDrawing(String name) {
         return onViewDrawings.get(name);
     }
 
@@ -227,17 +227,17 @@ public class BindingGridView extends GridView
 
     private OnRowDrawing onRowDrawing;
 
-    public OnRowDrawing getOnRowDrawing() {
+    public <T> OnRowDrawing<T> getOnRowDrawing() {
         return onRowDrawing;
     }
 
-    public void setOnRowDrawing(OnRowDrawing onRowDrawing) {
+    public <T> void setOnRowDrawing(OnRowDrawing<T> onRowDrawing) {
         this.onRowDrawing = onRowDrawing;
         setAdapter(getAdapter());
     }
 
-    public interface OnRowDrawing {
-        void onDraw(int index,View view,Object item);
+    public interface OnRowDrawing<T> {
+        void onDraw(int index,View view,T item);
     }
 
 }
