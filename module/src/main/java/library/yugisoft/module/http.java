@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -843,52 +845,22 @@ public class http
 
         public void GET(String url)
         {
-            try {
-                url = URLEncoder.encode(url, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            Execute(new HttpGet(url.replace(" ", "")));
+            Execute(new HttpGet(UrlFormatter(url)));
         }
         public void DELETE(String url) {
-            try {
-                url = URLEncoder.encode(url, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            Execute(new HttpDelete(url.replace(" ", "")));
+            Execute(new HttpDelete(UrlFormatter(url)));
         }
         public void HEAD(String url) {
-            try {
-                url = URLEncoder.encode(url, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            Execute(new HttpHead(url.replace(" ", "")));
+            Execute(new HttpHead(UrlFormatter(url)));
         }
         public void OPTIONS(String url) {
-            try {
-                url = URLEncoder.encode(url, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            Execute(new HttpOptions(url.replace(" ", "")));
+             Execute(new HttpOptions(UrlFormatter(url)));
         }
         public void POST(String url) {
-            try {
-                url = URLEncoder.encode(url, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            Execute(new HttpPost(url.replace(" ", "")));
+             Execute(new HttpPost(UrlFormatter(url)));
         }
         public void PUT(String url) {
-            try {
-                url = URLEncoder.encode(url, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            Execute(new HttpPut(url.replace(" ", "")));
+              Execute(new HttpPut(UrlFormatter(url)));
         }
 
         public <T> Request JsonTo(INTERFACES.OnResponse<T> listener, Class cl) {
@@ -965,6 +937,7 @@ public class http
             Headers.DeviceInfo(http);
             Headers.Add(http, headers);
             httpRequest = http;
+
             if (timeOut > 0)
             HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
             this.execute();
@@ -977,6 +950,21 @@ public class http
             super.onPostExecute(response);
             if (onHttpResponse!=null)
                 onHttpResponse.onResponse(response);
+        }
+
+        public static String UrlFormatter(String url)
+        {
+           try
+           {
+               URL urll= new URL(url);
+               URI uri = new URI(urll.getProtocol(), urll.getUserInfo(), urll.getHost(), urll.getPort(), urll.getPath(), urll.getQuery(), urll.getRef());
+               return uri.toString();
+           }
+           catch (Exception ex)
+           {
+               return  url;
+           }
+
         }
     }
 
