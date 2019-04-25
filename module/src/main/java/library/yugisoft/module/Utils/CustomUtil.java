@@ -1,20 +1,16 @@
 package library.yugisoft.module.Utils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import library.yugisoft.module.*;
+import library.yugisoft.module.Utils.CustomBinding.*;
 
-import library.yugisoft.module.DateTime;
-import library.yugisoft.module.Utils.CustomBinding.BindingBoolean;
-import library.yugisoft.module.Utils.CustomBinding.BindingDateTime;
-import library.yugisoft.module.Utils.CustomBinding.IBindableModel;
-import library.yugisoft.module.vList;
-import library.yugisoft.module.yugi;
 
 public class CustomUtil
 {
-    public static Field getField(Object ob, String fieldName) {
+
+    public static Field getField(Object ob,String fieldName) {
         Field field = null;
         try
         {
@@ -33,7 +29,7 @@ public class CustomUtil
 
         return field;
     }
-    public static Object getValue(Object ob, String fieldName) {
+    public static Object getValue(Object ob,String fieldName) {
         try
         {
             Field field =  getField(ob,fieldName);
@@ -44,6 +40,12 @@ public class CustomUtil
                 Object pValue = field.get(ob);
                 if (typeClass.equals(Integer.class) ||typeClass.equals(int.class))
                 {
+                    if (field.isAnnotationPresent(BindingImage.class))
+                    {
+                        int ret = field.getAnnotation(BindingImage.class).defaultResource();
+                        if (parse.toInt(pValue) == 0 && ret > 0)
+                            return  ret;
+                    }
                     return yugi.NF(pValue,0);
                 }
 
@@ -101,6 +103,16 @@ public class CustomUtil
                 {
                     return  ((IBindableModel)pValue).getValue(fieldName);
                 }
+                else if (typeClass.equals(String.class))
+                {
+                    if (field.isAnnotationPresent(BindingImage.class))
+                    {
+                        String ret = field.getAnnotation(BindingImage.class).defaultUrl();
+                        if (String.valueOf(pValue).length() ==0 && ret.length() > 0)
+                            return  ret;
+                    }
+                    return pValue;
+                }
                 else
                 {
                     return pValue;
@@ -126,5 +138,40 @@ public class CustomUtil
         catch (Exception ignored){}
 
         return list;
+    }
+
+
+    public static BindProperty getFieldProperty(Object ob, String fieldName)
+    {
+        return getFieldProperty(getField(ob,fieldName));
+    }
+    public static BindProperty getFieldProperty(Field field)
+    {
+        if (field.isAnnotationPresent(BindProperty.class))
+            return  field.getAnnotation(BindProperty.class);
+        else
+            return new BindProperty()
+            {
+
+                @Override
+                public Class<? extends Annotation> annotationType() {
+                    return null;
+                }
+
+                @Override
+                public boolean isNullSetInvisible() {
+                    return false;
+                }
+
+                @Override
+                public boolean isEmptySetInvisible() {
+                    return false;
+                }
+
+                @Override
+                public String DisplayIdName() {
+                    return "";
+                }
+            };
     }
 }

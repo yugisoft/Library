@@ -1,11 +1,16 @@
 package library.yugisoft.module.Utils.CustomBinding;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.lang.reflect.Field;
 import java.util.Hashtable;
@@ -18,6 +23,8 @@ public class CustomBindingAdapter
 {
     private String idTag = "v";
     private Context context;
+    private View layoutController;
+    private int row = -1;
 
     public Context getContext() {
         return context;
@@ -51,7 +58,8 @@ public class CustomBindingAdapter
                 IDs = new Hashtable<>();
                 for (Field field : CustomUtil.getFields(bindingObject))
                 {
-                    int ID = context.getResources().getIdentifier("v" + field.getName(), "id", context.getPackageName());
+                    BindProperty property = CustomUtil.getFieldProperty(field);
+                    int ID = context.getResources().getIdentifier(property.DisplayIdName().length()> 0 ? property.DisplayIdName() : ("v" +  field.getName()), "id", context.getPackageName());
                     View itemView = bindingView.findViewById(ID);
                     if (itemView != null) {
                         IDs.put(ID,field.getName());
@@ -74,7 +82,7 @@ public class CustomBindingAdapter
         this(context);
         setBindingViewID(bindingViewID);
     }
-    public CustomBindingAdapter(Context context, int bindingViewID, Object bindingObject) {
+    public CustomBindingAdapter(Context context, int bindingViewID,Object bindingObject) {
         this(context);
         setBindingViewID(bindingViewID);
         setBindingObject(bindingObject);
@@ -83,7 +91,7 @@ public class CustomBindingAdapter
         this(context);
         setBindingView(bindingView);
     }
-    public CustomBindingAdapter(Context context, View bindingView, Object bindingObject) {
+    public CustomBindingAdapter(Context context, View bindingView,Object bindingObject) {
         this(context);
         setBindingView(bindingView);
         setBindingObject(bindingObject);
@@ -93,7 +101,7 @@ public class CustomBindingAdapter
     {
         this(yugi.activity,bindingViewID);
     }
-    public CustomBindingAdapter(int bindingViewID, Object bindingObject) {
+    public CustomBindingAdapter(int bindingViewID,Object bindingObject) {
         this(yugi.activity,bindingViewID,bindingObject);
     }
 
@@ -101,13 +109,28 @@ public class CustomBindingAdapter
     {
         this(yugi.activity,bindingView);
     }
-    public CustomBindingAdapter(View bindingView, Object bindingObject) {
+    public CustomBindingAdapter(View bindingView,Object bindingObject) {
         this(yugi.activity,bindingView,bindingObject);
     }
 
     Hashtable<Integer, String> IDs;
 
-    void setViewValue(View view) {
+    void setViewValue(View view,String fieldName)
+    {
+        BindProperty property = CustomUtil.getFieldProperty(getBindingObject(), fieldName);
+        if (getLayoutController()!=null)
+        {
+            View layoutView = getLayoutController().findViewById(view.getId());
+            if (layoutView!= null)
+            {
+                new Handler().postDelayed(()->
+                {
+                    view.getLayoutParams().width = layoutView.getWidth();
+                },500);
+                //view.getLayoutParams().height = layoutView.getHeight();
+            }
+
+        }
         Object pValue = null;
         if (getBindingObject() != null)
             pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(IDs.get(view.getId())):CustomUtil.getValue(getBindingObject(),IDs.get(view.getId()));
@@ -116,19 +139,42 @@ public class CustomBindingAdapter
         if (view instanceof TextView)
         {
             TextView tView = (TextView)view;
-
             String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
             if (format.length()>0)
             {
                 try{sValue = parse.Formatter.purify(format,getBindingObject());}catch (Exception ignored){}
             }
             tView.setText(sValue);
+
+            if (tView.getText().length() == 0 && property.isEmptySetInvisible())
+                tView.setVisibility(View.GONE);
+            else
+                tView.setVisibility(View.VISIBLE);
+
         }
         else if (view instanceof ImageView)
         {
             if (pValue != null) {
                 ImageView iView = (ImageView) view;
-                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, null);
+                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) { }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        iView.setImageDrawable(null);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        iView.setImageDrawable(null);
+                    }
+                });
             }
         }
         else if (view instanceof Checkable)
@@ -136,6 +182,10 @@ public class CustomBindingAdapter
             Checkable cView = (Checkable) view;
             cView.setChecked(parse.toBoolean(pValue));
         }
+
+        if (onViewDrawings.get(fieldName) != null)
+            onViewDrawings.get(fieldName).onDraw(getRow(),view,fieldName);
+
 
     }
 
@@ -151,10 +201,58 @@ public class CustomBindingAdapter
         {
             for (int id: IDs.keySet())
             {
-                setViewValue(getBindingView().findViewById(id));
+                setViewValue(getBindingView().findViewById(id),IDs.get(id));
             }
         }
     }
 
 
+    public void setLayoutController(View layoutController) {
+        this.layoutController = layoutController;
+    }
+
+    public View getLayoutController() {
+        return layoutController;
+    }
+
+
+    private Hashtable<String, OnViewDrawing> onViewDrawings = new Hashtable<>();
+
+    public CustomBindingAdapter addOnViewDrawing (String name , OnViewDrawing onViewDrawing) {
+        onViewDrawings.put(name,onViewDrawing);
+        return  this;
+    }
+
+    public OnViewDrawing getOnViewDrawing(String name)
+    {
+        return onViewDrawings.get(name);
+    }
+
+    public void RemoveOnViewDrawing(String name)
+    {
+        onViewDrawings.remove(name);
+    }
+
+    public void setOnViewDrawing(Hashtable<String, OnViewDrawing> onViewDrawings) {
+        this.onViewDrawings = onViewDrawings;
+    }
+
+    public CustomBindingAdapter setOnViewDrawings(Hashtable<String, OnViewDrawing> onViewDrawings) {
+        this.onViewDrawings = onViewDrawings;
+        return this;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public CustomBindingAdapter setRow(int row) {
+        this.row = row;
+        return  this;
+    }
+
+    public interface OnViewDrawing
+    {
+        void onDraw(int index,View view,String fieldName);
+    }
 }

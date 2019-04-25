@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -840,22 +841,53 @@ public class http
             return  this;
         }
 
-        public void GET(String url)  {
+        public void GET(String url)
+        {
+            try {
+                url = URLEncoder.encode(url, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             Execute(new HttpGet(url.replace(" ", "")));
         }
         public void DELETE(String url) {
+            try {
+                url = URLEncoder.encode(url, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             Execute(new HttpDelete(url.replace(" ", "")));
         }
         public void HEAD(String url) {
+            try {
+                url = URLEncoder.encode(url, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             Execute(new HttpHead(url.replace(" ", "")));
         }
         public void OPTIONS(String url) {
+            try {
+                url = URLEncoder.encode(url, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             Execute(new HttpOptions(url.replace(" ", "")));
         }
         public void POST(String url) {
+            try {
+                url = URLEncoder.encode(url, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             Execute(new HttpPost(url.replace(" ", "")));
         }
         public void PUT(String url) {
+            try {
+                url = URLEncoder.encode(url, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             Execute(new HttpPut(url.replace(" ", "")));
         }
 

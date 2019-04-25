@@ -42,6 +42,7 @@ public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapt
     public ItemAdapter(Context context, int id) {
         this(context);
         contentView=id;
+        if (id>0)
         view = layoutInflater.inflate(id,null);
     }
     public ItemAdapter(Context context, View view) {

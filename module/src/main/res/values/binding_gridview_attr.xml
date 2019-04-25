@@ -6,6 +6,8 @@
     <attr name="emtyParentID" format="reference" />
     <attr name="emptyRowCount" format="integer|reference" />
     <attr name="showDivider" format="boolean" />
+    <attr name="rowColors"  format="boolean" />
+    <attr name="autoHeightOnChild" format="boolean" />
 
     <declare-styleable name="BindingGridView">
         <attr name="detailViewID" />
@@ -13,6 +15,8 @@
         <attr name="emtyParentID"  />
         <attr name="emptyRowCount" />
         <attr name="showDivider"  />
+        <attr name="autoHeightOnChild"  />
+        <attr name="rowColors"  />
     </declare-styleable>
 
 </resources>
