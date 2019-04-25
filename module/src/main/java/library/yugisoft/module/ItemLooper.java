@@ -299,7 +299,7 @@ BindingGridView bindingGridView = null;
         public BindingGridView showListDialog(String title) {
         if (listDialog == null)
                 listDialog = new IL_Dialog(getContext());
-        else
+                listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
 
         if (bindingGridView == null)
@@ -326,7 +326,7 @@ BindingGridView bindingGridView = null;
         public BindingGridView showListFullDialog(String title) {
                 if (listDialog == null)
                         listDialog = new IL_Dialog(getContext());
-                else
+                        listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
                         listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
 
                 if (bindingGridView == null)
