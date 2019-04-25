@@ -302,6 +302,8 @@ BindingGridView bindingGridView = null;
                 listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
 
+                listDialog.btn_confirm.setVisibility(View.GONE);
+
         if (bindingGridView == null)
                 bindingGridView = new BindingGridView(getContext());
         bindingGridView.setDetailViewID(getDetailViewID());
@@ -328,7 +330,7 @@ BindingGridView bindingGridView = null;
                         listDialog = new IL_Dialog(getContext());
                         listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
                         listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
-
+            listDialog.btn_confirm.setVisibility(View.GONE);
                 if (bindingGridView == null)
                         bindingGridView = new BindingGridView(getContext());
                 bindingGridView.setDetailViewID(getDetailViewID());
