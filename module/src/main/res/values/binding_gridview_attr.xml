@@ -8,6 +8,8 @@
     <attr name="showDivider" format="boolean" />
     <attr name="rowColors"  format="boolean" />
     <attr name="autoHeightOnChild" format="boolean" />
+    <attr name="emptyRowWithDetailView" format="boolean" />
+
 
     <declare-styleable name="BindingGridView">
         <attr name="detailViewID" />
@@ -17,6 +19,7 @@
         <attr name="showDivider"  />
         <attr name="autoHeightOnChild"  />
         <attr name="rowColors"  />
+        <attr name="emptyRowWithDetailView" />
     </declare-styleable>
 
 </resources>

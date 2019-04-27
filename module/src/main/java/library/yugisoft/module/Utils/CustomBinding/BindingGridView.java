@@ -21,6 +21,8 @@ public class BindingGridView extends GridView
     private boolean autoHeightOnChild;
     private int heightRow = 0;
     private boolean rowColors;
+    private boolean emptyRowWithDetailView;
+
     //region Constructor
     public BindingGridView(Context context) {
         this(context, null, 0);
@@ -40,6 +42,7 @@ public class BindingGridView extends GridView
             setShowDevider(a.getBoolean(R.styleable.BindingGridView_showDivider,true));
             setAutoHeightOnChild(a.getBoolean(R.styleable.BindingGridView_autoHeightOnChild,false));
             setRowColors(a.getBoolean(R.styleable.BindingGridView_rowColors,false));
+            setEmptyRowWithDetailView(a.getBoolean(R.styleable.BindingGridView_emptyRowWithDetailView,false));
         }
 
         adapter = new BindingItemAdapter(getContext(),getDetailViewID());
@@ -109,6 +112,8 @@ public class BindingGridView extends GridView
                 AutoHeightOnChildControl();
             });
             adapter.setOnViewDrawing(onViewDrawings);
+            adapter.setOnRowDrawing(getOnRowDrawing());
+            adapter.setEmptyRowWithDetailView(isEmptyRowWithDetailView());
         }
         return this;
     }
@@ -236,8 +241,19 @@ public class BindingGridView extends GridView
         setAdapter(getAdapter());
     }
 
-    public interface OnRowDrawing<T> {
-        void onDraw(int index,View view,T item);
+    public interface OnRowDrawing<T>
+    {
+        default void onDraw(int index,View view,T item) {}
+        default void onDraw(int index,View view,T item,List<View> views) {}
+    }
+
+    public boolean isEmptyRowWithDetailView() {
+        return emptyRowWithDetailView;
+    }
+
+    public void setEmptyRowWithDetailView(boolean emptyRowWithDetailView) {
+        this.emptyRowWithDetailView = emptyRowWithDetailView;
+        setAdapter(getAdapter());
     }
 
 }

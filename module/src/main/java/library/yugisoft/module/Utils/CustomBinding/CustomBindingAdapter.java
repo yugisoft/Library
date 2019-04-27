@@ -13,7 +13,9 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import library.yugisoft.module.Utils.CustomUtil;
 import library.yugisoft.module.parse;
@@ -190,6 +192,7 @@ public class CustomBindingAdapter
     }
 
 
+    List<View> viewList;
     public void bind()
     {
         bind(getBindingObject());
@@ -199,9 +202,16 @@ public class CustomBindingAdapter
         setBindingObject(bindingObject);
         if (bindingObject != null)
         {
+            viewList = new ArrayList<>();
             for (int id: IDs.keySet())
             {
+                viewList.add(getBindingView().findViewById(id));
                 setViewValue(getBindingView().findViewById(id),IDs.get(id));
+            }
+            if (getOnRowDrawing()!=null)
+            {
+                getOnRowDrawing().onDraw(getRow(),getBindingView(),getBindingObject());
+                getOnRowDrawing().onDraw(getRow(),getBindingView(),getBindingObject(),viewList);
             }
         }
     }
@@ -254,5 +264,23 @@ public class CustomBindingAdapter
     public interface OnViewDrawing<Type>
     {
         void onDraw(int index,View view,String fieldName,Type value);
+    }
+
+    private BindingGridView.OnRowDrawing onRowDrawing;
+
+    public <T> BindingGridView.OnRowDrawing<T> getOnRowDrawing() {
+        return onRowDrawing;
+    }
+
+    public <T> CustomBindingAdapter setOnRowDrawing(BindingGridView.OnRowDrawing<T> onRowDrawing) {
+        this.onRowDrawing = onRowDrawing;
+        return  this;
+
+    }
+
+    public interface OnRowDrawing<T>
+    {
+        default void onDraw(int index,View view,T item) {}
+        default void onDraw(int index,View view,T item,View[] views) {}
     }
 }

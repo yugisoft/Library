@@ -12,4 +12,5 @@ public @interface BindProperty
     public boolean isNullSetInvisible() default false;
     public boolean isEmptySetInvisible() default false;
     public String DisplayIdName() default "";
+ 
 }

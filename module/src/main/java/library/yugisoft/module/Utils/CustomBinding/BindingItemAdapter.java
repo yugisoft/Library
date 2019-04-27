@@ -17,6 +17,7 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
 
     private View layoutController,firstView;
     private boolean rowColors;
+    private boolean emptyRowWithDetailView;
 
     public BindingItemAdapter(int id) {
 
@@ -40,23 +41,31 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
                 layout =(ViewGroup) getLayoutInflater().inflate(getEmptyViewID(),null);
                 if (layout != null)
                     parent = layout.findViewById(getEmtyParentID());
-                adapter = new CustomBindingAdapter(context, contentViewID).setOnViewDrawings(onViewDrawings).setRow(i);
+                adapter = new CustomBindingAdapter(context, contentViewID).setOnViewDrawings(onViewDrawings).setOnRowDrawing(getOnRowDrawing()).setRow(i);
 
                 if (getLayoutController() != null)
                     adapter.setLayoutController(getLayoutController());
 
-                if (parent!= null && isShowDevider())
+                if ((super.getCount() > i) || isEmptyRowWithDetailView())
                 {
-                    parent.addView(adapter.getBindingView());
-                    view = layout;
+                    if (parent!= null && isShowDevider())
+                    {
+                        parent.addView(adapter.getBindingView());
+                        view = layout;
+                    }
+                    else
+                    {
+                        view = adapter.getBindingView();
+                    }
                 }
                 else
                 {
-                    view = adapter.getBindingView();
+                    view = layout;
                 }
+
             }
             else
-                adapter = new CustomBindingAdapter(context, view).setOnViewDrawings(onViewDrawings).setRow(i);
+                adapter = new CustomBindingAdapter(context, view).setOnViewDrawings(onViewDrawings).setOnRowDrawing(getOnRowDrawing()).setRow(i);
 
             if (super.getCount() > i)
                 adapter.bind(getList().get(i));
@@ -202,6 +211,31 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
 
     public void setOnViewDrawing(Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings) {
         this.onViewDrawings = onViewDrawings;
+    }
+
+    private BindingGridView.OnRowDrawing onRowDrawing;
+
+    public <T> BindingGridView.OnRowDrawing<T> getOnRowDrawing() {
+        return onRowDrawing;
+    }
+
+    public <T> void setOnRowDrawing(BindingGridView.OnRowDrawing<T> onRowDrawing) {
+        this.onRowDrawing = onRowDrawing;
+
+    }
+
+    public boolean isEmptyRowWithDetailView() {
+        return emptyRowWithDetailView;
+    }
+
+    public void setEmptyRowWithDetailView(boolean emptyRowWithDetailView) {
+        this.emptyRowWithDetailView = emptyRowWithDetailView;
+    }
+
+    public interface OnRowDrawing<T>
+    {
+        default void onDraw(int index,View view,T item) {}
+        default void onDraw(int index,View view,T item,View[] views) {}
     }
 }
 
