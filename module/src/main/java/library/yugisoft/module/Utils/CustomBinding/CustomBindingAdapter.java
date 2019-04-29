@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Checkable;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,45 +18,64 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import library.yugisoft.module.CurrencyTextView;
+import library.yugisoft.module.DateTextView;
+import library.yugisoft.module.DateTime;
+import library.yugisoft.module.LoopTextView;
+import library.yugisoft.module.PhoneTextEdit;
 import library.yugisoft.module.Utils.CustomUtil;
 import library.yugisoft.module.parse;
 import library.yugisoft.module.yugi;
 
 public class CustomBindingAdapter
 {
+    Hashtable<Integer, Field> IDs;
+    List<View> viewList;
+    private Hashtable<String, OnViewDrawing> onViewDrawings = new Hashtable<>();
+    private BindingGridView.OnRowDrawing onRowDrawing;
+
+    //region Order
     private String idTag = "v";
     private Context context;
     private View layoutController;
     private int row = -1;
+    private int bindingViewID;
+    private View bindingView;
+    private Object bindingObject;
 
     public Context getContext() {
         return context;
     }
-
     public String getIdTag() { return idTag; }
-    public CustomBindingAdapter setIdTag(String idTag) { this.idTag = idTag;  return  this;}
-
-    private int bindingViewID;
     public int getBindingViewID() { return bindingViewID; }
-    public CustomBindingAdapter setBindingViewID(int bindingViewID)
-    {
+    public View getBindingView() { return bindingView; }
+    public Object getBindingObject() { return bindingObject; }
+    public int getRow() {
+        return row;
+    }
+
+    public CustomBindingAdapter setIdTag(String idTag) { this.idTag = idTag;  return  this;}
+    public CustomBindingAdapter setBindingViewID(int bindingViewID) {
         this.bindingViewID = bindingViewID;
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         setBindingView(layoutInflater.inflate(bindingViewID,null));
         return this;
     }
-
-    private View bindingView;
-    public View getBindingView() { return bindingView; }
-    public CustomBindingAdapter setBindingView(View bindingView) { this.bindingView = bindingView;return this; }
-
-    private Object bindingObject;
-    public Object getBindingObject() { return bindingObject; }
+    public CustomBindingAdapter setBindingView(View bindingView) {
+        if (this.bindingView != bindingView)
+        {
+            IDs = null;
+            setBindingObject(getBindingObject());
+        }
+        this.bindingView = bindingView;
+        return this;
+    }
     public CustomBindingAdapter setBindingObject(Object bindingObject) {
-        this.bindingObject = bindingObject;
+
         if (bindingObject != null && getBindingView()!= null )
         {
-
+         if (this.bindingObject ==null || this.bindingObject.getClass() .equals(bindingObject.getClass()))
+             IDs = null;
             if (IDs == null) {
                 IDs = new Hashtable<>();
                 for (Field field : CustomUtil.getFields(bindingObject))
@@ -64,7 +84,7 @@ public class CustomBindingAdapter
                     int ID = context.getResources().getIdentifier(property.DisplayIdName().length()> 0 ? property.DisplayIdName() : ("v" +  field.getName()), "id", context.getPackageName());
                     View itemView = bindingView.findViewById(ID);
                     if (itemView != null) {
-                        IDs.put(ID,field.getName());
+                        IDs.put(ID,field);
                     }
                 }
             }
@@ -73,12 +93,19 @@ public class CustomBindingAdapter
         {
             IDs= null;
         }
+        this.bindingObject = bindingObject;
         return  this;
+    }
+    public CustomBindingAdapter setLayoutController(View layoutController) {
+        this.layoutController = layoutController;
+        return this;
+    }
+    public View getLayoutController() {
+        return layoutController;
     }
 
 
     public CustomBindingAdapter(){this(yugi.activity);}
-
     public CustomBindingAdapter(Context context) { this.context = context; }
     public CustomBindingAdapter(Context context, int bindingViewID) {
         this(context);
@@ -98,6 +125,10 @@ public class CustomBindingAdapter
         setBindingView(bindingView);
         setBindingObject(bindingObject);
     }
+    public CustomBindingAdapter setRow(int row) {
+        this.row = row;
+        return  this;
+    }
 
     public CustomBindingAdapter(int bindingViewID)
     {
@@ -106,7 +137,6 @@ public class CustomBindingAdapter
     public CustomBindingAdapter(int bindingViewID,Object bindingObject) {
         this(yugi.activity,bindingViewID,bindingObject);
     }
-
     public CustomBindingAdapter(View bindingView)
     {
         this(yugi.activity,bindingView);
@@ -115,11 +145,60 @@ public class CustomBindingAdapter
         this(yugi.activity,bindingView,bindingObject);
     }
 
-    Hashtable<Integer, String> IDs;
+    public CustomBindingAdapter setOnViewDrawing(Hashtable<String, OnViewDrawing> onViewDrawings) {
+        this.onViewDrawings = onViewDrawings;
+        return this;
+    }
+    public CustomBindingAdapter setOnViewDrawings(Hashtable<String, OnViewDrawing> onViewDrawings) {
+        this.onViewDrawings = onViewDrawings;
+        return this;
+    }
 
-    void setViewValue(View view,String fieldName)
+    public <T> OnViewDrawing<T> getOnViewDrawing(String name)
     {
-        BindProperty property = CustomUtil.getFieldProperty(getBindingObject(), fieldName);
+        return onViewDrawings.get(name);
+    }
+
+    public <T> CustomBindingAdapter addOnViewDrawing (String name , OnViewDrawing<T> onViewDrawing) {
+        onViewDrawings.put(name,onViewDrawing);
+        return  this;
+    }
+
+    public void RemoveOnViewDrawing(String name)
+    {
+        onViewDrawings.remove(name);
+    }
+
+
+    public interface OnViewDrawing<Type>
+    {
+        void onDraw(int index,View view,String fieldName,Type value);
+    }
+    public interface OnRowDrawing<T>
+    {
+        default void onDraw(int index,View view,T item) {}
+        default void onDraw(int index,View view,T item,View[] views) {}
+    }
+
+
+    public <T> BindingGridView.OnRowDrawing<T> getOnRowDrawing() {
+        return onRowDrawing;
+    }
+
+    public <T> CustomBindingAdapter setOnRowDrawing(BindingGridView.OnRowDrawing<T> onRowDrawing) {
+        this.onRowDrawing = onRowDrawing;
+        return  this;
+
+    }
+
+    //endregion
+
+
+
+    void setViewValue(View view,Field field)
+    {
+        String fieldName = field.getName();
+        BindProperty property = CustomUtil.getFieldProperty(field);
         if (getLayoutController()!=null)
         {
             View layoutView = getLayoutController().findViewById(view.getId());
@@ -135,7 +214,7 @@ public class CustomBindingAdapter
         }
         Object pValue = null;
         if (getBindingObject() != null)
-            pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(IDs.get(view.getId())):CustomUtil.getValue(getBindingObject(),IDs.get(view.getId()));
+            pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(fieldName):CustomUtil.getValue(getBindingObject(),fieldName);
         String sValue = pValue ==null ? "" : String.valueOf(pValue);
 
         if (view instanceof TextView)
@@ -184,21 +263,21 @@ public class CustomBindingAdapter
             Checkable cView = (Checkable) view;
             cView.setChecked(parse.toBoolean(pValue));
         }
-
+        else if (view instanceof CurrencyTextView)
+        {
+            ((CurrencyTextView)view).setTutar(parse.toDouble(pValue));
+        }
         if (onViewDrawings.get(fieldName) != null)
             onViewDrawings.get(fieldName).onDraw(getRow(),view,fieldName,pValue);
 
 
     }
 
-
-    List<View> viewList;
     public void bind()
     {
         bind(getBindingObject());
     }
-    public void bind(Object bindingObject)
-    {
+    public void bind(Object bindingObject) {
         setBindingObject(bindingObject);
         if (bindingObject != null)
         {
@@ -215,72 +294,79 @@ public class CustomBindingAdapter
             }
         }
     }
-
-
-    public void setLayoutController(View layoutController) {
-        this.layoutController = layoutController;
-    }
-
-    public View getLayoutController() {
-        return layoutController;
-    }
-
-
-    private Hashtable<String, OnViewDrawing> onViewDrawings = new Hashtable<>();
-
-    public <T> CustomBindingAdapter addOnViewDrawing (String name , OnViewDrawing<T> onViewDrawing) {
-        onViewDrawings.put(name,onViewDrawing);
-        return  this;
-    }
-
-    public <T> OnViewDrawing<T> getOnViewDrawing(String name)
+    public void reverse()
     {
-        return onViewDrawings.get(name);
+        reverse(getBindingView());
     }
 
-    public void RemoveOnViewDrawing(String name)
+    public void reverse(View view) {
+        setBindingView(view);
+        if (getBindingObject() != null)
+        {
+            viewList = new ArrayList<>();
+            for (int id: IDs.keySet())
+            {
+                setFieldValue(getBindingView().findViewById(id),IDs.get(id));
+            }
+        }
+    }
+
+    private void setFieldValue(View view, Field field)
     {
-        onViewDrawings.remove(name);
+        field.setAccessible(true);
+        if (field.isAnnotationPresent(BindingReverseable.class))
+        {
+            Object value = null;
+            if (view instanceof PhoneTextEdit)
+                value = ((PhoneTextEdit) view).toString();
+            else if (view instanceof EditText)
+                value = ((EditText) view).getText().toString();
+            else if (view instanceof CurrencyTextView)
+                value = ((CurrencyTextView)view).Tutar;
+            else if (view instanceof DateTextView)
+                value = ((DateTextView) view).getDateTime();
+            else if (view instanceof LoopTextView) {
+                Object obj = ((LoopTextView) view).getSelectedObject();
+                if (obj != null) {
+                    if (obj.getClass().isAnnotationPresent(BindingItemLooper.class)) {
+                        String fn = obj.getClass().getAnnotation(BindingItemLooper.class).IdFieldName();
+                        obj = CustomUtil.getValue(obj, fn);
+                    } else
+                        value = obj;
+                }
+            } else if (view instanceof TextView)
+                value = ((TextView) view).getText().toString();
+            else if (view instanceof Checkable)
+                value = ((Checkable) view).isChecked();
+            field.setAccessible(false);
+            setFieldValue(field, value);
+        }
     }
-
-    public void setOnViewDrawing(Hashtable<String, OnViewDrawing> onViewDrawings) {
-        this.onViewDrawings = onViewDrawings;
-    }
-
-    public CustomBindingAdapter setOnViewDrawings(Hashtable<String, OnViewDrawing> onViewDrawings) {
-        this.onViewDrawings = onViewDrawings;
-        return this;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public CustomBindingAdapter setRow(int row) {
-        this.row = row;
-        return  this;
-    }
-
-    public interface OnViewDrawing<Type>
+    private void setFieldValue(Field f,Object value)
     {
-        void onDraw(int index,View view,String fieldName,Type value);
+        try
+        {
+            f.setAccessible(true);
+            Class<?> clazz = f.getType();
+
+            if (clazz.equals(Integer.class) || clazz.equals(int.class))
+                f.setInt(getBindingObject(), parse.toInt(value));
+             else if (clazz.equals(Long.class) || clazz.equals(long.class))
+                f.setLong(getBindingObject(), parse.toLong(value));
+             else if (clazz.equals(Double.class) || clazz.equals(double.class))
+                f.setDouble(getBindingObject(), parse.toDouble(value));
+            else if (clazz.equals(Boolean.class) || clazz.equals(boolean.class))
+                f.setBoolean(getBindingObject(), parse.toBoolean(value));
+            else if (clazz.equals(DateTime.class) )
+                f.set(getBindingObject(),value);
+            else
+                f.set(getBindingObject(),value);
+
+        }
+        catch (Exception ex){}
+        finally {
+            f.setAccessible(false);
+        }
     }
 
-    private BindingGridView.OnRowDrawing onRowDrawing;
-
-    public <T> BindingGridView.OnRowDrawing<T> getOnRowDrawing() {
-        return onRowDrawing;
-    }
-
-    public <T> CustomBindingAdapter setOnRowDrawing(BindingGridView.OnRowDrawing<T> onRowDrawing) {
-        this.onRowDrawing = onRowDrawing;
-        return  this;
-
-    }
-
-    public interface OnRowDrawing<T>
-    {
-        default void onDraw(int index,View view,T item) {}
-        default void onDraw(int index,View view,T item,View[] views) {}
-    }
 }

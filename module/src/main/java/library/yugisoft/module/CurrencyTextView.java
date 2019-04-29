@@ -18,7 +18,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
 
 
 
-    DLG_Numpad numpad;
+    public DLG_Numpad numpad;
     public Double Tutar=0.0;
     public String Currency ="";
 
