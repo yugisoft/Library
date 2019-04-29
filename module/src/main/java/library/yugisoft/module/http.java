@@ -156,6 +156,7 @@ public class http
         }
     }
 
+    @Deprecated
     public static Response GET(String url, Hashtable headers) {
         Response response = null;
         HttpGet httpGet = new HttpGet(url);
@@ -168,6 +169,7 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
+    @Deprecated
     public static Response DELETE(String url, Hashtable headers) {
         Response response = null;
         HttpDelete httpDelete = new HttpDelete(url);
@@ -180,6 +182,7 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
+    @Deprecated
     public static Response POST(String url,Hashtable body,Hashtable headers) {
         Response response = null;
         HttpPost httpPost = new HttpPost(url);
@@ -206,6 +209,7 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
+    @Deprecated
     public static Response POST(String url,String body,Hashtable headers) {
         Response response = null;
         HttpPost httpPost = new HttpPost(url);
@@ -234,6 +238,7 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
+    @Deprecated
     public static Response PUT(String url,Hashtable body,Hashtable headers) {
         Response response = null;
         HttpPut httpPut = new HttpPut(url);
@@ -261,6 +266,7 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
+    @Deprecated
     public static Response PUT(String url,String body,Hashtable headers) {
         Response response = null;
         HttpPut httpPut = new HttpPut(url);
@@ -289,6 +295,7 @@ public class http
         yugi.TempHttpHeader = null;
         return response;
     }
+
     private static Response httpExecute(HttpRequestBase httpGet,String log) {
         String LOG ="httpExecuteResponse \n";
         Response response =null;
@@ -307,6 +314,7 @@ public class http
             LOG+= "HttpURL : "+httpGet.getURI().toURL()+"\n";
             LOG+=log+"\n";
             LOG+= "HttpReponseStatusCode : "+st.getStatusCode()+"\n";
+
             //if (!response.isException || st.getStatusCode() == 400) { try { } catch (Exception Ex) { } }
             if (st.getStatusCode() != 204)
             {
@@ -338,7 +346,6 @@ public class http
         yugi.Print("I", "httpExecuteResponse", LOG);
         return  response;
     }
-
 
     public interface OnAuthenticationFailed {
         void onFailed(Response response,String url);
@@ -418,7 +425,7 @@ public class http
     }
     //endregion
 
-
+    @Deprecated
     public static class httpGET extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
@@ -452,6 +459,7 @@ public class http
                 onHttpResponse.onResponse(response);
         }
     }
+    @Deprecated
     public static class httpGETTable extends AsyncTask<String,Void,DataTable> {
 
         OnHttpResponseTable onHttpResponseTable = null;
@@ -485,6 +493,7 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
+    @Deprecated
     public static class httpDELETE extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
@@ -518,6 +527,7 @@ public class http
                 onHttpResponse.onResponse(response);
         }
     }
+    @Deprecated
     public static class httpDELETETable extends AsyncTask<String,Void,DataTable> {
 
         OnHttpResponseTable onHttpResponseTable = null;
@@ -549,6 +559,7 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
+    @Deprecated
     public static class httpPOST extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
@@ -603,6 +614,7 @@ public class http
                 onHttpResponse.onResponse(response);
         }
     }
+    @Deprecated
     public static class httpPOSTTable extends AsyncTask<String,Void,DataTable> {
 
         OnHttpResponseTable onHttpResponseTable = null;
@@ -657,6 +669,7 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
+    @Deprecated
     public static class httpPUT extends AsyncTask<String,Void,Response> {
 
         OnHttpResponse onHttpResponse = null;
@@ -711,6 +724,7 @@ public class http
                 onHttpResponse.onResponse(response);
         }
     }
+    @Deprecated
     public static class httpPUTTable extends AsyncTask<String,Void,DataTable> {
 
         OnHttpResponseTable onHttpResponseTable = null;
@@ -765,6 +779,7 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
+
 
     public static class Request extends AsyncTask<String,Void,Response> {
         private OnHttpResponse onHttpResponse = null;
@@ -919,6 +934,7 @@ public class http
             else
             {
                 Headers.json(http);
+                Log += "\n"+sbody.replace("{","\n{").replace("}","\n}");
                 Bodys.Add(http,sbody);
             }
 
