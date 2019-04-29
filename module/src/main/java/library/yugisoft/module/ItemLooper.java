@@ -409,6 +409,7 @@ public IL_ListPopup(Context context, ItemLooper<T> looper) {
      tview.setText(item instanceof IItemLooper ? ((IItemLooper) item).toLooperString() : item.toString());
      tview.setTextColor(looper.getTextColor());
      tview.setBackgroundColor(looper.getBackColor());
+     tview.setPadding(5,5,5,5);
      view = tview;
       } else {
      TextView tview = (TextView) view;
