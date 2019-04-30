@@ -81,7 +81,7 @@ public class CustomBindingAdapter
                 for (Field field : CustomUtil.getFields(bindingObject))
                 {
                     BindProperty property = CustomUtil.getFieldProperty(field);
-                    int ID = context.getResources().getIdentifier(property.DisplayIdName().length()> 0 ? property.DisplayIdName() : ("v" +  field.getName()), "id", context.getPackageName());
+                    int ID = context.getResources().getIdentifier(property.DisplayIdName().length()> 0 ? property.DisplayIdName() : (getIdTag() +  field.getName()), "id", context.getPackageName());
                     View itemView = bindingView.findViewById(ID);
                     if (itemView != null) {
                         IDs.put(ID,field);
