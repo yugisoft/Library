@@ -80,12 +80,15 @@ public class CustomBindingAdapter
                 IDs = new Hashtable<>();
                 for (Field field : CustomUtil.getFields(bindingObject))
                 {
+                    field.setAccessible(true);
                     BindProperty property = CustomUtil.getFieldProperty(field);
-                    int ID = context.getResources().getIdentifier(property.DisplayIdName().length()> 0 ? property.DisplayIdName() : (getIdTag() +  field.getName()), "id", context.getPackageName());
+                    String viewIdName = property.DisplayIdName().length()> 0 ? property.DisplayIdName() : (getIdTag() +  field.getName());
+                    int ID = context.getResources().getIdentifier(viewIdName, "id", context.getPackageName());
                     View itemView = bindingView.findViewById(ID);
                     if (itemView != null) {
                         IDs.put(ID,field);
                     }
+                    field.setAccessible(false);
                 }
             }
         }
