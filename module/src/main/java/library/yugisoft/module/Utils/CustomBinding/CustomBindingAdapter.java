@@ -32,7 +32,7 @@ public class CustomBindingAdapter
     Hashtable<Integer, Field> IDs;
     List<View> viewList;
     private Hashtable<String, OnViewDrawing> onViewDrawings = new Hashtable<>();
-    private BindingGridView.OnRowDrawing onRowDrawing;
+    private OnRowDrawing onRowDrawing;
 
     //region Order
     private String idTag = "v";
@@ -177,29 +177,21 @@ public class CustomBindingAdapter
     {
         void onDraw(int index,View view,String fieldName,Type value);
     }
-    public interface OnRowDrawing<T>
-    {
-        default void onDraw(int index,View view,T item) {}
-        default void onDraw(int index,View view,T item,View[] views) {}
-    }
 
 
-    public <T> BindingGridView.OnRowDrawing<T> getOnRowDrawing() {
+
+    public <T> OnRowDrawing<T> getOnRowDrawing() {
         return onRowDrawing;
     }
 
-    public <T> CustomBindingAdapter setOnRowDrawing(BindingGridView.OnRowDrawing<T> onRowDrawing) {
+    public <T> CustomBindingAdapter setOnRowDrawing(OnRowDrawing<T> onRowDrawing) {
         this.onRowDrawing = onRowDrawing;
         return  this;
 
     }
 
     //endregion
-
-
-
-    void setViewValue(View view,Field field)
-    {
+    void setViewValue(View view,Field field) {
         String fieldName = field.getName();
         BindProperty property = CustomUtil.getFieldProperty(field);
         if (getLayoutController()!=null)
@@ -275,7 +267,6 @@ public class CustomBindingAdapter
 
 
     }
-
     public void bind()
     {
         bind(getBindingObject());
@@ -301,7 +292,6 @@ public class CustomBindingAdapter
     {
         reverse(getBindingView());
     }
-
     public void reverse(View view) {
         setBindingView(view);
         if (getBindingObject() != null)
@@ -313,9 +303,7 @@ public class CustomBindingAdapter
             }
         }
     }
-
-    private void setFieldValue(View view, Field field)
-    {
+    private void setFieldValue(View view, Field field) {
         field.setAccessible(true);
         if (field.isAnnotationPresent(BindingReverseable.class))
         {
@@ -345,8 +333,7 @@ public class CustomBindingAdapter
             setFieldValue(field, value);
         }
     }
-    private void setFieldValue(Field f,Object value)
-    {
+    private void setFieldValue(Field f,Object value) {
         try
         {
             f.setAccessible(true);

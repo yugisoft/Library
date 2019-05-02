@@ -9,6 +9,7 @@
     <attr name="rowColors"  format="boolean" />
     <attr name="autoHeightOnChild" format="boolean" />
     <attr name="emptyRowWithDetailView" format="boolean" />
+    <attr name="selectable" format="boolean" />
 
 
     <declare-styleable name="BindingGridView">
@@ -20,6 +21,9 @@
         <attr name="autoHeightOnChild"  />
         <attr name="rowColors"  />
         <attr name="emptyRowWithDetailView" />
+        <attr name="selectable" />
+
+
     </declare-styleable>
 
 </resources>

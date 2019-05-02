@@ -22,6 +22,10 @@ public class BindingGridView extends GridView
     private int heightRow = 0;
     private boolean rowColors;
     private boolean emptyRowWithDetailView;
+    private Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings = new Hashtable<>();
+    private OnRowDrawing onRowDrawing;
+    private OnGridItemClick onGridItemClick;
+    private OnGridItemSelect onGridItemSelect;
 
     //region Constructor
     public BindingGridView(Context context) {
@@ -43,6 +47,7 @@ public class BindingGridView extends GridView
             setAutoHeightOnChild(a.getBoolean(R.styleable.BindingGridView_autoHeightOnChild,false));
             setRowColors(a.getBoolean(R.styleable.BindingGridView_rowColors,false));
             setEmptyRowWithDetailView(a.getBoolean(R.styleable.BindingGridView_emptyRowWithDetailView,false));
+            setSelectable(a.getBoolean(R.styleable.BindingGridView_selectable,false));
         }
 
         adapter = new BindingItemAdapter(getContext(),getDetailViewID());
@@ -64,13 +69,18 @@ public class BindingGridView extends GridView
     private int emptyRowCount = 0;
 
     private boolean showDevider = true;
-
+    private boolean selectable;
 
 
     //endregion
 
     //region Setter
 
+    public BindingGridView setEmptyRowWithDetailView(boolean emptyRowWithDetailView) {
+        this.emptyRowWithDetailView = emptyRowWithDetailView;
+        setAdapter(getAdapter());
+        return  this;
+    }
     public BindingGridView setDetailViewID(int detailViewID) {
         this.detailViewID = detailViewID;
         if (getAdapter()!=null) getAdapter().setDetailViewID(detailViewID);
@@ -114,32 +124,86 @@ public class BindingGridView extends GridView
             adapter.setOnViewDrawing(onViewDrawings);
             adapter.setOnRowDrawing(getOnRowDrawing());
             adapter.setEmptyRowWithDetailView(isEmptyRowWithDetailView());
+            adapter.setSelectable(isSelectable());
+            adapter.setOnGridItemClick(getOnGridItemClick());
+            adapter.setOnGridItemSelect(getOnGridItemSelect());
         }
         return this;
     }
 
+    public BindingGridView setSelectable(boolean selectable) {
+        this.selectable = selectable;
+        return  this;
+    }
+
+    public BindingGridView setAutoHeightOnChild(boolean autoHeightOnChild) {
+        this.autoHeightOnChild = autoHeightOnChild;
+        return  this;
+    }
+
+    public BindingGridView setRowColors(boolean rowColors) {
+        this.rowColors = rowColors;
+        if (getAdapter()!=null)
+            getAdapter().setRowColors(isRowColors());
+        return this;
+    }
+
+    public <T> BindingGridView setOnGridItemClick(OnGridItemClick<T> onGridItemClick) {
+        this.onGridItemClick = onGridItemClick;
+        setAdapter(getAdapter());
+        return  this;
+    }
+
+    public <T> BindingGridView setOnGridItemSelect(OnGridItemSelect<T> onGridItemSelect) {
+        this.onGridItemSelect = onGridItemSelect;
+        setAdapter(getAdapter());
+        return  this;
+    }
+
+    public BindingGridView setOnViewDrawing(Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings) {
+        this.onViewDrawings = onViewDrawings;
+        setAdapter(getAdapter());
+        return this;
+    }
+
+    public <T> BindingGridView addOnViewDrawing(String name , CustomBindingAdapter.OnViewDrawing<T> onViewDrawing) {
+        onViewDrawings.put(name,onViewDrawing);
+        setAdapter(getAdapter());
+        return  this;
+    }
+    public <T> BindingGridView setOnRowDrawing(OnRowDrawing<T> onRowDrawing) {
+        this.onRowDrawing = onRowDrawing;
+        setAdapter(getAdapter());
+        return  this;
+    }
+
+    public void RemoveOnViewDrawing(String name) {
+        onViewDrawings.remove(name);
+        setAdapter(getAdapter());
+    }
     //endregion
 
     //region Getter
-
+    public boolean isEmptyRowWithDetailView() {
+        return emptyRowWithDetailView;
+    }
     public int getDetailViewID() {
         return detailViewID;
     }
-
     public int getEmptyViewID() {
         return emptyViewID;
     }
-
     public int getEmtyParentID() {
         return emtyParentID;
     }
-
     public int getEmptyRowCount() {
         return emptyRowCount;
     }
-
     public boolean isShowDevider() {
         return showDevider;
+    }
+    public boolean isSelectable() {
+        return selectable;
     }
 
     @Override
@@ -165,9 +229,29 @@ public class BindingGridView extends GridView
     public View getLayoutController() {
         return layoutController;
     }
+    public boolean isAutoHeightOnChild() {
+        return autoHeightOnChild;
+    }
+    public boolean isRowColors() {
+        return rowColors;
+    }
+
+    public <T> CustomBindingAdapter.OnViewDrawing<T> getOnViewDrawing(String name) {
+        return onViewDrawings.get(name);
+    }
+    public <T> OnRowDrawing<T> getOnRowDrawing() {
+        return onRowDrawing;
+    }
+
+    public OnGridItemClick getOnGridItemClick() {
+        return onGridItemClick;
+    }
+
+    public OnGridItemSelect getOnGridItemSelect() {
+        return onGridItemSelect;
+    }
 
     //endregion
-
     public void AutoHeightOnChildControl() {
 
         try {
@@ -187,73 +271,8 @@ public class BindingGridView extends GridView
         }
     }
 
-    public boolean isAutoHeightOnChild() {
-        return autoHeightOnChild;
-    }
-
-    public void setAutoHeightOnChild(boolean autoHeightOnChild) {
-        this.autoHeightOnChild = autoHeightOnChild;
-    }
-
-    public boolean isRowColors() {
-        return rowColors;
-    }
-
-    public BindingGridView setRowColors(boolean rowColors) {
-        this.rowColors = rowColors;
-        if (getAdapter()!=null)
-            getAdapter().setRowColors(isRowColors());
-        return this;
-    }
-
-    private Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings = new Hashtable<>();
-
-    public <T> BindingGridView addOnViewDrawing(String name , CustomBindingAdapter.OnViewDrawing<T> onViewDrawing) {
-        onViewDrawings.put(name,onViewDrawing);
-        setAdapter(getAdapter());
-        return  this;
-    }
-
-    public <T> CustomBindingAdapter.OnViewDrawing<T> getOnViewDrawing(String name) {
-        return onViewDrawings.get(name);
-    }
-
-    public void RemoveOnViewDrawing(String name)
-    {
-        onViewDrawings.remove(name);
-        setAdapter(getAdapter());
-    }
-
-    public void setOnViewDrawing(Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings) {
-        this.onViewDrawings = onViewDrawings;
-        setAdapter(getAdapter());
-    }
 
 
-    private OnRowDrawing onRowDrawing;
 
-    public <T> OnRowDrawing<T> getOnRowDrawing() {
-        return onRowDrawing;
-    }
-
-    public <T> void setOnRowDrawing(OnRowDrawing<T> onRowDrawing) {
-        this.onRowDrawing = onRowDrawing;
-        setAdapter(getAdapter());
-    }
-
-    public interface OnRowDrawing<T>
-    {
-        default void onDraw(int index,View view,T item) {}
-        default void onDraw(int index,View view,T item,List<View> views) {}
-    }
-
-    public boolean isEmptyRowWithDetailView() {
-        return emptyRowWithDetailView;
-    }
-
-    public void setEmptyRowWithDetailView(boolean emptyRowWithDetailView) {
-        this.emptyRowWithDetailView = emptyRowWithDetailView;
-        setAdapter(getAdapter());
-    }
 
 }

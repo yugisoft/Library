@@ -9,5 +9,7 @@
 
     <color name="color_list_tek">#f7fdfd</color>
     <color name="color_list_cift">#FFFFFF</color>
+    <color name="color_list_selected">#ff8800</color>
+    <color name="color_list_unselected">#00000000</color>
 
 </resources>

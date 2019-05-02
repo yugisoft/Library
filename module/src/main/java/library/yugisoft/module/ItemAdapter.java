@@ -80,8 +80,12 @@ public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapt
         return getList().size();
     }
     @Override
-    public Object getItem(int i) {
-        return getList().get(i);
+    public Object getItem(int i)
+    {
+        if (getList().size() > i)
+            return getList().get(i);
+        else
+             return  null;
     }
     @Override
     public long getItemId(int i) {
@@ -96,9 +100,11 @@ public class ItemAdapter<T> extends BaseAdapter implements INTERFACES.IitemAdapt
         }
     }
 
-    public boolean isNew(View v,int i)
-    {
-        return  (v==null || v.getTag()==null || !v.getTag().equals(getItem(i)));
+    public boolean isNew(View v,int i) {
+        try {
+            return (v == null || v.getTag() == null || !v.getTag().equals(getItem(i)));
+        } catch (Exception ex){}
+        return false;
     }
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)

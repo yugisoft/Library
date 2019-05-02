@@ -1,9 +1,12 @@
 package library.yugisoft.module.Utils.CustomBinding;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Checkable;
+import android.widget.TextView;
 
 
 import java.util.Hashtable;
@@ -16,84 +19,143 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
 
 
     private View layoutController,firstView;
-    private boolean rowColors;
+    private boolean rowColors,selectable;
     private boolean emptyRowWithDetailView;
+    private OnRowDrawing onRowDrawing;
+    private Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings = new Hashtable<>();
+    private OnGridItemClick<T> onGridItemClick;
+    private OnGridItemSelect<T> onGridItemSelect;
 
     public BindingItemAdapter(int id) {
 
         this(yugi.activity,id);
     }
-
     public BindingItemAdapter(Context context, int id) {
         super(context);
         super.setContentView(id);
         contentViewID = id;
     }
 
+
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (getDetailViewID()>0)
+    public View getView(int i, View view, ViewGroup viewGroup)
+    {
+        ViewGroup layout  = null,parent = null;
+
+        CustomBindingAdapter adapter = null;
+
+        //region newView
+        if (isNew(view,i))
         {
-            ViewGroup layout  = null,parent = null;
-            CustomBindingAdapter adapter = null;
-            if (view == null)
+            if (getDetailViewID()>0)
             {
-                layout =(ViewGroup) getLayoutInflater().inflate(getEmptyViewID(),null);
-                if (layout != null)
-                    parent = layout.findViewById(getEmtyParentID());
-                adapter = new CustomBindingAdapter(context, contentViewID).setOnViewDrawings(onViewDrawings).setOnRowDrawing(getOnRowDrawing()).setRow(i);
-
-                if (getLayoutController() != null)
-                    adapter.setLayoutController(getLayoutController());
-
-                if ((super.getCount() > i) || isEmptyRowWithDetailView())
-                {
-                    if (parent!= null && isShowDevider())
-                    {
-                        parent.addView(adapter.getBindingView());
-                        view = layout;
-                    }
-                    else
-                    {
-                        view = adapter.getBindingView();
-                    }
-                }
-                else
-                {
-                    view = layout;
-                }
-
+               try
+               {
+                   layout = (ViewGroup) getLayoutInflater().inflate(getEmptyViewID(), null);
+                   if (layout != null)
+                       parent = layout.findViewById(getEmtyParentID());
+                   View infView = getLayoutInflater().inflate(getDetailViewID(),null);
+                   if ((super.getCount() > i) || isEmptyRowWithDetailView()) {
+                       if (parent != null && isShowDevider()) {
+                           parent.addView(infView);
+                           view = layout;
+                       } else
+                           view = infView;
+                   } else
+                       view = layout;
+               }
+               catch (Exception ignored)
+               {
+                   view = getLayoutInflater().inflate(getEmptyViewID(),null);
+               }
             }
             else
-                adapter = new CustomBindingAdapter(context, view).setOnViewDrawings(onViewDrawings).setOnRowDrawing(getOnRowDrawing()).setRow(i);
-
-            if (super.getCount() > i)
-                adapter.bind(getList().get(i));
-            if (i == 0)
-                firstView = view;
-
-            if (isRowColors())
             {
-                view.setBackground(context.getResources().getDrawable(R.drawable.ripple));
-                view.getBackground().setColorFilter( context.getResources().getColor(i % 2 == 0 ? R.color.color_list_cift : R.color.color_list_tek) , PorterDuff.Mode.MULTIPLY);
+                view = getLayoutInflater().inflate(getEmptyViewID(),null);
             }
-
-            return view;
         }
-        else
+        //endregion
+
+        //region BindingAdapter
+        adapter = new CustomBindingAdapter(view,getItem(i)).setOnViewDrawings(onViewDrawings).setOnRowDrawing(getOnRowDrawing()).setRow(i);
+
+        if (getLayoutController() != null)
+            adapter.setLayoutController(getLayoutController());
+        //endregion
+
+        if (getItem(i) != null) {
+            adapter.bind(getList().get(i));
+
+            if (isSelectable() && getList().get(i) instanceof Checkable)
+            {
+                View colorView = isShowDevider() ? view.findViewById(getEmtyParentID()) : adapter.getBindingView();
+                colorView.setBackground(context.getResources().getDrawable(R.drawable.ripple));
+                colorView.getBackground().setColorFilter( context.getResources().getColor(((Checkable)getList().get(i)).isChecked() ? R.color.color_list_selected : R.color.color_list_unselected) , PorterDuff.Mode.MULTIPLY);
+                //colorView.setBackgroundColor( context.getResources().getColor(((Checkable)getList().get(i)).isChecked() ? R.color.color_list_selected : R.color.color_list_unselected));
+            }
+        }
+
+        if (i == 0)
+            firstView = view;
+
+        if (isRowColors())
         {
-            View retView = view != null ? view : getLayoutInflater().inflate(getEmptyViewID(),null);
-            if (isRowColors())
-            {
-                retView.setBackground(context.getResources().getDrawable(R.drawable.ripple));
-                retView.getBackground().setColorFilter( context.getResources().getColor(i % 2 == 0 ? R.color.color_list_cift : R.color.color_list_tek) , PorterDuff.Mode.MULTIPLY);
-            }
-            if (i == 0)
-                firstView =retView;
-            return  retView;
+            view.setBackground(context.getResources().getDrawable(R.drawable.ripple));
+            view.getBackground().setColorFilter( context.getResources().getColor(i % 2 == 0 ? R.color.color_list_cift : R.color.color_list_tek) , PorterDuff.Mode.MULTIPLY);
         }
 
+
+        if (getItem(i) != null && (getOnGridItemClick() != null || getOnGridItemSelect() != null || isSelectable()))
+        {
+            View finalView = view;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (isSelectable() && getList().get(i) instanceof Checkable) {
+                        if (getOnGridItemSelect() != null) {
+                            getOnGridItemSelect().OnSelect(b ->
+                            {
+                                ((Checkable) getList().get(i)).setChecked(b);
+                                notifyDataSetChanged();
+                            }, i, (T) getItem(i), finalView);
+                        }
+                        else
+                        {
+                            ((Checkable) getList().get(i)).toggle();
+                            notifyDataSetChanged();
+                        }
+                    } else {
+                        if (getOnGridItemClick() != null)
+                            getOnGridItemClick().onClick(i, (T) getItem(i), finalView);
+                    }
+                }
+            });
+        }
+        else if (getItem(i) == null)
+            view.setOnClickListener(null);
+
+        view.setTag(getItem(i));
+        return view;
     }
+
+    @Override
+    public boolean isNew(View v, int i) {
+
+        boolean mNew = true;
+        try
+      {
+          mNew = super.isNew(v, i);
+          if (super.getCount() > i)
+              try {
+                  mNew = mNew || ((ViewGroup) v.findViewById(getEmtyParentID())).getChildCount() == 0;
+              } catch (Exception ignored) { }
+      }
+      catch (Exception ignored) { }
+
+        return mNew;
+    }
+
 
     //region Veriables
 
@@ -113,24 +175,61 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
     public BindingItemAdapter<T> setDetailViewID(int detailViewID) {
         this.contentViewID = detailViewID; return this;
     }
-
     public BindingItemAdapter<T> setEmptyViewID(int emptyViewID) {
         this.emptyViewID = emptyViewID; return this;
     }
-
     public BindingItemAdapter<T> setEmtyParentID(int emtyParentID) {
         this.emtyParentID = emtyParentID; return this;
     }
-
     public BindingItemAdapter<T> setEmptyRowCount(int emptyRowCount) {
         this.emptyRowCount = emptyRowCount; return this;
     }
-
     public BindingItemAdapter<T> setShowDevider(boolean showDevider) {
         this.showDevider = showDevider; return this;
     }
+    public BindingItemAdapter<T> setLayoutController(View layoutController) {
+        this.layoutController = layoutController;
+        return  this;
+    }
+    public BindingItemAdapter<T> setRowColors(boolean rowColors) {
+        this.rowColors = rowColors;
+        return  this;
+    }
+    public BindingItemAdapter<T> setOnViewDrawing(Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings) {
+        this.onViewDrawings = onViewDrawings;
+        return  this;
+    }
+    public BindingItemAdapter<T> setEmptyRowWithDetailView(boolean emptyRowWithDetailView) {
+        this.emptyRowWithDetailView = emptyRowWithDetailView;
+        return  this;
+    }
+    public BindingItemAdapter<T> setSelectable(boolean selectable) {
+        this.selectable = selectable;
+        return  this;
+    }
 
+    public BindingItemAdapter<T> setOnGridItemClick(OnGridItemClick<T> onGridItemClick) {
+        this.onGridItemClick = onGridItemClick;
+        return this;
+    }
+    public BindingItemAdapter<T> setOnGridItemSelect(OnGridItemSelect<T> onGridItemSelect) {
+        this.onGridItemSelect = onGridItemSelect;
+        return  this;
+    }
 
+    public <R> void setOnRowDrawing(OnRowDrawing<R> onRowDrawing) {
+        this.onRowDrawing = onRowDrawing;
+
+    }
+    public <R> BindingItemAdapter addOnViewDrawing(String name , CustomBindingAdapter.OnViewDrawing<R> onViewDrawing) {
+        onViewDrawings.put(name,onViewDrawing);
+        return  this;
+    }
+
+    public void RemoveOnViewDrawing(String name)
+    {
+        onViewDrawings.remove(name);
+    }
     //endregion
 
     //region Getter
@@ -155,14 +254,14 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
         return showDevider;
     }
 
+    public boolean isEmptyRowWithDetailView() {
+        return emptyRowWithDetailView;
+    }
 
-
-    //endregion
-
-
-    @Override
-    public int getCount()
-    {
+    public View getFirstView() {
+        return firstView;
+    }
+    public int getCount() {
         int i = super.getCount();
         return i < getEmptyRowCount() ?  getEmptyRowCount() : i;
     }
@@ -170,72 +269,34 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
     {
         return super.getCount();
     }
-
-    public void setLayoutController(View layoutController) {
-        this.layoutController = layoutController;
-    }
-
     public View getLayoutController() {
         return layoutController;
     }
-
-    public View getFirstView() {
-        return firstView;
-    }
-
     public boolean isRowColors() {
         return rowColors;
     }
-
-    public BindingItemAdapter setRowColors(boolean rowColors) {
-        this.rowColors = rowColors;
-        return  this;
+    public OnGridItemClick<T> getOnGridItemClick() {
+        return onGridItemClick;
     }
-
-
-    private Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings = new Hashtable<>();
-
-    public <T> BindingItemAdapter addOnViewDrawing(String name , CustomBindingAdapter.OnViewDrawing<T> onViewDrawing) {
-        onViewDrawings.put(name,onViewDrawing);
-        return  this;
-    }
-
-    public <T> CustomBindingAdapter.OnViewDrawing<T> getOnViewDrawing(String name) {
-        return onViewDrawings.get(name);
-    }
-
-    public void RemoveOnViewDrawing(String name)
-    {
-        onViewDrawings.remove(name);
-    }
-
-    public void setOnViewDrawing(Hashtable<String, CustomBindingAdapter.OnViewDrawing> onViewDrawings) {
-        this.onViewDrawings = onViewDrawings;
-    }
-
-    private BindingGridView.OnRowDrawing onRowDrawing;
-
-    public <T> BindingGridView.OnRowDrawing<T> getOnRowDrawing() {
+    public <R> OnRowDrawing<R> getOnRowDrawing() {
         return onRowDrawing;
     }
-
-    public <T> void setOnRowDrawing(BindingGridView.OnRowDrawing<T> onRowDrawing) {
-        this.onRowDrawing = onRowDrawing;
-
+    public <R> CustomBindingAdapter.OnViewDrawing<R> getOnViewDrawing(String name) {
+        return onViewDrawings.get(name);
+    }
+    public boolean isSelectable() {
+        return selectable;
     }
 
-    public boolean isEmptyRowWithDetailView() {
-        return emptyRowWithDetailView;
+    public OnGridItemSelect<T> getOnGridItemSelect() {
+        return onGridItemSelect;
     }
+    //endregion
 
-    public void setEmptyRowWithDetailView(boolean emptyRowWithDetailView) {
-        this.emptyRowWithDetailView = emptyRowWithDetailView;
-    }
 
-    public interface OnRowDrawing<T>
-    {
-        default void onDraw(int index,View view,T item) {}
-        default void onDraw(int index,View view,T item,View[] views) {}
-    }
+
+
+
+
 }
 
