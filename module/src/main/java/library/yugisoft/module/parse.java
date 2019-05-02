@@ -382,7 +382,7 @@ public class parse {
                     f.setBoolean(object, toBoolean(value));
                 else if (clazz.equals(String.class) || fType.equals("string")) {
                     if (value.equals("null")) value = null;
-                    f.set(object, value);
+                    f.set(object, String.valueOf(value));
                 } else {
                     if (value.equals("null")) value = null;
                     if (f.getType().isPrimitive()) {
