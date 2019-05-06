@@ -51,6 +51,8 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
         }
     }
 
+    private ItemLooper.OnItemLooperSelected onItemLooperSelected;
+
     public ItemLooper getItemLooper()
     {
         if (itemLooper == null)
@@ -61,6 +63,8 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
                 public void onSelected(int index, Object Item) {
                     LoopTextView.this.index = index;
                     LoopTextView.this.setText(Item.toString());
+                    if (getOnItemLooperSelected() != null)
+                        getOnItemLooperSelected().onSelected(index,Item);
                 }
             });
         }
@@ -114,4 +118,11 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
         this.index = index;
     }
 
+    public ItemLooper.OnItemLooperSelected getOnItemLooperSelected() {
+        return onItemLooperSelected;
     }
+
+    public void setOnItemLooperSelected(ItemLooper.OnItemLooperSelected onItemLooperSelected) {
+        this.onItemLooperSelected = onItemLooperSelected;
+    }
+}

@@ -367,6 +367,19 @@ BindingGridView bindingGridView = null;
                 return  this;
         }
 
+        private T SelectedITem;
+
+
+
+    public T getSelectedITem() {
+        return SelectedITem;
+    }
+
+    public void setSelectedITem(T selectedITem) {
+        SelectedITem = selectedITem;
+        getOnItemLooperSelected().onSelected(getList().indexOf(selectedITem),selectedITem);
+    }
+
 //endregion
 
 public interface OnItemLooperSelected<T> {

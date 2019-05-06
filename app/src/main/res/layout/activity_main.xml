@@ -7,11 +7,19 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <library.yugisoft.module.Utils.CustomBinding.BindingGridView
-        android:id="@+id/gridView"
+
+    <LinearLayout
+        android:id="@+id/binding_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:emptyRowCount="1"
-        />
+        android:orientation="vertical">
+
+        <library.yugisoft.module.LoopTextView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="sdfsdfs" />
+    </LinearLayout>
+
 
 </LinearLayout>

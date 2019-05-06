@@ -25,6 +25,7 @@ import library.yugisoft.module.LoopTextView;
 import library.yugisoft.module.PhoneTextEdit;
 import library.yugisoft.module.Utils.CustomUtil;
 import library.yugisoft.module.parse;
+import library.yugisoft.module.vList;
 import library.yugisoft.module.yugi;
 
 public class CustomBindingAdapter
@@ -212,7 +213,27 @@ public class CustomBindingAdapter
             pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(fieldName):CustomUtil.getValue(getBindingObject(),fieldName);
         String sValue = pValue ==null ? "" : String.valueOf(pValue);
 
-        if (view instanceof TextView)
+        if (view instanceof LoopTextView)
+        {
+            LoopTextView lView = ((LoopTextView)view);
+            List list = lView.getItemLooper().getList();
+            if (list.size() > 0)
+            {
+                Object it = list.get(0);
+                if (it instanceof  IBindingItemLooper) {
+                    Object finalPValue = pValue;
+                    try
+                    {
+                        Object li =vList.Filter(list, l->{return  ((IBindingItemLooper)l).Compare(finalPValue);}).get(0);
+                        lView.getItemLooper().setSelectedITem(li);
+                    }
+                    catch (Exception ignored)
+                    {}
+                }
+            }
+
+        }
+        else if (view instanceof TextView)
         {
             TextView tView = (TextView)view;
             String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
