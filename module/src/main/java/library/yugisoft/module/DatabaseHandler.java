@@ -215,7 +215,7 @@ public class DatabaseHandler
             String sql = sqlInsert();
             for (int i =0 ; i< o.Cells.size();i++)
             {
-                sql = sql.replace("{"+o.Cells.get(i).Name+"}","'"+o.Cells.get(i).Value+"'"); 
+                sql = sql.replace("{"+o.Cells.get(i).Name+"}","'"+o.Cells.get(i).Value+"'");
             }
             mSelect(sql);
         }

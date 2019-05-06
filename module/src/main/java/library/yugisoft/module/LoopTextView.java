@@ -113,8 +113,5 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
     public void setIndex(int index) {
         this.index = index;
     }
-}
-enum LoopDisplayType
-{
-    popup,listPopup,Dialog,FullScreenDialog,ListDialog,FullScreenListDialog
-}
+
+    }
