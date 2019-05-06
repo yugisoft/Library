@@ -318,11 +318,18 @@ public class CustomBindingAdapter
                 value = ((DateTextView) view).getDateTime();
             else if (view instanceof LoopTextView) {
                 Object obj = ((LoopTextView) view).getSelectedObject();
-                if (obj != null) {
-                    if (obj.getClass().isAnnotationPresent(BindingItemLooper.class)) {
-                        String fn = obj.getClass().getAnnotation(BindingItemLooper.class).IdFieldName();
+                if (obj != null)
+                {
+                    if (field.isAnnotationPresent(BindingItemLooper.class)) {
+                        String fn = field.getAnnotation(BindingItemLooper.class).IdFieldName();
                         obj = CustomUtil.getValue(obj, fn);
-                    } else
+                    }
+                    else if (obj instanceof  IBindingItemLooper)
+                    {
+                        String fn = ((IBindingItemLooper)obj).IdFieldName();
+                        obj = CustomUtil.getValue(obj, fn);
+                    }
+                    else
                         value = obj;
                 }
             } else if (view instanceof TextView)
