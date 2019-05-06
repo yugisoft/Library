@@ -303,6 +303,7 @@ public class CustomBindingAdapter
             }
         }
     }
+
     private void setFieldValue(View view, Field field) {
         field.setAccessible(true);
         if (field.isAnnotationPresent(BindingReverseable.class))

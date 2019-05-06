@@ -213,7 +213,10 @@ public class DatabaseHandler
         public void Insert(DataTable.DataRow o)
         {
             String sql = sqlInsert();
-            for (int i =0 ; i< o.Cells.size();i++) { sql = sql.replace("{"+o.Cells.get(i).Name+"}","'"+o.Cells.get(i).Name+"'"); }
+            for (int i =0 ; i< o.Cells.size();i++)
+            {
+                sql = sql.replace("{"+o.Cells.get(i).Name+"}","'"+o.Cells.get(i).Value+"'"); 
+            }
             mSelect(sql);
         }
 
@@ -251,10 +254,10 @@ public class DatabaseHandler
                             SQL=SQL.replace("{"+name+"}",fi.getBoolean(o)?"1":"0");
                             break;
                         case "string":
-                            SQL=SQL.replace("{"+name+"}","'"+fi.get(o).toString()+"'");
+                            SQL=SQL.replace("{"+name+"}","'"+fi.get(o).toString().replace("'","''")+"'");
                             break;
                             default:
-                                SQL=SQL.replace("{"+name+"}","'"+parse.toJson(fi.get(o))+"'");
+                                SQL=SQL.replace("{"+name+"}","'"+parse.toJson(fi.get(o))+"'").replace("'","''");
                                 break;
 
                     }
