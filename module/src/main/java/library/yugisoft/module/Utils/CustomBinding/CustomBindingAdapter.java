@@ -323,12 +323,12 @@ public class CustomBindingAdapter
                 {
                     if (field.isAnnotationPresent(BindingItemLooper.class)) {
                         String fn = field.getAnnotation(BindingItemLooper.class).IdFieldName();
-                        obj = CustomUtil.getValue(obj, fn);
+                        value = CustomUtil.getValue(obj, fn);
                     }
                     else if (obj instanceof  IBindingItemLooper)
                     {
                         String fn = ((IBindingItemLooper)obj).IdFieldName();
-                        obj = CustomUtil.getValue(obj, fn);
+                        value = CustomUtil.getValue(obj, fn);
                     }
                     else
                         value = obj;
