@@ -869,14 +869,36 @@ public class http
             Execute(new HttpHead(UrlFormatter(url)));
         }
         public void OPTIONS(String url) {
-             Execute(new HttpOptions(UrlFormatter(url)));
+            Execute(new HttpOptions(UrlFormatter(url)));
         }
         public void POST(String url) {
-             Execute(new HttpPost(UrlFormatter(url)));
+            Execute(new HttpPost(UrlFormatter(url)));
         }
         public void PUT(String url) {
-              Execute(new HttpPut(UrlFormatter(url)));
+            Execute(new HttpPut(UrlFormatter(url)));
         }
+
+
+        public Response GET2(String url)
+        {
+           return Execute2(new HttpGet(UrlFormatter(url)));
+        }
+        public Response DELETE2(String url) {
+            return  Execute2(new HttpDelete(UrlFormatter(url)));
+        }
+        public Response HEAD2(String url) {
+            return  Execute2(new HttpHead(UrlFormatter(url)));
+        }
+        public Response OPTIONS2(String url) {
+            return Execute2(new HttpOptions(UrlFormatter(url)));
+        }
+        public Response POST2(String url) {
+            return Execute2(new HttpPost(UrlFormatter(url)));
+        }
+        public Response PUT2(String url) {
+            return  Execute2(new HttpPut(UrlFormatter(url)));
+        }
+
 
         public <T> Request JsonTo(INTERFACES.OnResponse<T> listener, Class cl) {
             OnHttpResponse httpResponse = onHttpResponse;
@@ -957,6 +979,42 @@ public class http
             if (timeOut > 0)
             HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
             this.execute();
+        }
+
+        public Response Execute2(HttpEntityEnclosingRequestBase http) {
+
+            //Content Type Belirlendi!
+            if (!Json)
+            {
+                Headers.urlencoded(http);
+                Log += "\n"+Bodys.Add(http,bodys);
+            }
+            else
+            {
+                Headers.json(http);
+                Log += "\n"+sbody.replace("{","\n{").replace("}","\n}");
+                Bodys.Add(http,sbody);
+            }
+
+           return Execute2(((HttpRequestBase)(http)));
+        }
+        public Response Execute2(HttpRequestBase http) {
+
+            if (Log.equals(""))
+            {
+                Log = "http-"+http.getMethod();
+                if (!Json)
+                    Headers.urlencoded(http);
+            }
+            Headers.ConstHttpHeader(http);
+            Headers.TempHttpHeader(http);
+            Headers.DeviceInfo(http);
+            Headers.Add(http, headers);
+            httpRequest = http;
+
+            if (timeOut > 0)
+                HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
+            return httpExecute(httpRequest,Log);
         }
 
         @Override protected Response    doInBackground(String... strings) {
