@@ -19,6 +19,7 @@ import java.util.List;
 
 import library.yugisoft.module.Interfaces.ASerializable;
 import library.yugisoft.module.Interfaces.ISerializable;
+import library.yugisoft.module.Utils.CustomUtil;
 
 public class parse {
 
@@ -104,8 +105,9 @@ public class parse {
         String type = cls.getName().toLowerCase();
 
         JSONArray jsonArray = new JSONArray();
-        boolean isArray = (item instanceof List);
-        if (isArray) {
+        boolean isArray = (item instanceof List || item instanceof vList);
+        if (isArray)
+        {
             ArrayList list = (ArrayList) item;
             for (Object i : list) {
                 try {
@@ -121,7 +123,8 @@ public class parse {
         } else {
             JSONObject object = new JSONObject();
 
-            for (Field f : vList.Merge(Arrays.asList(cls.getFields()), Arrays.asList(cls.getDeclaredFields()))) {
+           // for (Field f : vList.Merge(Arrays.asList(cls.getFields()), Arrays.asList(cls.getDeclaredFields()))) {
+            for (Field f : CustomUtil.getFields(item)) {
                 f.setAccessible(true);
                 if (!f.getName().equals("$change") && !f.getName().equals("serialVersionUID"))
                     try {
@@ -324,12 +327,14 @@ public class parse {
 
     private static void set(Object object, JSONObject jsonObject) {
         Class objectClass = object.getClass();
-        setSub(object, jsonObject, objectClass.getDeclaredFields());
-        setSub(object, jsonObject, objectClass.getFields());
+        //setSub(object, jsonObject, objectClass.getDeclaredFields());
+        //setSub(object, jsonObject, objectClass.getFields());
+        setSub(object, jsonObject, CustomUtil.getFields(object));
+
         yugi.Print("i", "JSON END SET");
     }
 
-    private static void setSub(Object object, JSONObject jsonObject, Field[] fields) {
+    private static void setSub(Object object, JSONObject jsonObject, List<Field> fields) {
         for (Field f : fields)
         {
             String fName = f.getName();
@@ -367,7 +372,9 @@ public class parse {
                     f.setDouble(object, toDouble(value));
                 } else if (clazz.equals(DataTable.class)) {
                     f.set(object, toDataTable(value));
-                } else if (clazz.equals(List.class) || fType.equals("list")) {
+                }
+                else if (clazz.equals(List.class) || fType.equals("list"))
+                {
                     List l = new ArrayList();
                     JSONArray listJson = new JSONArray(value.toString());
                     for (int ds = 0; ds < listJson.length(); ds++) {
@@ -376,7 +383,19 @@ public class parse {
                         l.add(o);
                     }
                     f.set(object, l);
-                } else if (clazz.equals(DateTime.class) || fType.equals("datetime")) {
+                }
+                else if (clazz.equals(vList.class) || fType.equals("vlist"))
+                {
+                    vList l = new vList();
+                    JSONArray listJson = new JSONArray(value.toString());
+                    for (int ds = 0; ds < listJson.length(); ds++) {
+
+                        Object o = jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
+                        l.add(o);
+                    }
+                    f.set(object, l);
+                }
+                else if (clazz.equals(DateTime.class) || fType.equals("datetime")) {
                     f.set(object, toDateTime(value));
                 } else if (clazz.equals(Boolean.class) || fType.equals("boolean"))
                     f.setBoolean(object, toBoolean(value));
