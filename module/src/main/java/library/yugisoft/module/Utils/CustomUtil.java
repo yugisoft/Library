@@ -122,6 +122,25 @@ public class CustomUtil
         catch (Exception ignored){}
         return  null;
     }
+    public static Object getFieldValue(Object ob,String fieldName) {
+        Object pValue = null;
+        try
+        {
+            Field field =  getField(ob,fieldName);
+            if (field != null)
+            {
+                field.setAccessible(true);
+                pValue = field.get(ob);
+                field.setAccessible(false);
+            }
+        }
+        catch (Exception ignored) { }
+        finally
+        {
+            return pValue;
+        }
+
+    }
     public static List<Field> getFields(Object object) {
         Class cls = object.getClass();
         List<Field> list = new ArrayList<>();

@@ -208,9 +208,12 @@ public class CustomBindingAdapter
             }
 
         }
-        Object pValue = null;
+        Object pValue = null,fValue = null;
         if (getBindingObject() != null)
+        {
             pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(fieldName):CustomUtil.getValue(getBindingObject(),fieldName);
+            fValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(fieldName):CustomUtil.getFieldValue(getBindingObject(),fieldName);
+        }
         String sValue = pValue ==null ? "" : String.valueOf(pValue);
 
         if (view instanceof LoopTextView)
@@ -221,7 +224,7 @@ public class CustomBindingAdapter
             {
                 Object it = list.get(0);
                 if (it instanceof  IBindingItemLooper) {
-                    Object finalPValue = pValue;
+                    Object finalPValue = fValue;
                     try
                     {
                         Object li =vList.Filter(list, l->{return  ((IBindingItemLooper)l).Compare(finalPValue);}).get(0);
@@ -233,8 +236,15 @@ public class CustomBindingAdapter
             }
 
         }
+
         else if (view instanceof TextView)
         {
+            if (view instanceof DateTextView)
+            {
+                DateTextView dView = (DateTextView) view;
+                dView.setDateTime(DateTime.fromDateTime(fValue.toString()));
+            }
+
             TextView tView = (TextView)view;
             String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
             if (format.length()>0)
