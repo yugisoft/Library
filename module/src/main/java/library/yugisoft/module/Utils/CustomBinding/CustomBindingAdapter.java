@@ -242,7 +242,15 @@ public class CustomBindingAdapter
             if (view instanceof DateTextView)
             {
                 DateTextView dView = (DateTextView) view;
-                dView.setDateTime(DateTime.fromDateTime(fValue.toString()));
+                if (field.getType() == DateTime.class)
+                {
+                    dView.setDateTime((DateTime) fValue);
+                }
+                else
+                {
+                    dView.setDateTime(DateTime.fromDateTime(fValue.toString()));
+                }
+
             }
             else if (view instanceof CurrencyTextView)
             {
