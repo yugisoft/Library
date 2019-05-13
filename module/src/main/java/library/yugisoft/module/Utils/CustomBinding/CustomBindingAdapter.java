@@ -244,6 +244,11 @@ public class CustomBindingAdapter
                 DateTextView dView = (DateTextView) view;
                 dView.setDateTime(DateTime.fromDateTime(fValue.toString()));
             }
+            else if (view instanceof CurrencyTextView)
+            {
+                CurrencyTextView dView = (CurrencyTextView) view;
+                dView.setTutar(parse.toDouble(fValue));
+            }
 
             TextView tView = (TextView)view;
             String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
