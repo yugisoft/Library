@@ -1012,6 +1012,7 @@ public class yugi
     public static String GetSetup(Context context, Object Setup_name) {
         return GetSetup(context,Setup_name,"");
     }
+    public static String GetSetup(String Setup_name,String Defult) {  return GetSetup(yugi.activity,Setup_name,Defult); }
     public static String GetSetup(Context context, Object Setup_name,String Defult) {
         try {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -1025,6 +1026,7 @@ public class yugi
             return Defult;
         }
     }
+    public static void SetSetup(String Setup_name, Object Value) { SetSetup(yugi.activity,Setup_name,Value); }
     public static void SetSetup(Context context,String Setup_name, Object Value) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
