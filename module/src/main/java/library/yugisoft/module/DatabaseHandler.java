@@ -234,7 +234,11 @@ public class DatabaseHandler
                 {
                     fi.setAccessible(true);
                     String simlename = fi.getType().getSimpleName().toLowerCase();
+                    Object value = fi.get(o);
+                    if (value == null)
+                    {
 
+                    }
                     name = fi.getName();
                     if(name.equals("$change") || name.equals("serialVersionUID"))
                     {
@@ -242,22 +246,22 @@ public class DatabaseHandler
                     }
                     switch (simlename) {
                         case "int":
-                            SQL=SQL.replace("{"+name+"}",fi.get(o).toString());
+                            SQL=SQL.replace("{"+name+"}",value.toString());
                             break;
                         case "long":
-                            SQL=SQL.replace("{"+name+"}",fi.get(o).toString());
+                            SQL=SQL.replace("{"+name+"}",value.toString());
                             break;
                         case "double":
-                            SQL=SQL.replace("{"+name+"}",fi.get(o).toString());
+                            SQL=SQL.replace("{"+name+"}",value.toString());
                             break;
                         case "boolean":
-                            SQL=SQL.replace("{"+name+"}",fi.getBoolean(o)?"1":"0");
+                            SQL=SQL.replace("{"+name+"}",parse.toBoolean(value)?"1":"0");
                             break;
                         case "string":
-                            SQL=SQL.replace("{"+name+"}","'"+fi.get(o).toString().replace("'","''")+"'");
+                            SQL=SQL.replace("{"+name+"}","'"+value.toString().replace("'","''")+"'");
                             break;
                             default:
-                                SQL=SQL.replace("{"+name+"}","'"+parse.toJson(fi.get(o))+"'").replace("'","''");
+                                SQL=SQL.replace("{"+name+"}","'"+parse.toJson(value).replace("'","''")+"'");
                                 break;
 
                     }
