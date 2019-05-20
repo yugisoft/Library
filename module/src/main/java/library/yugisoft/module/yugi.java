@@ -1012,13 +1012,24 @@ public class yugi
     public static String GetSetup(Context context, Object Setup_name) {
         return GetSetup(context,Setup_name,"");
     }
-    public static String GetSetup(String Setup_name,String Defult) {  return GetSetup(yugi.activity,Setup_name,Defult); }
+
+    private static String setupTag = "HobiSatis";
+
+    public static void setSetupTag(String setupTag) {
+        yugi.setupTag = setupTag;
+    }
+
+    public static String getSetupTag() {
+        return setupTag;
+    }
+
+    public static String GetSetup(String Setup_name, String Defult) {  return GetSetup(yugi.activity,Setup_name,Defult); }
     public static String GetSetup(Context context, Object Setup_name,String Defult) {
         try {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
             String str;
-            str = sharedPreferences.getString("HobiSatis." + Setup_name, null);
+            str = sharedPreferences.getString(getSetupTag()+"." + Setup_name, null);
             if (str.isEmpty() || str.length()==0)
                 return Defult;
             else return str;
@@ -1030,7 +1041,7 @@ public class yugi
     public static void SetSetup(Context context,String Setup_name, Object Value) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("HobiSatis." + Setup_name, String.valueOf(Value));
+        editor.putString(getSetupTag()+"." + Setup_name, String.valueOf(Value));
         editor.commit();
     }
 
@@ -1400,6 +1411,7 @@ public class yugi
         catch (Exception ex){}
         return string;
     }
+
 
     public static boolean addHttpHedaerDeviceInfo=true;
 
