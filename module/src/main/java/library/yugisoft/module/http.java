@@ -804,6 +804,10 @@ public class http
             return timeOut;
         }
 
+        public Request() {
+            onHttpResponse=null;
+            timeOut = defaultTimeOut;
+        }
         public Request(OnHttpResponse pOnHttpResponse) {
             onHttpResponse=pOnHttpResponse;
             timeOut = defaultTimeOut;

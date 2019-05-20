@@ -1420,7 +1420,7 @@ public class yugi
                     i++;
                 }
             }
-        
+
         }
         catch (Exception ex){}
         return string;
