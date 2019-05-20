@@ -1403,10 +1403,24 @@ public class yugi
     public static String Join(String string , Object... params) {
         try
         {
-            for (int i = 0 ; i< params.length;i++)
+            int i = 0;
+            for (Object item : params)
             {
-                string = string.replace("{"+i+"}",String.valueOf(params[i]));
+                if (item.getClass() == Object[].class)
+                {
+                    for (Object item2 : ((Object[])item))
+                    {
+                        string = string.replace("{"+i+"}",String.valueOf(item2));
+                        i++;
+                    }
+                }
+                else
+                {
+                    string = string.replace("{"+i+"}",String.valueOf(item));
+                    i++;
+                }
             }
+        
         }
         catch (Exception ex){}
         return string;
