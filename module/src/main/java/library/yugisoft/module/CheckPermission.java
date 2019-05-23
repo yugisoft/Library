@@ -12,9 +12,9 @@ public class CheckPermission extends yugi.vActivity {
     private static final int PERMISSION = 256;
     public static INTERFACES.OnResponse<Boolean> onResponse;
 
-    public static void checkPermissionResult(String[] permis, INTERFACES.OnResponse<Boolean> onResponse)
+    public static void checkPermissionResult(String[] permis, INTERFACES.OnResponse<Boolean> response)
     {
-        onResponse = onResponse;
+        CheckPermission.onResponse = response;
         permissions=permis;
         yugi.activity.startActivity(new Intent(yugi.activity,CheckPermission.class));
     }
@@ -43,7 +43,8 @@ public class CheckPermission extends yugi.vActivity {
                 ActivityCompat.requestPermissions(this, permissions, PERMISSION);
             }
             catch (Exception ex)
-            {}
+            { this.finish();
+                onResponse.onResponse(true);}
         }
         else
         {
