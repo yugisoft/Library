@@ -38,7 +38,12 @@ public class CheckPermission extends yugi.vActivity {
     {
         if (!isCheckSelfPermission())
         {
-            ActivityCompat.requestPermissions(this, permissions, PERMISSION);
+            try
+            {
+                ActivityCompat.requestPermissions(this, permissions, PERMISSION);
+            }
+            catch (Exception ex)
+            {}
         }
         else
         {
