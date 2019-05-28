@@ -108,7 +108,7 @@ public class parse {
         boolean isArray = (item instanceof List || item instanceof vList);
         if (isArray)
         {
-            ArrayList list = (ArrayList) item;
+            ArrayList list = (item instanceof vList ? (ArrayList)((vList)item).list : (ArrayList) item);
             for (Object i : list) {
                 try {
                     String json = toJson(i);
@@ -123,62 +123,74 @@ public class parse {
         } else {
             JSONObject object = new JSONObject();
 
-           // for (Field f : vList.Merge(Arrays.asList(cls.getFields()), Arrays.asList(cls.getDeclaredFields()))) {
-            for (Field f : CustomUtil.getFields(item)) {
-                f.setAccessible(true);
-                if (!f.getName().equals("$change") && !f.getName().equals("serialVersionUID"))
-                    try {
+            try
+            {
 
-                        String fName = f.getName();
-                        if(f.isAnnotationPresent(Json.class))
-                        {
-                            Json json = f.getAnnotation(Json.class);
+                {
+                    for (Field f : CustomUtil.getFields(item)) {
+                        f.setAccessible(true);
+                        if (!f.getName().equals("$change") && !f.getName().equals("serialVersionUID"))
+                            try {
 
-                            if (json.ignoreToJson())
-                                continue;
+                                String fName = f.getName();
+                                if(f.isAnnotationPresent(Json.class))
+                                {
+                                    Json json = f.getAnnotation(Json.class);
 
-                            String jName = f.getAnnotation(Json.class).name();
-                            if (jName.length()>0)
-                                fName = jName;
+                                    if (json.ignoreToJson())
+                                        continue;
 
-                        }
+                                    String jName = f.getAnnotation(Json.class).name();
+                                    if (jName.length()>0)
+                                        fName = jName;
 
-                        Object pObject = f.get(item);
-                        Class objectClass = pObject.getClass();
-                        if (objectClass.equals(Integer.class) || objectClass.equals(int.class))
-                            object.put(fName, toInt(pObject));
-                        else if (objectClass.equals(Long.class) || objectClass.equals(long.class))
-                            object.put(fName, toLong(pObject));
-                        else if (objectClass.equals(Double.class) || objectClass.equals(double.class))
-                            object.put(fName, toDouble(pObject));
-                        else if (objectClass.equals(DataTable.class))
-                            object.put(fName, ((DataTable) pObject).getJsonData());
-                        else if (objectClass.equals(DateTime.class))
-                            object.put(fName, ((DateTime) pObject).toString());
-                        else if (objectClass.equals(Boolean.class))
-                            object.put(fName, (pObject));
-                        else if (objectClass.equals(String.class))
-                            object.put(fName, pObject);
-                        else if (pObject instanceof List)
-                            object.put(fName, new JSONArray(toJson(pObject)));
-                        else {
+                                }
 
-                            if (pObject instanceof ASerializable)
-                                object.put(fName, ((ASerializable) pObject).SerializeJsonObject());
-                            else if (pObject instanceof ISerializable)
-                                object.put(fName, ((ISerializable) pObject).SerializeJsonObject());
-                            else if (pObject.toString().split("\\.").length > 2 && pObject.toString().indexOf("@") != -1)
-                                object.put(fName, new JSONObject(toJson(pObject)));
-                            else
-                                object.put(fName, pObject);
-                        }
+                                Object pObject = f.get(item);
+                                Class objectClass = pObject.getClass();
+                                if (objectClass.equals(Integer.class) || objectClass.equals(int.class))
+                                    object.put(fName, toInt(pObject));
+                                else if (objectClass.equals(Long.class) || objectClass.equals(long.class))
+                                    object.put(fName, toLong(pObject));
+                                else if (objectClass.equals(Double.class) || objectClass.equals(double.class))
+                                    object.put(fName, toDouble(pObject));
+                                else if (objectClass.equals(DataTable.class))
+                                    object.put(fName, ((DataTable) pObject).getJsonData());
+                                else if (objectClass.equals(DateTime.class))
+                                    object.put(fName, ((DateTime) pObject).toString());
+                                else if (objectClass.equals(Boolean.class))
+                                    object.put(fName, (pObject));
+                                else if (objectClass.equals(String.class))
+                                    object.put(fName, pObject);
+                                else if (pObject instanceof List)
+                                    object.put(fName, new JSONArray(toJson(pObject)));
+                                else {
+
+                                    if (pObject instanceof ASerializable)
+                                        object.put(fName, ((ASerializable) pObject).SerializeJsonObject());
+                                    else if (pObject instanceof ISerializable)
+                                        object.put(fName, ((ISerializable) pObject).SerializeJsonObject());
+                                    else if (pObject.toString().split("\\.").length > 2 && pObject.toString().indexOf("@") != -1)
+                                        object.put(fName, new JSONObject(toJson(pObject)));
+                                    else
+                                        object.put(fName, pObject);
+                                }
 
 
-                    } catch (Exception ex) {
+                            } catch (Exception ex) {
+                            }
+                        f.setAccessible(false);
                     }
-                f.setAccessible(false);
+                    jsonArray.put(object);
+                }
             }
-            jsonArray.put(object);
+            catch (Exception ex)
+            {
+
+            }
+           // for (Field f : vList.Merge(Arrays.asList(cls.getFields()), Arrays.asList(cls.getDeclaredFields()))) {
+
+
         }
 
 
@@ -188,6 +200,28 @@ public class parse {
             return "{}";
         }
     }
+    public static String toJsonOfArray(List item)
+    {
+        String data="";
+        boolean virgul = false;
+        for (Object o:item)
+        {
+            if (virgul)
+                data+=",";
+            virgul=true;
+            data+=yugi.Join("\"{0}\"",o);
+        }
+        return yugi.Join("[{0}]",data);
+    }
+
+    /*
+    if (cls.equals(Integer.class) || cls.equals(int.class) ||cls.equals(Long.class) || cls.equals(long.class) ||cls.equals(Double.class) || cls.equals(double.class)
+                        ||cls.equals(DataTable.class) ||cls.equals(DateTime.class) ||cls.equals(Boolean.class) ||cls.equals(String.class))
+                {
+                    object=new JSONObject(yugi.Join("\"{0}\"",item));
+                    jsonArray.put(object);
+                }
+    */
 
     public static <T> T jsonTo(String Json, Class tClass) {
         try {
@@ -220,6 +254,18 @@ public class parse {
                 T item = (T) jsonTo(tClass.newInstance(), Json, key, index);
                 return item;
             }
+        } catch (Exception ex) {
+            return null;
+        }
+
+    }
+
+    public static <T extends vList> T  jsonTovList(String Json, Class tClass)
+    {
+        vList list = new vList();
+        try {
+            list.list = jsonToList(Json, 0, tClass);
+            return (T)list;
         } catch (Exception ex) {
             return null;
         }
@@ -310,10 +356,17 @@ public class parse {
                 JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
 
                 for (int i = 0; i < subArray.length(); i++) {
-                    JSONObject object = subArray.getJSONObject(i);
-                    Object listItem = parseClass.newInstance();
-                    set(listItem, object);
-                    list.add(listItem);
+                    try
+                    {
+                        JSONObject object = subArray.getJSONObject(i);
+                        Object listItem = parseClass.newInstance();
+                        set(listItem, object);
+                        list.add(listItem);
+                    }
+                    catch (Exception ex)
+                    {
+                        list.add(subArray.get(i));
+                    }
                 }
 
             } catch (Exception ex) {
@@ -330,8 +383,6 @@ public class parse {
         //setSub(object, jsonObject, objectClass.getDeclaredFields());
         //setSub(object, jsonObject, objectClass.getFields());
         setSub(object, jsonObject, CustomUtil.getFields(object));
-
-        yugi.Print("i", "JSON END SET");
     }
 
     private static void setSub(Object object, JSONObject jsonObject, List<Field> fields) {

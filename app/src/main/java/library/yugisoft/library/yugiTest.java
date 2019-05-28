@@ -37,19 +37,18 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
 
     View binding_bar;
     LoopTextView gridView;
+
+    List<String> list = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<SelectableClass> list = new ArrayList<>();
-        list.add(new SelectableClass(1,"v1"));
-        list.add(new SelectableClass(2,"v2"));
-        list.add(new SelectableClass(3,"v3"));
-        gridView = findViewById(R.id.gridView);
-        gridView.getItemLooper().setList(list);
-        binding_bar = findViewById(R.id.binding_bar);
-        Testcalas testcalas = new Testcalas();
-        new CustomBindingAdapter(binding_bar,testcalas).bind();
+
+        list.add("asdasd");
+        list.add("asdasdasdd");
+        list.add("asdwqewasd");
+       list = parse.jsonToList(parse.toJsonOfArray(list),String.class);
     }
 
     @Override
@@ -66,53 +65,5 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         }
     }
 
-    public static class SelectableClass implements Checkable , IBindingItemLooper {
-        public SelectableClass() { }
-        public SelectableClass(int id ,String name) {
-            this.id = id;
-            this.name = name;
-        }
 
-
-        private int id;
-        @BindProperty(DisplayIdName = "vListText")
-        private String name;
-        private boolean select;
-
-        @Override
-        public void setChecked(boolean checked) {
-            select = checked;
-        }
-        @Override
-        public boolean isChecked() {
-            return select;
-        }
-        @Override
-        public void toggle() {
-            setChecked(!isChecked());
-        }
-
-
-        private String Test = "Test";
-
-        @Override
-        public String IdFieldName() {
-            return "id";
-        }
-
-        @Override
-        public boolean Compare(Object value) {
-            return parse.toInt(value)== id || String.valueOf(value).equals(name);
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public static class Testcalas {
-        @BindProperty(DisplayIdName = "gridView")
-        private int gridView = 2;
-    }
 }
