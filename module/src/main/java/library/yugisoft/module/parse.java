@@ -109,17 +109,43 @@ public class parse {
         if (isArray)
         {
             ArrayList list = (item instanceof vList ? (ArrayList)((vList)item).list : (ArrayList) item);
-            for (Object i : list) {
-                try {
-                    String json = toJson(i);
-                    if (json.substring(0, 1).equals("["))
-                        jsonArray.put(new JSONArray(json));
-                    else
-                        jsonArray.put(new JSONObject(json));
 
-                } catch (Exception e) {
+            if (list.size()>0)
+            {
+                Object listFirst = list.get(0);
+
+                //region toJsonOfArray
+                if (       cls.equals(Integer.class)
+                        || cls.equals(int.class)
+                        || cls.equals(Long.class)
+                        || cls.equals(long.class)
+                        || cls.equals(Double.class)
+                        || cls.equals(double.class)
+                        || cls.equals(DateTime.class)
+                        || cls.equals(Boolean.class)
+                        || cls.equals(String.class)
+                )
+                {
+                    return toJsonOfArray(list);
+                }
+                //endregion
+                else
+                for (Object i : list)
+                {
+
+                    try {
+                        String json = toJson(i);
+                        if (json.substring(0, 1).equals("["))
+                            jsonArray.put(new JSONArray(json));
+                        else
+                            jsonArray.put(new JSONObject(json));
+
+                    } catch (Exception e) {
+                    }
                 }
             }
+
+
         } else {
             JSONObject object = new JSONObject();
 
@@ -206,10 +232,26 @@ public class parse {
         boolean virgul = false;
         for (Object o:item)
         {
+            Class cls = o.getClass();
+
             if (virgul)
                 data+=",";
             virgul=true;
-            data+=yugi.Join("\"{0}\"",o);
+
+            if (       cls.equals(Integer.class)
+                    || cls.equals(int.class)
+                    || cls.equals(Long.class)
+                    || cls.equals(long.class)
+                    || cls.equals(Double.class)
+                    || cls.equals(double.class)
+                    || cls.equals(Boolean.class)
+
+            )
+            data+=yugi.Join("{0}",o);
+            else if (cls.equals(String.class) || cls.equals(DateTime.class))
+                data+=yugi.Join("\"{0}\"",o);
+
+
         }
         return yugi.Join("[{0}]",data);
     }
