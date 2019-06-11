@@ -219,7 +219,6 @@ public class CustomBindingAdapter
         if (view instanceof LoopTextView)
         {
             LoopTextView lView = ((LoopTextView)view);
-            List list = lView.getItemLooper().getList();
 
             try
             {
@@ -233,6 +232,7 @@ public class CustomBindingAdapter
                 {
                     if (!lView.getItemLooper().getList().equals(l))
                         lView.getItemLooper().setList(l);
+
                 }
                 else
                     lView.getItemLooper().setList(new ArrayList());
@@ -244,6 +244,7 @@ public class CustomBindingAdapter
             }
             field.setAccessible(false);
 
+            List list = lView.getItemLooper().getList();
             if (list.size() > 0)
             {
                 Object it = list.get(0);
