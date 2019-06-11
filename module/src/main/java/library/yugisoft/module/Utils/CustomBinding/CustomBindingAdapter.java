@@ -220,6 +220,30 @@ public class CustomBindingAdapter
         {
             LoopTextView lView = ((LoopTextView)view);
             List list = lView.getItemLooper().getList();
+
+            try
+            {
+                field.setAccessible(true);
+                List l = null;
+                if (field.get(getBindingObject()) instanceof  List)
+                    l =(List) field.get(getBindingObject());
+                else if (field.get(getBindingObject()) instanceof  vList)
+                    l =  ((vList) field.get(getBindingObject())).list;
+                if (l!=null)
+                {
+                    if (!lView.getItemLooper().getList().equals(l))
+                        lView.getItemLooper().setList(l);
+                }
+                else
+                    lView.getItemLooper().setList(new ArrayList());
+
+            }
+            catch (Exception ignored)
+            {
+
+            }
+            field.setAccessible(false);
+
             if (list.size() > 0)
             {
                 Object it = list.get(0);

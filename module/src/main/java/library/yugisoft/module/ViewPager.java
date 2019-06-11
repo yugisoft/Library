@@ -445,7 +445,7 @@ public class ViewPager extends ViewGroup
      * limit will be recreated from the adapter when needed.
      *
      * <p>This is offered as an optimization. If you know in advance the number
-     * of pages you will need to support or have lazy-loading mechanisms in place
+     * of pages you will need to support or have lazy-waiting mechanisms in place
      * on your pages, tweaking this setting can have benefits in perceived smoothness
      * of paging animations and interaction. If you have a small number of pages (3-4)
      * that you can keep active all at once, less time will be spent in layout for
