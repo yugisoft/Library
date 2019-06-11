@@ -227,58 +227,62 @@ public void show(View anchorView) {
 //region Dialog
 IL_Dialog dialog;
 
-
-public void showDialog(String title) {
-        if (dialog == null) 
+    public void showDialog(String title) {
+       showDialog(title,R.layout.view_item_looper);
+    }
+    public void showFullScreen(String title) {
+        showFullScreen(title,R.layout.view_item_looper);
+    }
+    public void showDialog(String title,int id) {
+        if (dialog == null)
         {
-       dialog = new IL_Dialog(getContext()) {
-      @Override
-      public void onConfirm() {
-     if (getOnItemLooperSelected() != null) {
-    getOnItemLooperSelected().onSelected(loopView.getSelectedItem(), getList().get(loopView.getSelectedItem()));
-     }
-     dismiss();
-      }
-       };
-       dialog.loop = loopView;
+            dialog = new IL_Dialog(getContext(),id) {
+                @Override
+                public void onConfirm() {
+                    if (getOnItemLooperSelected() != null) {
+                        getOnItemLooperSelected().onSelected(loopView.getSelectedItem(), getList().get(loopView.getSelectedItem()));
+                    }
+                    dismiss();
+                }
+            };
+            dialog.loop = loopView;
         } else {
-       dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
-       dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
+            dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         try {
-       ((ViewGroup) loopView.getParent()).removeAllViews();
+            ((ViewGroup) loopView.getParent()).removeAllViews();
         } catch (Exception ex) { }
-        
+
         dialog.bar_loop.addView(loopView);
         dialog.txt_dialog_title.setText(title);
         dialog.show();
-}
-
-
-public void showFullScreen(String title) {
+    }
+    public void showFullScreen(String title,int id) {
         if (dialog == null) {
-       dialog = new IL_Dialog(getContext()) {
-      @Override
-      public void onConfirm() {
-     if (getOnItemLooperSelected() != null) {
-    getOnItemLooperSelected().onSelected(loopView.getSelectedItem(), getList().get(loopView.getSelectedItem()));
-     }
-     dismiss();
-      }
-       };
-       dialog.loop = loopView;
+            dialog = new IL_Dialog(getContext(),id) {
+                @Override
+                public void onConfirm() {
+                    if (getOnItemLooperSelected() != null) {
+                        getOnItemLooperSelected().onSelected(loopView.getSelectedItem(), getList().get(loopView.getSelectedItem()));
+                    }
+                    dismiss();
+                }
+            };
+            dialog.loop = loopView;
         }
 
         dialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MATCH_PARENT, 1));
         try {
-       ((ViewGroup) loopView.getParent()).removeAllViews();
+            ((ViewGroup) loopView.getParent()).removeAllViews();
         } catch (Exception ex) {
         }
         dialog.bar_loop.addView(loopView);
         dialog.txt_dialog_title.setText(title);
         dialog.show();
-}
+    }
+
 
 public static int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT, WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
 
