@@ -54,7 +54,7 @@ private Context context;
 private List<T> list;
 private LoopView loopView = null;
 private int textSize = 12, drawItemsCount = 7, textAlignment = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, textColor = Color.BLACK, BackColor = Color.TRANSPARENT;
-private boolean canLoop,showConfirm;
+private boolean canLoop, showConfirm;
 private Object parentObject;
 
 
