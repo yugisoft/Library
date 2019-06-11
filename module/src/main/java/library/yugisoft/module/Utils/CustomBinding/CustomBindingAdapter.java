@@ -338,7 +338,7 @@ public class CustomBindingAdapter
         }
         String sValue = pValue ==null ? "" : String.valueOf(pValue);
 
-        bindLoopTextView(field,view,pValue,fValue,sValue);
+
         bindTextView(field,view,pValue, fValue,sValue);
 
 
@@ -346,7 +346,8 @@ public class CustomBindingAdapter
         {
             Checkable cView = (Checkable) view;
             cView.setChecked(parse.toBoolean(pValue));
-
+            if (getBindingObject() instanceof Checkable)
+                cView.setChecked(((Checkable)getBindingObject()).isChecked());
             if (view instanceof CompoundButton)
                 ((CompoundButton)view).setOnCheckedChangeListener((buttonView, isChecked) ->
                         {
@@ -386,7 +387,7 @@ public class CustomBindingAdapter
 
         if (getOnCustomBindingAdapterSetView()!=null)
             getOnCustomBindingAdapterSetView().SetViewValue(this,field,view,pValue, fValue,sValue);
-        
+
         if (onViewDrawings.get(fieldName) != null)
             onViewDrawings.get(fieldName).onDraw(getRow(),view,fieldName,pValue);
 
@@ -444,14 +445,17 @@ public class CustomBindingAdapter
     }
     public void bindTextView(Field field,View view,Object pValue,Object fValue,String sValue) {
 
-
-        if (view instanceof TextView)
+        if (view instanceof  LoopTextView)
+            bindLoopTextView(field,view,pValue,fValue,sValue);
+        else if (view instanceof TextView)
         {
+
+
             if (view instanceof CurrencyTextView)
             {
                 ((CurrencyTextView)view).setTutar(parse.toDouble(pValue));
             }
-            if (view instanceof DateTextView)
+            else if (view instanceof DateTextView)
             {
                 DateTextView dView = (DateTextView) view;
                 if (field.getType() == DateTime.class)
