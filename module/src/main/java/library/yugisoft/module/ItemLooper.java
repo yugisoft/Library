@@ -302,7 +302,7 @@ BindingGridView bindingGridView = null;
 
         public BindingGridView showListDialog(String title,int id) {
         if (listDialog == null)
-            listDialog = new IL_Dialog(getContext());
+            listDialog = new IL_Dialog(getContext(),id);
         listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
 
@@ -332,7 +332,7 @@ BindingGridView bindingGridView = null;
 
         public BindingGridView showListFullDialog(String title,int id) {
         if (listDialog == null)
-            listDialog = new IL_Dialog(getContext());
+            listDialog = new IL_Dialog(getContext(),id);
         listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
         listDialog.btn_confirm.setVisibility(View.GONE);
