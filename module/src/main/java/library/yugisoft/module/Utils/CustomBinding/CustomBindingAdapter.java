@@ -33,6 +33,21 @@ import library.yugisoft.module.yugi;
 
 public class CustomBindingAdapter
 {
+    public static OnCustomBindingAdapterSetView getOnCustomBindingAdapterSetView() {
+        return onCustomBindingAdapterSetView;
+    }
+
+    public static void setOnCustomBindingAdapterSetView(OnCustomBindingAdapterSetView onCustomBindingAdapterSetView) {
+        CustomBindingAdapter.onCustomBindingAdapterSetView = onCustomBindingAdapterSetView;
+    }
+
+    public interface OnCustomBindingAdapterSetView
+    {
+        void SetViewValue(CustomBindingAdapter adapter,Field field,View view,Object pValue,Object fValue,String sValue);
+    }
+
+    private static OnCustomBindingAdapterSetView onCustomBindingAdapterSetView;
+
     Hashtable<Integer, Field> IDs;
     List<View> viewList;
     private Hashtable<String, OnViewDrawing> onViewDrawings = new Hashtable<>();
@@ -195,163 +210,6 @@ public class CustomBindingAdapter
     }
 
     //endregion
-    void setViewValue(View view,Field field) {
-        String fieldName = field.getName();
-        BindProperty property = CustomUtil.getFieldProperty(field);
-        if (getLayoutController()!=null)
-        {
-            View layoutView = getLayoutController().findViewById(view.getId());
-            if (layoutView!= null)
-            {
-                new Handler().postDelayed(()->
-                {
-                    view.getLayoutParams().width = layoutView.getWidth();
-                },500);
-                //view.getLayoutParams().height = layoutView.getHeight();
-            }
-
-        }
-        Object pValue = null,fValue = null;
-        if (getBindingObject() != null)
-        {
-            pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(fieldName):CustomUtil.getValue(getBindingObject(),fieldName);
-            fValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(fieldName):CustomUtil.getFieldValue(getBindingObject(),fieldName);
-        }
-        String sValue = pValue ==null ? "" : String.valueOf(pValue);
-
-        if (view instanceof LoopTextView)
-        {
-            LoopTextView lView = ((LoopTextView)view);
-
-            try
-            {
-                field.setAccessible(true);
-                List l = null;
-                if (field.get(getBindingObject()) instanceof  List)
-                    l =(List) field.get(getBindingObject());
-                else if (field.get(getBindingObject()) instanceof  vList)
-                    l =  ((vList) field.get(getBindingObject())).list;
-                if (l!=null)
-                {
-                    if (!lView.getItemLooper().getList().equals(l))
-                        lView.getItemLooper().setList(l);
-
-                }
-                else
-                    lView.getItemLooper().setList(new ArrayList());
-
-            }
-            catch (Exception ignored)
-            {
-
-            }
-            field.setAccessible(false);
-
-            List list = lView.getItemLooper().getList();
-            if (list.size() > 0)
-            {
-                Object it = list.get(0);
-                if (it instanceof  IBindingItemLooper) {
-                    Object finalPValue = fValue;
-                    try
-                    {
-                        Object li =vList.Filter(list, l->{return  ((IBindingItemLooper)l).Compare(finalPValue);}).get(0);
-                        lView.getItemLooper().setSelectedITem(li);
-                    }
-                    catch (Exception ignored)
-                    {}
-                }
-            }
-
-        }
-        else if (view instanceof Checkable)
-        {
-            Checkable cView = (Checkable) view;
-            cView.setChecked(parse.toBoolean(pValue));
-
-            if (view instanceof CompoundButton)
-                ((CompoundButton)view).setOnCheckedChangeListener((buttonView, isChecked) ->
-                        {
-                            if (getBindingObject() instanceof  Checkable)
-                                ((Checkable)getBindingObject()).setChecked(((Checkable) view).isChecked());
-
-                            reverse();
-                        }
-                );
-
-        }
-
-
-        else if (view instanceof ImageView)
-        {
-            if (pValue != null) {
-                ImageView iView = (ImageView) view;
-                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) { }
-
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        iView.setImageDrawable(null);
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-
-                    }
-
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-                        iView.setImageDrawable(null);
-                    }
-                });
-            }
-        }
-
-        else if (view instanceof CurrencyTextView)
-        {
-            ((CurrencyTextView)view).setTutar(parse.toDouble(pValue));
-        }
-        else if (view instanceof TextView)
-        {
-            if (view instanceof DateTextView)
-            {
-                DateTextView dView = (DateTextView) view;
-                if (field.getType() == DateTime.class)
-                {
-                    dView.setDateTime((DateTime) fValue);
-                }
-                else
-                {
-                    dView.setDateTime(DateTime.fromDateTime(fValue.toString()));
-                }
-
-            }
-            else if (view instanceof CurrencyTextView)
-            {
-                CurrencyTextView dView = (CurrencyTextView) view;
-                dView.setTutar(parse.toDouble(fValue));
-            }
-
-            TextView tView = (TextView)view;
-            String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
-            if (format.length()>0)
-            {
-                try{sValue = parse.Formatter.purify(format,getBindingObject());}catch (Exception ignored){}
-            }
-            tView.setText(sValue);
-
-            if (tView.getText().length() == 0 && property.isEmptySetInvisible())
-                tView.setVisibility(View.GONE);
-            else
-                tView.setVisibility(View.VISIBLE);
-
-        }
-        if (onViewDrawings.get(fieldName) != null)
-            onViewDrawings.get(fieldName).onDraw(getRow(),view,fieldName,pValue);
-
-
-    }
     public void bind()
     {
         bind(getBindingObject());
@@ -456,4 +314,177 @@ public class CustomBindingAdapter
         }
     }
 
+
+    void setViewValue(View view,Field field) {
+        String fieldName = field.getName();
+        if (getLayoutController()!=null)
+        {
+            View layoutView = getLayoutController().findViewById(view.getId());
+            if (layoutView!= null)
+            {
+                new Handler().postDelayed(()->
+                {
+                    view.getLayoutParams().width = layoutView.getWidth();
+                },500);
+                //view.getLayoutParams().height = layoutView.getHeight();
+            }
+
+        }
+        Object pValue = null,fValue = null;
+        if (getBindingObject() != null)
+        {
+            pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(fieldName):CustomUtil.getValue(getBindingObject(),fieldName);
+            fValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel)getBindingObject()).getValue(fieldName):CustomUtil.getFieldValue(getBindingObject(),fieldName);
+        }
+        String sValue = pValue ==null ? "" : String.valueOf(pValue);
+
+        bindLoopTextView(field,view,pValue,fValue,sValue);
+        bindTextView(field,view,pValue, fValue,sValue);
+
+
+        if (view instanceof Checkable)
+        {
+            Checkable cView = (Checkable) view;
+            cView.setChecked(parse.toBoolean(pValue));
+
+            if (view instanceof CompoundButton)
+                ((CompoundButton)view).setOnCheckedChangeListener((buttonView, isChecked) ->
+                        {
+                            if (getBindingObject() instanceof  Checkable)
+                                ((Checkable)getBindingObject()).setChecked(((Checkable) view).isChecked());
+
+                            reverse();
+                        }
+                );
+
+        }
+        if (view instanceof ImageView)
+        {
+            if (pValue != null) {
+                ImageView iView = (ImageView) view;
+                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) { }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        iView.setImageDrawable(null);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        iView.setImageDrawable(null);
+                    }
+                });
+            }
+        }
+
+        if (getOnCustomBindingAdapterSetView()!=null)
+            getOnCustomBindingAdapterSetView().SetViewValue(this,field,view,pValue, fValue,sValue);
+        
+        if (onViewDrawings.get(fieldName) != null)
+            onViewDrawings.get(fieldName).onDraw(getRow(),view,fieldName,pValue);
+
+
+    }
+
+
+    //region Views
+
+    public void bindLoopTextView(Field field,View view,Object pValue,Object fValue,String sValue) {
+        if (view instanceof LoopTextView)
+        {
+            LoopTextView lView = ((LoopTextView)view);
+
+            try
+            {
+                field.setAccessible(true);
+                List l = null;
+                if (field.get(getBindingObject()) instanceof  List)
+                    l =(List) field.get(getBindingObject());
+                else if (field.get(getBindingObject()) instanceof  vList)
+                    l =  ((vList) field.get(getBindingObject())).list;
+                if (l!=null)
+                {
+                    if (!lView.getItemLooper().getList().equals(l))
+                        lView.getItemLooper().setList(l);
+
+                }
+                else
+                    lView.getItemLooper().setList(new ArrayList());
+
+            }
+            catch (Exception ignored)
+            {
+
+            }
+            field.setAccessible(false);
+
+            List list = lView.getItemLooper().getList();
+            if (list.size() > 0)
+            {
+                Object it = list.get(0);
+                if (it instanceof  IBindingItemLooper) {
+                    try
+                    {
+                        Object li =vList.Filter(list, l->{return  ((IBindingItemLooper)l).Compare(fValue);}).get(0);
+                        lView.getItemLooper().setSelectedITem(li);
+                    }
+                    catch (Exception ignored)
+                    {}
+                }
+            }
+
+        }
+    }
+    public void bindTextView(Field field,View view,Object pValue,Object fValue,String sValue) {
+
+
+        if (view instanceof TextView)
+        {
+            if (view instanceof CurrencyTextView)
+            {
+                ((CurrencyTextView)view).setTutar(parse.toDouble(pValue));
+            }
+            if (view instanceof DateTextView)
+            {
+                DateTextView dView = (DateTextView) view;
+                if (field.getType() == DateTime.class)
+                {
+                    dView.setDateTime((DateTime) fValue);
+                }
+                else
+                {
+                    dView.setDateTime(DateTime.fromDateTime(fValue.toString()));
+                }
+
+            }
+            if (view instanceof CurrencyTextView)
+            {
+                CurrencyTextView dView = (CurrencyTextView) view;
+                dView.setTutar(parse.toDouble(fValue));
+            }
+
+            TextView tView = (TextView)view;
+            String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
+            if (format.length()>0)
+            {
+                try{sValue = parse.Formatter.purify(format,getBindingObject());}catch (Exception ignored){}
+            }
+            tView.setText(sValue);
+
+            if (tView.getText().length() == 0 && CustomUtil.getFieldProperty(field).isEmptySetInvisible())
+                tView.setVisibility(View.GONE);
+            else
+                tView.setVisibility(View.VISIBLE);
+
+        }
+    }
+
+    //endregion
 }
