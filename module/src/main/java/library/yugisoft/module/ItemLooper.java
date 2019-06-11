@@ -54,7 +54,7 @@ private Context context;
 private List<T> list;
 private LoopView loopView = null;
 private int textSize = 12, drawItemsCount = 7, textAlignment = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, textColor = Color.BLACK, BackColor = Color.TRANSPARENT;
-private boolean canLoop;
+private boolean canLoop,showConfirm;
 private Object parentObject;
 
 
@@ -130,6 +130,12 @@ public ItemLooper<T> setParentObject(Object parentObject) {
         return this;
 }
 
+public ItemLooper<T> setShowConfirm(boolean showConfirm)
+{
+    this.showConfirm = showConfirm;
+    return  this;
+}
+
 //endregion
 //region Getters
 public Context getContext() {
@@ -171,6 +177,10 @@ public int getBackColor() {
 public Object getParentObject() {
         return parentObject;
 }
+
+    public boolean isShowConfirm() {
+        return showConfirm;
+    }
 //endregion
 
 void createLoopView() {
@@ -295,6 +305,8 @@ public void showDialog(String title, int witdh, int height) {
 
 //endregion
 
+
+
 //region ListDialog
 
 IL_Dialog listDialog = null;
@@ -310,7 +322,7 @@ BindingGridView bindingGridView = null;
         listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
 
-        listDialog.btn_confirm.setVisibility(View.GONE);
+            listDialog.btn_confirm.setVisibility(isShowConfirm() ? View.VISIBLE : View.GONE);
 
         if (bindingGridView == null)
             bindingGridView = new BindingGridView(getContext());
@@ -339,7 +351,7 @@ BindingGridView bindingGridView = null;
             listDialog = new IL_Dialog(getContext(),id);
         listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
-        listDialog.btn_confirm.setVisibility(View.GONE);
+        listDialog.btn_confirm.setVisibility(isShowConfirm() ? View.VISIBLE : View.GONE);
         if (bindingGridView == null)
             bindingGridView = new BindingGridView(getContext());
         bindingGridView.setDetailViewID(getDetailViewID());
