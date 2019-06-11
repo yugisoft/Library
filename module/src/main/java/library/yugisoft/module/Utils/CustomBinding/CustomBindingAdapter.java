@@ -264,7 +264,54 @@ public class CustomBindingAdapter
             }
 
         }
+        else if (view instanceof Checkable)
+        {
+            Checkable cView = (Checkable) view;
+            cView.setChecked(parse.toBoolean(pValue));
 
+            if (view instanceof CompoundButton)
+                ((CompoundButton)view).setOnCheckedChangeListener((buttonView, isChecked) ->
+                        {
+                            if (getBindingObject() instanceof  Checkable)
+                                ((Checkable)getBindingObject()).setChecked(((Checkable) view).isChecked());
+
+                            reverse();
+                        }
+                );
+
+        }
+
+
+        else if (view instanceof ImageView)
+        {
+            if (pValue != null) {
+                ImageView iView = (ImageView) view;
+                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) { }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        iView.setImageDrawable(null);
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+                        iView.setImageDrawable(null);
+                    }
+                });
+            }
+        }
+
+        else if (view instanceof CurrencyTextView)
+        {
+            ((CurrencyTextView)view).setTutar(parse.toDouble(pValue));
+        }
         else if (view instanceof TextView)
         {
             if (view instanceof DateTextView)
@@ -299,51 +346,6 @@ public class CustomBindingAdapter
             else
                 tView.setVisibility(View.VISIBLE);
 
-        }
-        else if (view instanceof ImageView)
-        {
-            if (pValue != null) {
-                ImageView iView = (ImageView) view;
-                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) { }
-
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        iView.setImageDrawable(null);
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-
-                    }
-
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-                        iView.setImageDrawable(null);
-                    }
-                });
-            }
-        }
-        else if (view instanceof Checkable)
-        {
-            Checkable cView = (Checkable) view;
-            cView.setChecked(parse.toBoolean(pValue));
-
-            if (view instanceof CompoundButton)
-            ((CompoundButton)view).setOnCheckedChangeListener((buttonView, isChecked) ->
-            {
-                if (getBindingObject() instanceof  Checkable)
-                ((Checkable)getBindingObject()).setChecked(((Checkable) view).isChecked());
-              
-                reverse();
-            }
-            );
-
-        }
-        else if (view instanceof CurrencyTextView)
-        {
-            ((CurrencyTextView)view).setTutar(parse.toDouble(pValue));
         }
         if (onViewDrawings.get(fieldName) != null)
             onViewDrawings.get(fieldName).onDraw(getRow(),view,fieldName,pValue);
