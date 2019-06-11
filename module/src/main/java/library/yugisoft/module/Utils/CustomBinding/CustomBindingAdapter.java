@@ -5,9 +5,12 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -326,6 +329,17 @@ public class CustomBindingAdapter
         {
             Checkable cView = (Checkable) view;
             cView.setChecked(parse.toBoolean(pValue));
+
+            if (view instanceof CompoundButton)
+            ((CompoundButton)view).setOnCheckedChangeListener((buttonView, isChecked) ->
+            {
+                if (getBindingObject() instanceof  Checkable)
+                ((Checkable)getBindingObject()).setChecked(((Checkable) view).isChecked());
+              
+                reverse();
+            }
+            );
+
         }
         else if (view instanceof CurrencyTextView)
         {
@@ -405,7 +419,11 @@ public class CustomBindingAdapter
             } else if (view instanceof TextView)
                 value = ((TextView) view).getText().toString();
             else if (view instanceof Checkable)
+            {
+                if (getBindingObject() instanceof Checkable)
+                    ((Checkable)getBindingObject()).setChecked(((Checkable) view).isChecked());
                 value = ((Checkable) view).isChecked();
+            }
             field.setAccessible(false);
             setFieldValue(field, value);
         }
