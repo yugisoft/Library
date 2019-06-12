@@ -141,7 +141,7 @@ public class http
             }
             catch (Exception Ex)
             {
-                    log += Ex.getMessage();
+                log += Ex.getMessage();
             }
             return log;
         }
@@ -300,7 +300,7 @@ public class http
         return response;
     }
 
-    protected static Response httpExecute(HttpRequestBase httpGet,String log) {
+    public static Response httpExecute(HttpRequestBase httpGet,String log) {
         String LOG ="httpExecuteResponse \n";
         Response response =null;
         try
@@ -361,7 +361,7 @@ public class http
         void onResponse(DataTable response);
     }
 
-    protected static OnAuthenticationFailed onAuthenticationFailed;
+    public static OnAuthenticationFailed onAuthenticationFailed;
     public static OnAuthenticationFailed getOnAuthenticationFailed() {
         return onAuthenticationFailed;
     }
@@ -370,7 +370,7 @@ public class http
     }
 
     //region Private
-    protected static String convertInputStreamToString(InputStream inputStream) throws IOException {
+    public static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
         String result = "";
@@ -381,49 +381,49 @@ public class http
         return result;
 
     }
-    protected static Response isException(int statusCode) {
+    public static Response isException(int statusCode) {
 
         Response response = new Response();
         response.HataKodu = statusCode;
         response.isException = !(statusCode >= 200 && statusCode < 300);
 
 
-       switch (statusCode)
-       {
-       //     case 400:
-       //         Hata.isException = true;
-       //         Hata.HataAciklama = "Sunucuya Yapılan İstek Hatalıdır";
-       //         break;
-       //     case 401:
-       //         Hata.isException = true;
-       //         Hata.HataAciklama = "Oturumunuzun Süresi Dolmuş! Lütfen Tekrar Giriş Yapınız.";
-       //         break;
-                 case 404:
-                     response.isException = true;
-                     response.HataAciklama = "İstek Yapılan Kaynak Veya Sayfa Bulunamadı! Lütfen Server Adresini Doğru Girdiğinizden Emin Olun!";
-                     break;
-       //     case 408:
-       //         Hata.isException = true;
-       //         Hata.HataAciklama = "İstek Zaman Aşımına Uğradı! Lütfen İnternet Bağlantınızı Kontrol Edin.";
-       //         break;
-       //     case 410:
-       //         Hata.isException = true;
-       //         Hata.HataAciklama = "Ulaşmaya Çalıştığınız Sayfa Veya Kaynak Artık Mevcut Değil!";
-       //         break;
-       //     case 413:
-       //         Hata.isException = true;
-       //         Hata.HataAciklama = "İsteğin boyutu çok büyük olduğu için işlenemedi!";
-       //         break;
-       //     case 414:
-       //         Hata.isException = true;
-       //         Hata.HataAciklama = "İstek Adresi Fazla Uzun!";
-       //         break;
-       //     default:
-       //         Hata.isException = false;
-       //         Hata.HataAciklama = "Success";
-       //         Hata.HataKodu = 0;
-       //         break;
-       //
+        switch (statusCode)
+        {
+            //     case 400:
+            //         Hata.isException = true;
+            //         Hata.HataAciklama = "Sunucuya Yapılan İstek Hatalıdır";
+            //         break;
+            //     case 401:
+            //         Hata.isException = true;
+            //         Hata.HataAciklama = "Oturumunuzun Süresi Dolmuş! Lütfen Tekrar Giriş Yapınız.";
+            //         break;
+            case 404:
+                response.isException = true;
+                response.HataAciklama = "İstek Yapılan Kaynak Veya Sayfa Bulunamadı! Lütfen Server Adresini Doğru Girdiğinizden Emin Olun!";
+                break;
+            //     case 408:
+            //         Hata.isException = true;
+            //         Hata.HataAciklama = "İstek Zaman Aşımına Uğradı! Lütfen İnternet Bağlantınızı Kontrol Edin.";
+            //         break;
+            //     case 410:
+            //         Hata.isException = true;
+            //         Hata.HataAciklama = "Ulaşmaya Çalıştığınız Sayfa Veya Kaynak Artık Mevcut Değil!";
+            //         break;
+            //     case 413:
+            //         Hata.isException = true;
+            //         Hata.HataAciklama = "İsteğin boyutu çok büyük olduğu için işlenemedi!";
+            //         break;
+            //     case 414:
+            //         Hata.isException = true;
+            //         Hata.HataAciklama = "İstek Adresi Fazla Uzun!";
+            //         break;
+            //     default:
+            //         Hata.isException = false;
+            //         Hata.HataAciklama = "Success";
+            //         Hata.HataKodu = 0;
+            //         break;
+            //
         }
         return response;
     }
@@ -433,37 +433,37 @@ public class http
     @Deprecated
     public static class httpGET extends AsyncTask<String,Void,Response> {
 
-    OnHttpResponse onHttpResponse = null;
-    Hashtable headers=null;
+        OnHttpResponse onHttpResponse = null;
+        Hashtable headers=null;
 
-    public httpGET(OnHttpResponse pOnHttpResponse)
-    {
-        onHttpResponse=pOnHttpResponse;
-    }
-
-    public httpGET(OnHttpResponse pOnHttpResponse,Hashtable pheaders) {
-        onHttpResponse=pOnHttpResponse;
-        headers=pheaders;
-    }
-
-    @Override
-    protected Response doInBackground(String... strings)
-    {
-        if (strings.length>0)
+        public httpGET(OnHttpResponse pOnHttpResponse)
         {
-            String Url = strings[0];
-            return http.GET(Url,headers);
+            onHttpResponse=pOnHttpResponse;
         }
-        return null;
-    }
 
-    @Override
-    protected void onPostExecute(Response response) {
-        super.onPostExecute(response);
-        if (onHttpResponse!=null)
-            onHttpResponse.onResponse(response);
+        public httpGET(OnHttpResponse pOnHttpResponse,Hashtable pheaders) {
+            onHttpResponse=pOnHttpResponse;
+            headers=pheaders;
+        }
+
+        @Override
+        protected Response doInBackground(String... strings)
+        {
+            if (strings.length>0)
+            {
+                String Url = strings[0];
+                return http.GET(Url,headers);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Response response) {
+            super.onPostExecute(response);
+            if (onHttpResponse!=null)
+                onHttpResponse.onResponse(response);
+        }
     }
-}
     @Deprecated
     public static class httpGETTable extends AsyncTask<String,Void,DataTable> {
 
@@ -986,14 +986,19 @@ public class http
             Execute(new HttpPut(UrlFormatter(url)));
         }
         public void POST_FILE(String url, File[] files) {
-            HttpPost httpPost = new HttpPost(UrlFormatter(url));
-
-            MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-            for (File file : files)
-            reqEntity.addPart(file.getName(), new FileBody(file));
-            httpPost.setEntity(reqEntity);
-
-            Execute(httpPost);
+            if (files.length>0)
+            {
+                String postReceiverUrl = url;
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost(postReceiverUrl);
+                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                for (File file : files)
+                    reqEntity.addPart(file.getName(), new FileBody(file));
+                httpPost.setEntity(reqEntity);
+                httpPost.addHeader("Authorization","bearer "+yugi.getToken());
+                setHttpRequest(httpPost);
+                super.execute();
+            }
         }
 
 
@@ -1050,6 +1055,16 @@ public class http
         }
         public Response PUT_Sync(String url) {
             return  Execute_Sync(new HttpPut(UrlFormatter(url)));
+        }
+        public Response POST_FILE_Sync(String url, File[] files) {
+            HttpPost httpPost = new HttpPost(UrlFormatter(url));
+
+            MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            for (File file : files)
+                reqEntity.addPart(file.getName(), new FileBody(file));
+            httpPost.setEntity(reqEntity);
+
+            return httpExecute(((HttpRequestBase)(httpPost)),"Http File Post");
         }
 
         public Response Execute_Sync(HttpEntityEnclosingRequestBase http) {
