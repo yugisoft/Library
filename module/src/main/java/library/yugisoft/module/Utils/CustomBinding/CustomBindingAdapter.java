@@ -345,9 +345,12 @@ public class CustomBindingAdapter
         if (view instanceof Checkable)
         {
             Checkable cView = (Checkable) view;
-            cView.setChecked(parse.toBoolean(pValue));
+
             if (getBindingObject() instanceof Checkable)
                 cView.setChecked(((Checkable)getBindingObject()).isChecked());
+            else
+                cView.setChecked(parse.toBoolean(pValue));
+
             if (view instanceof CompoundButton)
                 ((CompoundButton)view).setOnCheckedChangeListener((buttonView, isChecked) ->
                         {
