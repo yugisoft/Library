@@ -7,11 +7,15 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -296,7 +300,7 @@ public class http
         return response;
     }
 
-    private static Response httpExecute(HttpRequestBase httpGet,String log) {
+    protected static Response httpExecute(HttpRequestBase httpGet,String log) {
         String LOG ="httpExecuteResponse \n";
         Response response =null;
         try
@@ -357,7 +361,7 @@ public class http
         void onResponse(DataTable response);
     }
 
-    private static OnAuthenticationFailed onAuthenticationFailed;
+    protected static OnAuthenticationFailed onAuthenticationFailed;
     public static OnAuthenticationFailed getOnAuthenticationFailed() {
         return onAuthenticationFailed;
     }
@@ -366,7 +370,7 @@ public class http
     }
 
     //region Private
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
+    protected static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
         String result = "";
@@ -377,7 +381,7 @@ public class http
         return result;
 
     }
-    private static Response isException(int statusCode) {
+    protected static Response isException(int statusCode) {
 
         Response response = new Response();
         response.HataKodu = statusCode;
@@ -425,40 +429,41 @@ public class http
     }
     //endregion
 
+    //region Deprecated
     @Deprecated
     public static class httpGET extends AsyncTask<String,Void,Response> {
 
-        OnHttpResponse onHttpResponse = null;
-        Hashtable headers=null;
+    OnHttpResponse onHttpResponse = null;
+    Hashtable headers=null;
 
-        public httpGET(OnHttpResponse pOnHttpResponse)
-        {
-            onHttpResponse=pOnHttpResponse;
-        }
-
-        public httpGET(OnHttpResponse pOnHttpResponse,Hashtable pheaders) {
-            onHttpResponse=pOnHttpResponse;
-            headers=pheaders;
-        }
-
-        @Override
-        protected Response doInBackground(String... strings)
-        {
-            if (strings.length>0)
-            {
-                String Url = strings[0];
-                return http.GET(Url,headers);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Response response) {
-            super.onPostExecute(response);
-            if (onHttpResponse!=null)
-                onHttpResponse.onResponse(response);
-        }
+    public httpGET(OnHttpResponse pOnHttpResponse)
+    {
+        onHttpResponse=pOnHttpResponse;
     }
+
+    public httpGET(OnHttpResponse pOnHttpResponse,Hashtable pheaders) {
+        onHttpResponse=pOnHttpResponse;
+        headers=pheaders;
+    }
+
+    @Override
+    protected Response doInBackground(String... strings)
+    {
+        if (strings.length>0)
+        {
+            String Url = strings[0];
+            return http.GET(Url,headers);
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Response response) {
+        super.onPostExecute(response);
+        if (onHttpResponse!=null)
+            onHttpResponse.onResponse(response);
+    }
+}
     @Deprecated
     public static class httpGETTable extends AsyncTask<String,Void,DataTable> {
 
@@ -779,9 +784,11 @@ public class http
                 onHttpResponseTable.onResponse(response);
         }
     }
+    //endregion
 
 
-    public static class Request extends AsyncTask<String,Void,Response> {
+    public static class Request extends AsyncTask<String,Void,Response>
+    {
         private OnHttpResponse onHttpResponse = null;
         private Hashtable headers=null,bodys=null;
         private String sbody="";
@@ -791,19 +798,23 @@ public class http
         public static int defaultTimeOut = 0;
         HttpRequestBase httpRequest;
 
-        public Request setTimeOut(int timeOut) {
-            this.timeOut = timeOut;
-            return  this;
-        }
-        public Request setTimeOutSecond(int timeOut) {
-            this.timeOut = timeOut * 1000;
-            return  this;
+        protected boolean isFilePost = false;
+
+        public static String UrlFormatter(String url) {
+            try
+            {
+                URL urll= new URL(url);
+                URI uri = new URI(urll.getProtocol(), urll.getUserInfo(), urll.getHost(), urll.getPort(), urll.getPath(), urll.getQuery(), urll.getRef());
+                return uri.toString();
+            }
+            catch (Exception ex)
+            {
+                return  url;
+            }
+
         }
 
-        public int getTimeOut() {
-            return timeOut;
-        }
-
+        //region Constr
         public Request() {
             onHttpResponse=null;
             timeOut = defaultTimeOut;
@@ -836,7 +847,34 @@ public class http
             headers=pheaders;
             timeOut = defaultTimeOut;
         }
-
+        //endregion
+        //region GETTER
+        public int getTimeOut() {
+            return timeOut;
+        }
+        public Hashtable getBodys() {
+            return bodys;
+        }
+        public Hashtable getHeaders() {
+            return headers;
+        }
+        public HttpRequestBase getHttpRequest() {
+            return httpRequest;
+        }
+        public static int getDefaultTimeOut() {
+            return defaultTimeOut;
+        }
+        public OnHttpResponse getOnHttpResponse() {
+            return onHttpResponse;
+        }
+        public String getLog() {
+            return Log;
+        }
+        public String getSbody() {
+            return sbody;
+        }
+        //endregion
+        //region SETTER
         public Request setOnHttpResponse(OnHttpResponse onHttpResponse) {
             this.onHttpResponse = onHttpResponse;
             return  this;
@@ -861,48 +899,26 @@ public class http
             Log = log;
             return  this;
         }
-
-        public void GET(String url)
-        {
-            Execute(new HttpGet(UrlFormatter(url)));
+        public Request setJson(boolean json) {
+            Json = json;
+            return this;
         }
-        public void DELETE(String url) {
-            Execute(new HttpDelete(UrlFormatter(url)));
+        public Request setHttpRequest(HttpRequestBase httpRequest) {
+            this.httpRequest = httpRequest;
+            return this;
         }
-        public void HEAD(String url) {
-            Execute(new HttpHead(UrlFormatter(url)));
+        public Request setSbody(String sbody) {
+            this.sbody = sbody;
+            return this;
         }
-        public void OPTIONS(String url) {
-            Execute(new HttpOptions(UrlFormatter(url)));
+        public Request setTimeOut(int timeOut) {
+            this.timeOut = timeOut;
+            return  this;
         }
-        public void POST(String url) {
-            Execute(new HttpPost(UrlFormatter(url)));
+        public Request setTimeOutSecond(int timeOut) {
+            this.timeOut = timeOut * 1000;
+            return  this;
         }
-        public void PUT(String url) {
-            Execute(new HttpPut(UrlFormatter(url)));
-        }
-
-
-        public Response GET2(String url)
-        {
-           return Execute2(new HttpGet(UrlFormatter(url)));
-        }
-        public Response DELETE2(String url) {
-            return  Execute2(new HttpDelete(UrlFormatter(url)));
-        }
-        public Response HEAD2(String url) {
-            return  Execute2(new HttpHead(UrlFormatter(url)));
-        }
-        public Response OPTIONS2(String url) {
-            return Execute2(new HttpOptions(UrlFormatter(url)));
-        }
-        public Response POST2(String url) {
-            return Execute2(new HttpPost(UrlFormatter(url)));
-        }
-        public Response PUT2(String url) {
-            return  Execute2(new HttpPut(UrlFormatter(url)));
-        }
-
 
         public <T> Request JsonTo(INTERFACES.OnResponse<T> listener, Class cl) {
             OnHttpResponse httpResponse = onHttpResponse;
@@ -948,6 +964,38 @@ public class http
             });
             return  this;
         }
+        //endregion
+        //region Http Request Async
+        public void GET(String url)
+        {
+            Execute(new HttpGet(UrlFormatter(url)));
+        }
+        public void DELETE(String url) {
+            Execute(new HttpDelete(UrlFormatter(url)));
+        }
+        public void HEAD(String url) {
+            Execute(new HttpHead(UrlFormatter(url)));
+        }
+        public void OPTIONS(String url) {
+            Execute(new HttpOptions(UrlFormatter(url)));
+        }
+        public void POST(String url) {
+            Execute(new HttpPost(UrlFormatter(url)));
+        }
+        public void PUT(String url) {
+            Execute(new HttpPut(UrlFormatter(url)));
+        }
+        public void POST_FILE(String url, File[] files) {
+            HttpPost httpPost = new HttpPost(UrlFormatter(url));
+
+            MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            for (File file : files)
+            reqEntity.addPart(file.getName(), new FileBody(file));
+            httpPost.setEntity(reqEntity);
+
+            Execute(httpPost);
+        }
+
 
         public void Execute(HttpEntityEnclosingRequestBase http) {
 
@@ -981,11 +1029,30 @@ public class http
             httpRequest = http;
 
             if (timeOut > 0)
-            HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
+                HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
             this.execute();
         }
+        //endregion
+        //region Http Request Sync
+        public Response GET_Sync(String url) {
+            return Execute_Sync(new HttpGet(UrlFormatter(url)));
+        }
+        public Response DELETE_Sync(String url) {
+            return  Execute_Sync(new HttpDelete(UrlFormatter(url)));
+        }
+        public Response HEAD_Sync(String url) {
+            return  Execute_Sync(new HttpHead(UrlFormatter(url)));
+        }
+        public Response OPTIONS_Sync(String url) { return Execute_Sync(new HttpOptions(UrlFormatter(url)));
+        }
+        public Response POST_Sync(String url) {
+            return Execute_Sync(new HttpPost(UrlFormatter(url)));
+        }
+        public Response PUT_Sync(String url) {
+            return  Execute_Sync(new HttpPut(UrlFormatter(url)));
+        }
 
-        public Response Execute2(HttpEntityEnclosingRequestBase http) {
+        public Response Execute_Sync(HttpEntityEnclosingRequestBase http) {
 
             //Content Type Belirlendi!
             if (!Json)
@@ -1000,9 +1067,9 @@ public class http
                 Bodys.Add(http,sbody);
             }
 
-           return Execute2(((HttpRequestBase)(http)));
+            return Execute_Sync(((HttpRequestBase)(http)));
         }
-        public Response Execute2(HttpRequestBase http) {
+        public Response Execute_Sync(HttpRequestBase http) {
 
             if (Log.equals(""))
             {
@@ -1020,29 +1087,15 @@ public class http
                 HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
             return httpExecute(httpRequest,Log);
         }
+        //endregion
 
         @Override protected Response    doInBackground(String... strings) {
             return httpExecute(httpRequest,Log);
         }
-        @Override protected void        onPostExecute(Response response) {
+        @Override protected void   onPostExecute(Response response) {
             super.onPostExecute(response);
             if (onHttpResponse!=null)
                 onHttpResponse.onResponse(response);
-        }
-
-        public static String UrlFormatter(String url)
-        {
-           try
-           {
-               URL urll= new URL(url);
-               URI uri = new URI(urll.getProtocol(), urll.getUserInfo(), urll.getHost(), urll.getPort(), urll.getPath(), urll.getQuery(), urll.getRef());
-               return uri.toString();
-           }
-           catch (Exception ex)
-           {
-               return  url;
-           }
-
         }
     }
 
