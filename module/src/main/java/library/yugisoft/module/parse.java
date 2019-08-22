@@ -103,12 +103,14 @@ public class parse {
 
     }
 
+    public static int DpToPixel(float dp){ return  DpToPixel(dp,yugi.activity); }
     public static int DpToPixel(float dp, Context context){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float px = dp * ((float)metrics.densityDpi / DENSITY_DEFAULT);
         return toInt(px);
     }
+    public static int PixelToDp(float px){ return  PixelToDp(px,yugi.activity); }
     public static int PixelToDp(float px, Context context){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
