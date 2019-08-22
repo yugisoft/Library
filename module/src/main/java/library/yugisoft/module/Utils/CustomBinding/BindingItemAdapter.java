@@ -38,6 +38,7 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
         contentViewID = id;
     }
 
+    private String idTag = "v";
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup)
@@ -79,7 +80,7 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
         //endregion
 
         //region BindingAdapter
-        adapter = new CustomBindingAdapter(view,getItem(i)).setOnViewDrawings(onViewDrawings).setOnRowDrawing(getOnRowDrawing()).setRow(i);
+        adapter = new CustomBindingAdapter(view,getItem(i)).setOnViewDrawings(onViewDrawings).setOnRowDrawing(getOnRowDrawing()).setRow(i).setIdTag(getIdTag());
 
         if (getLayoutController() != null)
             adapter.setLayoutController(getLayoutController());
@@ -292,6 +293,14 @@ public class BindingItemAdapter<T> extends ItemAdapter<T> {
 
     public OnGridItemSelect<T> getOnGridItemSelect() {
         return onGridItemSelect;
+    }
+
+    public String getIdTag() {
+        return idTag;
+    }
+
+    public void setIdTag(String idTag) {
+        this.idTag = idTag;
     }
     //endregion
 

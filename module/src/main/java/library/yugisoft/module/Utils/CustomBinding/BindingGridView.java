@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TabHost;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -26,6 +27,7 @@ public class BindingGridView extends GridView
     private OnRowDrawing onRowDrawing;
     private OnGridItemClick onGridItemClick;
     private OnGridItemSelect onGridItemSelect;
+    private String idTag = null;
 
     //region Constructor
     public BindingGridView(Context context) {
@@ -48,6 +50,7 @@ public class BindingGridView extends GridView
             setRowColors(a.getBoolean(R.styleable.BindingGridView_rowColors,false));
             setEmptyRowWithDetailView(a.getBoolean(R.styleable.BindingGridView_emptyRowWithDetailView,false));
             setSelectable(a.getBoolean(R.styleable.BindingGridView_selectable,false));
+            setIdTag(a.getString(R.styleable.BindingGridView_IdTag));
         }
 
         adapter = new BindingItemAdapter(getContext(),getDetailViewID());
@@ -56,6 +59,7 @@ public class BindingGridView extends GridView
         adapter.setEmptyRowCount(getEmptyRowCount());
         adapter.setShowDevider(isShowDevider());
         adapter.setRowColors(isRowColors());
+        adapter.setIdTag(getIdTag());
         setAdapter(adapter);
     }
     //endregion
@@ -272,7 +276,14 @@ public class BindingGridView extends GridView
     }
 
 
+    public String getIdTag() {
+        return idTag;
+    }
 
-
-
+    public void setIdTag(String idTag)
+    {
+        if (this.idTag == null && (idTag== null || idTag.length() == 0))
+            idTag ="v";
+        this.idTag = idTag;
+    }
 }

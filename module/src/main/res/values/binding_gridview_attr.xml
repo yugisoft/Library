@@ -10,6 +10,7 @@
     <attr name="autoHeightOnChild" format="boolean" />
     <attr name="emptyRowWithDetailView" format="boolean" />
     <attr name="selectable" format="boolean" />
+    <attr name="IdTag" format="string" />
 
 
     <declare-styleable name="BindingGridView">
@@ -22,7 +23,7 @@
         <attr name="rowColors"  />
         <attr name="emptyRowWithDetailView" />
         <attr name="selectable" />
-
+        <attr name="IdTag" />
 
     </declare-styleable>
 
