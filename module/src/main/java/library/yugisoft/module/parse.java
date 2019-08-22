@@ -1,5 +1,8 @@
 package library.yugisoft.module;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -21,11 +24,13 @@ import library.yugisoft.module.Interfaces.ASerializable;
 import library.yugisoft.module.Interfaces.ISerializable;
 import library.yugisoft.module.Utils.CustomUtil;
 
+import static android.util.DisplayMetrics.DENSITY_DEFAULT;
+
 public class parse {
 
     public static int toInt(Object p) {
         try {
-            return Integer.parseInt(p.toString().replace(".0", "").replace(",0", ""));
+            return Integer.parseInt(yugi.NF(p.toString().replace(".0", "").replace(",0", ""),0));
         } catch (Exception ex) {
             return defaultInt;
         }
@@ -33,7 +38,7 @@ public class parse {
 
     public static long toLong(Object p) {
         try {
-            return Long.parseLong(p.toString().replace(".0", ""));
+            return Long.parseLong(yugi.NF(p.toString().replace(".0", "").replace(",0", ""),0));
         } catch (Exception ex) {
             return defaultLong;
         }
@@ -97,6 +102,20 @@ public class parse {
         }
 
     }
+
+    public static int DpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * ((float)metrics.densityDpi / DENSITY_DEFAULT);
+        return toInt(px);
+    }
+    public static int PixelToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return toInt(dp);
+    }
+
 
     public static String toJson(Object item)
     {
@@ -255,6 +274,8 @@ public class parse {
         }
         return yugi.Join("[{0}]",data);
     }
+
+
 
     /*
     if (cls.equals(Integer.class) || cls.equals(int.class) ||cls.equals(Long.class) || cls.equals(long.class) ||cls.equals(Double.class) || cls.equals(double.class)
