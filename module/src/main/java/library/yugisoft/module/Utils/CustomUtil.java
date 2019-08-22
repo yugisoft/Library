@@ -29,10 +29,13 @@ public class CustomUtil
 
         return field;
     }
-    public static Object getValue(Object ob,String fieldName) {
+
+    //
+
+    private static Object getValue(Object ob,Field field) {
+
         try
         {
-            Field field =  getField(ob,fieldName);
             if (field != null)
             {
                 Class typeClass = field.getType();
@@ -101,7 +104,7 @@ public class CustomUtil
                 }
                 else if(pValue instanceof IBindableModel)
                 {
-                    return  ((IBindableModel)pValue).getValue(fieldName);
+                    return  ((IBindableModel)pValue).getValue(field.getName());
                 }
                 else if (typeClass.equals(String.class))
                 {
@@ -118,6 +121,27 @@ public class CustomUtil
                     return pValue;
                 }
             }
+        }
+        catch (Exception ignored)
+        {}
+        return  null;
+
+    }
+    public static Object getValue(Object ob,String fieldName) {
+        try
+        {
+            Field field =  getField(ob,fieldName);
+
+            Object value = getValue(ob,field);
+
+            BindProperty prop = getFieldProperty(field);
+
+            if (prop.Format().length()>0)
+            {
+                try{ return parse.Formatter.purify(prop.Format(),ob );}catch (Exception ignored){}
+            }
+            return  value;
+
         }
         catch (Exception ignored){}
         return  null;
@@ -190,6 +214,16 @@ public class CustomUtil
                 @Override
                 public String DisplayIdName() {
                     return "";
+                }
+
+                @Override
+                public String Format() {
+                    return "";
+                }
+
+                @Override
+                public boolean IgnoreViewFormat() {
+                    return true;
                 }
             };
     }

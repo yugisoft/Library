@@ -18,6 +18,8 @@ import library.yugisoft.module.yugi;
 public class BindingItemAdapter<T> extends ItemAdapter<T> {
 
 
+
+
     private View layoutController,firstView;
     private boolean rowColors,selectable;
     private boolean emptyRowWithDetailView;

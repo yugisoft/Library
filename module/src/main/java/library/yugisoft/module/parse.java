@@ -574,7 +574,8 @@ public class parse {
             view.setLayoutParams(new FrameLayout.LayoutParams(Wi, He));
     }
 
-    public static class Formatter {
+    public static class Formatter
+    {
         public static String get(String format, Object args) {
             format = args instanceof DataTable.DataRow ? purifyDR(format, (DataTable.DataRow) args) : purify(format, args);
             return String.format(format, args);

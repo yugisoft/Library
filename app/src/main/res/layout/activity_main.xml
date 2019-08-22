@@ -5,21 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".yugiTest">
 
-
-    <LinearLayout
-        android:id="@+id/binding_bar"
+    <TextView
+        android:id="@+id/Text1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:contentDescription="${deneme1} Alanı"
+        android:text="TextView" />
 
-        <library.yugisoft.module.LoopTextView
-            android:id="@+id/gridView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="sdfsdfs" />
-    </LinearLayout>
-
-
+    <TextView
+        android:id="@+id/Text2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 </LinearLayout>

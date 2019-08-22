@@ -446,6 +446,7 @@ public class CustomBindingAdapter
 
         }
     }
+
     public void bindTextView(Field field,View view,Object pValue,Object fValue,String sValue) {
 
         if (view instanceof  LoopTextView)
@@ -481,7 +482,7 @@ public class CustomBindingAdapter
             String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
             if (format.length()>0)
             {
-                try{sValue = parse.Formatter.purify(format,getBindingObject());}catch (Exception ignored){}
+                try{sValue = parse.Formatter.get(format,getBindingObject());}catch (Exception ignored){}
             }
             tView.setText(sValue);
 

@@ -149,6 +149,7 @@ public class yugi
     public static class vActivity extends AppCompatActivity {
 
         public static boolean LoadMainConfig  = false;
+        public static View MainView;
         public boolean   isFinisForCatchExtras(){return false;}
 
         public  boolean isLoad=false;
@@ -202,8 +203,8 @@ public class yugi
         @Override
         public void setContentView(int layoutResID) {
             super.setContentView(layoutResID);
-            View v = (View)findViewById(android.R.id.content);
-            v.setOnTouchListener(new View.OnTouchListener()
+            MainView = (View)findViewById(android.R.id.content);
+            MainView.setOnTouchListener(new View.OnTouchListener()
             {
                 @Override
                 public boolean onTouch(View view, MotionEvent ev)
