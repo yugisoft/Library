@@ -431,11 +431,28 @@ public class parse {
     public static List jsonToList(List list, String Json, String key, int index, Class parseClass) {
         if (Json != null && Json.length() > 0 && !Json.equals("[]")) {
             try {
+                int index1 = index;
+
                 if (!Json.substring(0, 1).equals("[")) {
                     Json = "[ " + Json + " ]";
+                    index1 =0;
                 }
                 JSONArray array = new JSONArray(Json);
-                JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
+
+               // JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
+
+                JSONArray subArray  = null;
+                JSONObject subObject = null;
+
+                try
+                {
+                    subArray = key.length() > 0 ? array.getJSONObject(index1).getJSONArray(key) : array;
+                    subObject = subArray.getJSONObject(index);
+                }
+                catch (Exception ex)
+                {
+                    subObject = array.getJSONObject(index1).getJSONObject(key);
+                }
 
                 for (int i = 0; i < subArray.length(); i++) {
                     try
