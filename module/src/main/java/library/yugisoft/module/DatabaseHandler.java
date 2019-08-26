@@ -15,7 +15,6 @@ import java.util.List;
 
 public class DatabaseHandler
 {
-
     public static String DATABASE_NAME = "GPOS";
     private static final int DATABASE_VERSION = 1;
     public static class DBColumn {

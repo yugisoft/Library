@@ -390,14 +390,31 @@ public class parse {
             else {
                 String objectClassName = objectClass.getSimpleName().toLowerCase();
                 try {
-                    if (!Json.substring(0, 1).equals("[")) {
+
+                    int index1 = index;
+
+                    if (!Json.substring(0, 1).equals("["))
+                    {
                         Json = "[ " + Json + " ]";
+                        index1 = 0;
                     }
                     JSONArray array = new JSONArray(Json);
-                    JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
+
+                    JSONArray subArray  = null;
+                    JSONObject object = null;
+
+                    try
+                    {
+                        subArray = key.length() > 0 ? array.getJSONObject(index1).getJSONArray(key) : array;
+                        object = subArray.getJSONObject(index);
+                    }
+                    catch (Exception ex)
+                    {
+                        object = array.getJSONObject(index1).getJSONObject(key);
+                    }
 
 
-                    JSONObject object = subArray.getJSONObject(index);
+
 
                     set(parseItem, object);
 
