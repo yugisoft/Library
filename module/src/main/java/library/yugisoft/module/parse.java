@@ -28,13 +28,14 @@ import static android.util.DisplayMetrics.DENSITY_DEFAULT;
 
 public class parse {
 
+    //region Convertion
     public static int toInt(Object p) {
-        try {
-            return Integer.parseInt(yugi.NF(p.toString().replace(".0", "").replace(",0", ""),0));
-        } catch (Exception ex) {
-            return defaultInt;
-        }
+    try {
+        return Integer.parseInt(yugi.NF(p.toString().replace(".0", "").replace(",0", ""),0));
+    } catch (Exception ex) {
+        return defaultInt;
     }
+}
 
     public static long toLong(Object p) {
         try {
@@ -117,6 +118,7 @@ public class parse {
         float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return toInt(dp);
     }
+    //endregion
 
 
     public static String toJson(Object item)
@@ -235,8 +237,6 @@ public class parse {
             {
 
             }
-            // for (Field f : vList.Merge(Arrays.asList(cls.getFields()), Arrays.asList(cls.getDeclaredFields()))) {
-
 
         }
 
@@ -276,17 +276,6 @@ public class parse {
         }
         return yugi.Join("[{0}]",data);
     }
-
-
-
-    /*
-    if (cls.equals(Integer.class) || cls.equals(int.class) ||cls.equals(Long.class) || cls.equals(long.class) ||cls.equals(Double.class) || cls.equals(double.class)
-                        ||cls.equals(DataTable.class) ||cls.equals(DateTime.class) ||cls.equals(Boolean.class) ||cls.equals(String.class))
-                {
-                    object=new JSONObject(yugi.Join("\"{0}\"",item));
-                    jsonArray.put(object);
-                }
-    */
 
     public static <T> T jsonTo(String Json, Class tClass) {
         try {
@@ -643,13 +632,15 @@ public class parse {
                         String fS = "${" + f + "}";
                         fieldFormat = fieldArea.length > 1 ? fieldArea[1] : "";
                         try {
-                            Field ff = null;
+                            Field ff = CustomUtil.getField(object,fieldName);
+                            /*
                             try {
                                 ff = object.getClass().getField(fieldName);
                             } catch (Exception e) {
                             }
                             if (ff == null)
                                 ff = object.getClass().getDeclaredField(fieldName);
+                            */
                             if (ff != null) {
                                 ff.setAccessible(true);
                                 Object value = ff.get(object);
