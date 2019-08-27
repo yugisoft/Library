@@ -151,19 +151,19 @@ public class parse {
                 }
                 //endregion
                 else
-                for (Object i : list)
-                {
+                    for (Object i : list)
+                    {
 
-                    try {
-                        String json = toJson(i);
-                        if (json.substring(0, 1).equals("["))
-                            jsonArray.put(new JSONArray(json));
-                        else
-                            jsonArray.put(new JSONObject(json));
+                        try {
+                            String json = toJson(i);
+                            if (json.substring(0, 1).equals("["))
+                                jsonArray.put(new JSONArray(json));
+                            else
+                                jsonArray.put(new JSONObject(json));
 
-                    } catch (Exception e) {
+                        } catch (Exception e) {
+                        }
                     }
-                }
             }
 
 
@@ -235,7 +235,7 @@ public class parse {
             {
 
             }
-           // for (Field f : vList.Merge(Arrays.asList(cls.getFields()), Arrays.asList(cls.getDeclaredFields()))) {
+            // for (Field f : vList.Merge(Arrays.asList(cls.getFields()), Arrays.asList(cls.getDeclaredFields()))) {
 
 
         }
@@ -268,7 +268,7 @@ public class parse {
                     || cls.equals(Boolean.class)
 
             )
-            data+=yugi.Join("{0}",o);
+                data+=yugi.Join("{0}",o);
             else if (cls.equals(String.class) || cls.equals(DateTime.class))
                 data+=yugi.Join("\"{0}\"",o);
 
@@ -430,30 +430,31 @@ public class parse {
 
     public static List jsonToList(List list, String Json, String key, int index, Class parseClass) {
         if (Json != null && Json.length() > 0 && !Json.equals("[]")) {
+            Json = Json.trim();
             try {
                 int index1 = index;
 
-                if (!Json.substring(0, 1).equals("[")) {
+                if (!Json.replace("\r","").replace("\n","").substring(0, 1).equals("[")) {
                     Json = "[ " + Json + " ]";
                     index1 =0;
                 }
                 JSONArray array = new JSONArray(Json);
 
-               // JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
+                // JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
 
-                JSONArray subArray = key.length() > 0 ? array.getJSONObject(index1).getJSONArray(key) : array;
+                // JSONArray subArray = key.length() > 0 ? array.getJSONObject(index1).getJSONArray(key) : array;
 
-                for (int i = 0; i < subArray.length(); i++) {
+                for (int i = 0; i < array.length(); i++) {
                     try
                     {
-                        JSONObject object = subArray.getJSONObject(i);
+                        JSONObject object = key.length() > 0 ? array.getJSONObject(i).getJSONObject(key) : array.getJSONObject(i);
                         Object listItem = parseClass.newInstance();
                         set(listItem, object);
                         list.add(listItem);
                     }
                     catch (Exception ex)
                     {
-                        list.add(subArray.get(i));
+                        list.add(key.length() > 0 ? array.getJSONObject(i).getJSONObject(key) : array.get(i));
                     }
                 }
 
@@ -566,7 +567,7 @@ public class parse {
     }
 
     public static void setDefaultInt(int defaultInt) {
-        parse.defaultInt = defaultInt;
+        defaultInt = defaultInt;
     }
 
     private static double defaultDouble = 0;
@@ -576,7 +577,7 @@ public class parse {
     }
 
     public static void setDefaultDouble(double defaultDouble) {
-        parse.defaultDouble = defaultDouble;
+        defaultDouble = defaultDouble;
     }
 
     private static float defaultFloat = 0f;
@@ -588,7 +589,7 @@ public class parse {
     }
 
     public static void setDefaultBoolean(boolean defaultBoolean) {
-        parse.defaultBoolean = defaultBoolean;
+        defaultBoolean = defaultBoolean;
     }
 
     private static long defaultLong = 0;
@@ -598,7 +599,7 @@ public class parse {
     }
 
     public static void setDefaultLong(long defaultLong) {
-        parse.defaultLong = defaultLong;
+        defaultLong = defaultLong;
     }
 
 
