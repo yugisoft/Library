@@ -441,18 +441,7 @@ public class parse {
 
                // JSONArray subArray = key.length() > 0 ? array.getJSONObject(0).getJSONArray(key) : array;
 
-                JSONArray subArray  = null;
-                JSONObject subObject = null;
-
-                try
-                {
-                    subArray = key.length() > 0 ? array.getJSONObject(index1).getJSONArray(key) : array;
-                    subObject = subArray.getJSONObject(index);
-                }
-                catch (Exception ex)
-                {
-                    subObject = array.getJSONObject(index1).getJSONObject(key);
-                }
+                JSONArray subArray = key.length() > 0 ? array.getJSONObject(index1).getJSONArray(key) : array;
 
                 for (int i = 0; i < subArray.length(); i++) {
                     try
