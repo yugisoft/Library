@@ -97,7 +97,16 @@ public class http
         }
 
         public static void Add(HttpRequestBase req, Hashtable headers) {
-            if (headers==null)return;;
+            if (getConstHeaders != null)
+            {
+                Hashtable hashtable = getConstHeaders.getItem();
+                Iterator<String> keys = hashtable.keySet().iterator();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    req.setHeader(key, hashtable.get(key).toString());
+                }
+            }
+            if (headers==null)return;
             try
             {
                 Iterator<String> keys = headers.keySet().iterator();
@@ -159,6 +168,8 @@ public class http
             }
         }
     }
+
+    public static INTERFACES.getGenericItem<Hashtable> getConstHeaders = null;
 
     @Deprecated
     public static Response GET(String url, Hashtable headers) {

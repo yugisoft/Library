@@ -79,4 +79,9 @@ public class INTERFACES
         void onResponse(T item);
     }
 
+    public interface getGenericItem<T>
+    {
+        T getItem();
+    }
+
 }
