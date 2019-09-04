@@ -22,7 +22,6 @@ public class vList<E>  implements List<E>{
     public vList() {
         list = new ArrayList<>();
     }
-
     //region LIST
     public List<E> list;
     @Override
@@ -146,7 +145,6 @@ public class vList<E>  implements List<E>{
         return list.subList(fromIndex,toIndex);
     }
     //endregion
-
     //region Stream
 
     //region Local
@@ -499,10 +497,7 @@ public class vList<E>  implements List<E>{
 
 
     //endregion
-
-
-    public static <T> vList<T> Merge(List<T>... list)
-    {
+    public static <T> vList<T> Merge(List<T>... list) {
         vList newList = new vList<T>();
 
         for (List<T> lists:list)
@@ -515,10 +510,7 @@ public class vList<E>  implements List<E>{
 
         return newList;
     }
-
-
-    public static class vListItem<V,VT>
-    {
+    public static class vListItem<V,VT> {
         public V item = null;
         public VT value = null;
     }

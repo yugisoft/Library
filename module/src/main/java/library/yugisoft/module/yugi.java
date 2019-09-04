@@ -361,8 +361,7 @@ public class yugi
                 gdialog.show();
             }
         }
-        public static void ShowTop(Context context, String message)
-        {
+        public static void ShowTop(Context context, String message) {
             Top=true;
             Close();
             tdialog = new ProgressDialog(context);
@@ -1049,8 +1048,7 @@ public class yugi
 
     //endregion
     //region NUMPAD
-    public static class mNumpad implements View.OnClickListener
-    {
+    public static class mNumpad implements View.OnClickListener {
         //region DECLARE
         Dialog.mDialog dialog;
         Activity activity;

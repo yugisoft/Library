@@ -20,13 +20,13 @@ public class LocaleManager {
     }
     public static void setLocale(Context c, String language) {
 
-      Locale myLocale = new Locale(language);
-      Resources res = c.getResources();
-      DisplayMetrics dm = res.getDisplayMetrics();
-      Configuration conf = res.getConfiguration();
-      conf.locale = myLocale;
-      res.updateConfiguration(conf, dm);
-      yugi.SetSetup(c,"Language",getLanguage(c));
+        Locale myLocale = new Locale(language);
+        Resources res = c.getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        yugi.SetSetup(c,"Language",getLanguage(c));
     }
     public static String getLanguage(Context c) {
         return c.getResources().getConfiguration().locale.getLanguage();

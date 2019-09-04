@@ -28,10 +28,6 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
         dialog.setContentView(itemView);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         Initilialize();
-
-
-
-
     }
 
     public abstract void Initilialize();
@@ -52,8 +48,7 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
         return mDialog!=null && mDialog.isShowing();
     }
 
-    public void hideKeyboard()
-    {
+    public void hideKeyboard() {
         InputMethodManager in = (InputMethodManager) yugi.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(dialog.getWindow().peekDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }

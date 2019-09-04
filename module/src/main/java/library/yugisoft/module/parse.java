@@ -31,7 +31,7 @@ public class parse {
     //region Convertion
     public static int toInt(Object p) {
     try {
-        return Integer.parseInt(yugi.NF(p.toString().replace(".0", "").replace(",0", ""),0));
+        return Integer.parseInt(yugi.NFReplace(p.toString().replace(".0", "").replace(",0", ""),0));
     } catch (Exception ex) {
         return defaultInt;
     }
@@ -39,7 +39,7 @@ public class parse {
 
     public static long toLong(Object p) {
         try {
-            return Long.parseLong(yugi.NF(p.toString().replace(".0", "").replace(",0", ""),0));
+            return Long.parseLong(yugi.NFReplace(p.toString().replace(".0", "").replace(",0", ""),0));
         } catch (Exception ex) {
             return defaultLong;
         }
