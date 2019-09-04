@@ -314,8 +314,7 @@ public class parse {
 
     }
 
-    public static <T extends vList> T  jsonTovList(String Json, Class tClass)
-    {
+    public static <T extends vList> T  jsonTovList(String Json, Class tClass) {
         vList list = new vList();
         try {
             list.list = jsonToList(Json, 0, tClass);

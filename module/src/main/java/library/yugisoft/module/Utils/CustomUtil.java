@@ -30,7 +30,6 @@ public class CustomUtil
         return field;
     }
 
-    //
 
     private static Object getValue(Object ob,Field field) {
 
@@ -182,6 +181,33 @@ public class CustomUtil
 
         return list;
     }
+
+
+    public static Field getFieldForJsonObject(vList<Field> fields,String name)
+    {
+        Field field = null;
+        try{field = fields.Filter(f-> f.getName().equals(name)).get(0);}catch (Exception ex){}
+        if (field == null)
+        {
+            try
+            {
+                field = fields.Filter(f->
+                {
+                    Json js = f.getAnnotation(Json.class);
+                    if (js == null)
+                        return false;
+                    return js.name().equals(name);
+                }).get(0);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        return field;
+
+    }
+
 
 
     public static BindProperty getFieldProperty(Object ob, String fieldName)

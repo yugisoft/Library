@@ -15,10 +15,13 @@ package library.yugisoft.library;
     import java.util.Arrays;
     import java.util.List;
 
+    import library.yugisoft.module.DialogBox;
     import library.yugisoft.module.ItemAdapter;
 
+    import library.yugisoft.module.Json;
     import library.yugisoft.module.Utils.CustomBinding.BindProperty;
     import library.yugisoft.module.Utils.CustomBinding.CustomBindingAdapter;
+    import library.yugisoft.module.Utils.JsonConverter;
     import library.yugisoft.module.yugi;
 
 public class yugiTest extends yugi.vActivity implements View.OnClickListener {
@@ -30,12 +33,17 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CustomBindingAdapter bindingAdapter = new CustomBindingAdapter(this,MainView);
-        bindingAdapter.bind(new Deneme());
+        JsonConverter<Deneme> converter = new JsonConverter<>("[{\"Field1\":\"Value1\",\"Field2\":2,\"Item\":{\"Field1\":\"Value1\",\"Field2\":2},\"ListItem\":[{\"Field1\":\"Value1\",\"Field2\":2},{\"Field1\":\"Value1\",\"Field2\":2}]},{\"Field1\":\"Value1\",\"Field2\":2,\"Item\":{\"Field1\":\"Value1\",\"Field2\":2},\"ListItem\":[{\"Field1\":\"Value1\",\"Field2\":2},{\"Field1\":\"Value1\",\"Field2\":2}]}]",Deneme.class);
+        converter.setKey("Item");
+        Deneme deneme = converter.convertToClass();
+
+        DialogBox.showOK("",null);
+
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
 
     }
 
@@ -44,27 +52,31 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
     public static class Deneme
     {
 
-        @BindProperty(DisplayIdName = "Text1")
-        private String deneme1 = "Deneme1";
-        @BindProperty(DisplayIdName = "Text2",Format = "${deneme1} Alanı")
-        private String deneme2 = "Deneme2";
-
-
-        public String getDeneme1() {
-            return deneme1;
+        //region Field1
+        @Json(name = "Field1")
+        private String field1;
+        public String getField1(){
+            return field1;
         }
-
-        public void setDeneme1(String deneme1) {
-            this.deneme1 = deneme1;
+        public void setField1( String field1 )
+        {
+            this.field1= field1;
         }
+        //endregion
+        //region Field2
 
-        public String getDeneme2() {
-            return deneme2;
+        private int Field2;
+        public int getField2(){
+            return Field2;
         }
+        public void setField2( int field2 )
+        {
+            this.Field2= field2;
+        }
+        //endregion
 
-        public void setDeneme2(String deneme2) {
-            this.deneme2 = deneme2;
-        }
+        public List<Deneme> ListItem;
+
     }
 
 
