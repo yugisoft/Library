@@ -308,7 +308,41 @@ public class parse {
                 T item = (T) jsonTo(tClass.newInstance(), Json, key, index);
                 return item;
             }
-        } catch (Exception ex) {
+        }
+        catch (java.lang.InstantiationException Iex)
+        {
+            if (key.length()>0)
+            {
+                try
+                {
+                    Json = new JSONObject(Json).get(key).toString();
+                }
+                catch (Exception ex){}
+                try
+                {
+                    Json = new JSONArray(Json).getJSONObject(index).get(key).toString();
+                }
+                catch (Exception ex){}
+            }
+            Object parseItem =null;
+            if (tClass.equals(Integer.class) || tClass.equals(int.class))
+                parseItem = toInt(Json);
+            else if (tClass.equals(Long.class) || tClass.equals(long.class))
+                parseItem = toLong(Json);
+            else if (tClass.equals(Double.class) || tClass.equals(double.class))
+                parseItem = toDouble(Json);
+            else if (tClass.equals(DataTable.class))
+                parseItem = toDataTable(Json);
+            else if (tClass.equals(DateTime.class))
+                parseItem = toDateTime(Json);
+            else if (tClass.equals(Boolean.class))
+                parseItem = toBoolean(Json);
+            else if (tClass.equals(String.class))
+                parseItem = Json;
+
+            return  parseItem == null ? null : (T)parseItem;
+        }
+        catch (Exception ex) {
             return null;
         }
 
