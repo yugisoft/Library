@@ -95,7 +95,7 @@ public class parse {
         try {
             boolean Iso8601 = value.toString().indexOf("T") > 0;
             if (Iso8601)
-                return DateTime.fromISO8601UTC(value.toString());
+                return DateTime.fromISO8601UTC(value.toString().replace("Z","+0000"));
             else
                 return DateTime.fromDateTime(value.toString());
         } catch (Exception ex) {
