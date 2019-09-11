@@ -322,5 +322,66 @@ public class DateTime extends Date {
         timePickerPopWin.showPopWin(context);
     }
 
+    public static DateTime FirstDayOfWeek()
+    {
+        DateTime time = DateTime.Now();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        cal.set(Calendar.DAY_OF_WEEK,cal.getFirstDayOfWeek());
+        time.setDateTime(cal.getTime());
+        return time;
+    }
+    public static DateTime LastDayOfWeek()
+    {
+        DateTime time = DateTime.Now();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        cal.set(Calendar.DAY_OF_WEEK,cal.getFirstDayOfWeek());
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        time.setDateTime(cal.getTime());
+        return time;
+    }
+    public static DateTime FirstDayOfMounth()
+    {
+        DateTime time = DateTime.Now();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        cal.set(Calendar.DAY_OF_MONTH,1);
 
+        time.setDateTime(cal.getTime());
+        return time;
+    }
+    public static DateTime LastDayOfMounth()
+    {
+        DateTime time = DateTime.Now();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.add(Calendar.MONTH, 1);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+
+        time.setDateTime(cal.getTime());
+
+
+
+
+        return time;
+    }
 }
