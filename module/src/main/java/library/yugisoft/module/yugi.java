@@ -1400,28 +1400,39 @@ public class yugi
 
 
     public static String Join(String string , Object... params) {
-        try
-        {
-            int i = 0;
+        try {
+            int i = -1;
             for (Object item : params)
             {
-                if (item.getClass() == Object[].class)
+                if (item != null)
                 {
-                    for (Object item2 : ((Object[])item))
+                    if (item.getClass() == Object[].class)
                     {
-                        string = string.replace("{"+i+"}",String.valueOf(item2));
+                        for (Object item2 : ((Object[]) item))
+                        {
+                            if (item2 != null)
+                                string = string.replace("{" + i + "}", String.valueOf(item2));
+                            else
+                                string = string.replace("{" + i + "}", String.valueOf("null"));
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        string = string.replace("{" + i + "}", String.valueOf(item));
                         i++;
                     }
                 }
                 else
                 {
-                    string = string.replace("{"+i+"}",String.valueOf(item));
+                    string = string.replace("{" + i + "}", String.valueOf("null"));
                     i++;
                 }
             }
 
+
+        } catch (Exception ex) {
         }
-        catch (Exception ex){}
         return string;
     }
 
