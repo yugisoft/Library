@@ -24,6 +24,7 @@ public class ResizeLayout extends LinearLayout
     int state = 1;
     int w=-99,h=-99,nw=0,nh=0;
     float g=-99;
+    private boolean horizantal;
 
 
     public ResizeLayout(Context context) {
@@ -39,6 +40,7 @@ public class ResizeLayout extends LinearLayout
         {
             state = (a.getInt(R.styleable.ResizeLayout__State,1));
             setTouchOnSlide(a.getBoolean(R.styleable.ResizeLayout__touchOnSlide,false));
+            setHorizantal(a.getBoolean(R.styleable.ResizeLayout__horizantal,false));
         }
         LayoutTransition lt = new LayoutTransition();
         lt.disableTransitionType(LayoutTransition.CHANGING);
@@ -50,8 +52,16 @@ public class ResizeLayout extends LinearLayout
     public void setLayoutParams(ViewGroup.LayoutParams params) {
         if (w==-99 && h== -99 && g == -99)
         {
-            w= params.width;
-            h=params.height;
+          if (isHorizantal())
+          {
+              w= params.height;
+              h=params.width;
+          }
+          else
+          {
+              w= params.width;
+              h=params.height;
+          }
             if (params instanceof LayoutParams)
                 g = ((LayoutParams) params).weight;
         }
@@ -134,7 +144,7 @@ public class ResizeLayout extends LinearLayout
     {
         if (isShow())
         {
-            setParams(w,getMinimumHeight(),0,true);
+            setParams(w,isHorizantal() ? getMinimumWidth() : getMinimumHeight(),0,true);
             setimage(false);
             if (getOnResizeToogle()!=null)
                 getOnResizeToogle().onToogle(this,false);
@@ -150,12 +160,19 @@ public class ResizeLayout extends LinearLayout
 
     private void close()
     {
-        setParams(w,getMinimumHeight(),0,false);
+        setParams(w,isHorizantal() ? getMinimumWidth() : getMinimumHeight(),0,false);
         show = false;
     }
 
     void setParams(int _w,int _h, float _g,boolean set)
     {
+        int _w_ = _w, _h_=_h;
+        if (isHorizantal())
+        {
+            _w = _h_;
+            _h = _h_;
+        }
+
         boolean ch = isShow();
         if(getLayoutParams() instanceof LayoutParams)
         {
@@ -312,6 +329,14 @@ public class ResizeLayout extends LinearLayout
 
     public void setOnResizeToogle(OnResizeToogle onResizeToogle) {
         this.onResizeToogle = onResizeToogle;
+    }
+
+    public boolean isHorizantal() {
+        return horizantal;
+    }
+
+    public void setHorizantal(boolean horizantal) {
+        this.horizantal = horizantal;
     }
 
     public interface OnResizeToogle
