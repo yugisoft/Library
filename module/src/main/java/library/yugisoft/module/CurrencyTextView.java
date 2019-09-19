@@ -65,6 +65,7 @@ public class CurrencyTextView extends android.support.v7.widget.AppCompatTextVie
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                numpad.setAmount(Tutar);
                numpad.setTotalAmount(Tutar);
                numpad.show();
             }

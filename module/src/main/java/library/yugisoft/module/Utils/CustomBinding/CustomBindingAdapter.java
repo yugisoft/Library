@@ -503,36 +503,39 @@ public class CustomBindingAdapter {
 
     public void bindTextView(Field field, View view, Object pValue, Object fValue, String sValue) {
 
+
         if (view instanceof LoopTextView)
             bindLoopTextView(field, view, pValue, fValue, sValue);
-        else if (view instanceof TextView) {
+        else if (view instanceof TextView)
+        {
+            TextView tView = (TextView) view;
 
+            if (view instanceof CurrencyTextView)
+            {
+                CurrencyTextView dView = (CurrencyTextView) view;
+                dView.setTutar(parse.toDouble(fValue));
 
-            if (view instanceof CurrencyTextView) {
-                ((CurrencyTextView) view).setTutar(parse.toDouble(pValue));
-            } else if (view instanceof DateTextView) {
+            } else if (view instanceof DateTextView)
+            {
                 DateTextView dView = (DateTextView) view;
                 if (field.getType() == DateTime.class) {
                     dView.setDateTime((DateTime) fValue);
                 } else {
                     dView.setDateTime(DateTime.fromDateTime(fValue.toString()));
                 }
-
             }
-            if (view instanceof CurrencyTextView) {
-                CurrencyTextView dView = (CurrencyTextView) view;
-                dView.setTutar(parse.toDouble(fValue));
-            }
+            else
+            {
 
-            TextView tView = (TextView) view;
-            String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
-            if (format.length() > 0) {
-                try {
-                    sValue = parse.Formatter.get(format, getBindingObject());
-                } catch (Exception ignored) {
+                String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
+                if (format.length() > 0) {
+                    try {
+                        sValue = parse.Formatter.get(format, getBindingObject());
+                    } catch (Exception ignored) {
+                    }
                 }
+                tView.setText(sValue);
             }
-            tView.setText(sValue);
 
             if (tView.getText().length() == 0 && CustomUtil.getFieldProperty(field).isEmptySetInvisible())
                 tView.setVisibility(View.GONE);
