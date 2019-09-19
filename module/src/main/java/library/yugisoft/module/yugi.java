@@ -1401,7 +1401,7 @@ public class yugi
 
     public static String Join(String string , Object... params) {
         try {
-            int i = -1;
+            int i = 0;
             for (Object item : params)
             {
                 if (item != null)
