@@ -23,6 +23,11 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
     public BaseDialog(Context context, int id) {
         super(yugi.activity.getLayoutInflater().inflate(id, null));
         this.context = context;
+        init();
+    }
+
+    void init()
+    {
         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(itemView);
@@ -34,8 +39,17 @@ public abstract class BaseDialog  extends RecyclerView.ViewHolder {
 
     public void show()
     {
-        mDialog = dialog;
-        dialog.show();
+        try
+        {
+            mDialog = dialog;
+            dialog.show();
+        }
+        catch (Exception ex)
+        {
+            init();
+            mDialog = dialog;
+            dialog.show();
+        }
     }
     public void dismiss()
     {

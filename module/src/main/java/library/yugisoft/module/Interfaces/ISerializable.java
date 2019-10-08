@@ -57,10 +57,10 @@ public interface ISerializable
             for (Object i : list) {
                 try {
 
-                   //if (json.substring(0, 1).equals("["))
-                   //    jsonArray.put(new JSONArray(json));
-                   //else
-                        jsonArray.put(SerializeJsonObject(i));
+                    //if (json.substring(0, 1).equals("["))
+                    //    jsonArray.put(new JSONArray(json));
+                    //else
+                    jsonArray.put(SerializeJsonObject(i));
 
                 } catch (Exception e) {
                 }
