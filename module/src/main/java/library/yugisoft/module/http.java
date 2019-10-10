@@ -1049,69 +1049,69 @@ public class http
         }
         //endregion
         //region Http Request Sync
-        //        public Response GET_Sync(String url) {
-        //            return Execute_Sync(new HttpGet(UrlFormatter(url)));
-        //        }
-        //        public Response DELETE_Sync(String url) {
-        //            return  Execute_Sync(new HttpDelete(UrlFormatter(url)));
-        //        }
-        //        public Response HEAD_Sync(String url) {
-        //            return  Execute_Sync(new HttpHead(UrlFormatter(url)));
-        //        }
-        //        public Response OPTIONS_Sync(String url) { return Execute_Sync(new HttpOptions(UrlFormatter(url)));
-        //        }
-        //        public Response POST_Sync(String url) {
-        //            return Execute_Sync(new HttpPost(UrlFormatter(url)));
-        //        }
-        //        public Response PUT_Sync(String url) {
-        //            return  Execute_Sync(new HttpPut(UrlFormatter(url)));
-        //        }
-        //        public Response POST_FILE_Sync(String url, File[] files) {
-        //            HttpPost httpPost = new HttpPost(UrlFormatter(url));
-        //
-        //            MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-        //            for (File file : files)
-        //                reqEntity.addPart(file.getName(), new FileBody(file));
-        //            httpPost.setEntity(reqEntity);
-        //
-        //            return httpExecute(((HttpRequestBase)(httpPost)),"Http File Post");
-        //        }
-        //
-        //        public Response Execute_Sync(HttpEntityEnclosingRequestBase http) {
-        //
-        //            //Content Type Belirlendi!
-        //            if (!Json)
-        //            {
-        //                Headers.urlencoded(http);
-        //                Log += "\n"+Bodys.Add(http,bodys);
-        //            }
-        //            else
-        //            {
-        //                Headers.json(http);
-        //                Log += "\n"+sbody.replace("{","\n{").replace("}","\n}");
-        //                Bodys.Add(http,sbody);
-        //            }
-        //
-        //            return Execute_Sync(((HttpRequestBase)(http)));
-        //        }
-        //        public Response Execute_Sync(HttpRequestBase http) {
-        //
-        //            if (Log.equals(""))
-        //            {
-        //                Log = "http-"+http.getMethod();
-        //                if (!Json)
-        //                    Headers.urlencoded(http);
-        //            }
-        //            Headers.ConstHttpHeader(http);
-        //            Headers.TempHttpHeader(http);
-        //            Headers.DeviceInfo(http);
-        //            Headers.Add(http, headers);
-        //            httpRequest = http;
-        //
-        //            if (timeOut > 0)
-        //                HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
-        //            return httpExecute(httpRequest,Log);
-        //        }
+                public Response GET_Sync(String url) {
+                    return Execute_Sync(new HttpGet(UrlFormatter(url)));
+                }
+                public Response DELETE_Sync(String url) {
+                    return  Execute_Sync(new HttpDelete(UrlFormatter(url)));
+                }
+                public Response HEAD_Sync(String url) {
+                    return  Execute_Sync(new HttpHead(UrlFormatter(url)));
+                }
+                public Response OPTIONS_Sync(String url) { return Execute_Sync(new HttpOptions(UrlFormatter(url)));
+                }
+                public Response POST_Sync(String url) {
+                    return Execute_Sync(new HttpPost(UrlFormatter(url)));
+                }
+                public Response PUT_Sync(String url) {
+                    return  Execute_Sync(new HttpPut(UrlFormatter(url)));
+                }
+                public Response POST_FILE_Sync(String url, File[] files) {
+                    HttpPost httpPost = new HttpPost(UrlFormatter(url));
+
+                    MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                    for (File file : files)
+                        reqEntity.addPart(file.getName(), new FileBody(file));
+                    httpPost.setEntity(reqEntity);
+
+                    return httpExecute(((HttpRequestBase)(httpPost)),"Http File Post");
+                }
+
+                public Response Execute_Sync(HttpEntityEnclosingRequestBase http) {
+
+                    //Content Type Belirlendi!
+                    if (!Json)
+                    {
+                        Headers.urlencoded(http);
+                        Log += "\n"+Bodys.Add(http,bodys);
+                    }
+                    else
+                    {
+                        Headers.json(http);
+                        Log += "\n"+sbody.replace("{","\n{").replace("}","\n}");
+                        Bodys.Add(http,sbody);
+                    }
+
+                    return Execute_Sync(((HttpRequestBase)(http)));
+                }
+                public Response Execute_Sync(HttpRequestBase http) {
+
+                    if (Log.equals(""))
+                    {
+                        Log = "http-"+http.getMethod();
+                        if (!Json)
+                            Headers.urlencoded(http);
+                    }
+                    Headers.ConstHttpHeader(http);
+                    Headers.TempHttpHeader(http);
+                    Headers.DeviceInfo(http);
+                    Headers.Add(http, headers);
+                    httpRequest = http;
+
+                    if (timeOut > 0)
+                        HttpConnectionParams.setConnectionTimeout(http.getParams(),timeOut);
+                    return httpExecute(httpRequest,Log);
+                }
         //        //endregion
 
         @Override protected Response    doInBackground(String... strings) {
