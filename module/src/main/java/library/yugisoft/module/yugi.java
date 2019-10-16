@@ -515,7 +515,7 @@ public class yugi
     }
     public static String NF(Object ob, boolean Replace, int bas) {
         double d =0;
-        try{d= Double.parseDouble(ob.toString().replace(".","").replace(",","."));}
+        try{d= Double.parseDouble(ob.toString().replace(",","."));}
         catch (Exception e){}
         NumberFormat nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(bas);
