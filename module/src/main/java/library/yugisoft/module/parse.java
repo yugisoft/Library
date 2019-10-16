@@ -50,7 +50,7 @@ public class parse {
             return Double.parseDouble(p.toString());
         } catch (Exception ex) {
             try {
-                return Double.parseDouble(p.toString().replace(",", "."));
+                return Double.parseDouble(p.toString().replace(".","").replace(",", "."));
             } catch (Exception exd) {
                 return defaultDouble;
             }
@@ -62,7 +62,7 @@ public class parse {
             return Float.parseFloat(p.toString());
         } catch (Exception ex) {
             try {
-                return Float.parseFloat(p.toString().replace(",", "."));
+                return Float.parseFloat(p.toString().replace(".","").replace(",", "."));
             } catch (Exception exd) {
                 return defaultFloat;
             }

@@ -515,11 +515,11 @@ public class yugi
     }
     public static String NF(Object ob, boolean Replace, int bas) {
         double d =0;
-        try{d= Double.parseDouble(ob.toString().replace(",","."));}
+        try{d= Double.parseDouble(ob.toString().replace(".","").replace(",","."));}
         catch (Exception e){}
         NumberFormat nf = NumberFormat.getInstance();
-        nf.setMaximumFractionDigits(bas);      // Burada virgülden sonra maksimum 2 karakter olacağı belirtiliyor.
-        nf.setMinimumFractionDigits(bas);      // Burada virgülden sonra minimum 2 karakter olacağı belirtiliyor.
+        nf.setMaximumFractionDigits(bas);
+        nf.setMinimumFractionDigits(bas);
         String s = nf.format(d);
 
         if (Replace && culture_Ondalik_ayrac.equals("."))
