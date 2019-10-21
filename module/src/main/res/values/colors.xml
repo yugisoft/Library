@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_dialog_box_title">#ff8800</color>
-    <color name="color_dialog_box_message">#7b7b7b</color>
-    <color name="colorPrimaryDark">#96bab7</color>
-    <color name="color_dialog_box_yes_button">#88ebd2</color>
-    <color name="color_dialog_box_no_button">#CB1C1C</color>
-    <color name="color_listview_devider">#D6D6D6</color>
 
-    <color name="color_list_tek">#f7fdfd</color>
-    <color name="color_list_cift">#FFFFFF</color>
-    <color name="color_list_selected">#ff8800</color>
-    <color name="color_list_unselected">#00000000</color>
 
 </resources>

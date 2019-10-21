@@ -23,6 +23,12 @@
 
 
 
+
+
+
+
+
+
     <attr name="focusedDrawable" format="color|reference" />
     <attr name="unFocusedDrawable" format="color|reference" />
     <attr name="rowColor1" format="color|reference"/>
@@ -151,6 +157,14 @@
         <attr name="headerForeColor" />
         <attr name="rowColor" />
 
+    </declare-styleable>
+
+    <attr name="focusedSize" format="dimension"></attr>
+    <attr name="unFocusedSize" format="dimension"></attr>
+
+    <declare-styleable name="BottomIntegrator">
+        <attr name="focusedSize"></attr>
+        <attr name="unFocusedSize"></attr>
     </declare-styleable>
 
 

@@ -1121,16 +1121,26 @@ public class ViewPager extends ViewGroup
     }
 
 
+    public void refreshAdapterData()
+    {
+        if(mAdapter!=null)
+        {
+            mAdapter.Views.clear();
+            for (int i=0;i<this.getChildCount();i++)
+            {
+                mAdapter.Views.add(this.getChildAt(i));
+            }
+        }
+    }
+
+
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (mAdapter==null)
         {
             mAdapter = new SlidePageAdapter();
-            for (int i=0;i<this.getChildCount();i++)
-            {
-                mAdapter.Views.add(this.getChildAt(i));
-            }
+            refreshAdapterData();
         }
 
         mInLayout = true;
@@ -2427,7 +2437,7 @@ public class ViewPager extends ViewGroup
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
+            container.removeView(Views.get(position));
         }
     }
 

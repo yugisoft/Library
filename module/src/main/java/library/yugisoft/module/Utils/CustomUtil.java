@@ -1,5 +1,8 @@
 package library.yugisoft.module.Utils;
 
+import android.os.Build;
+import android.view.View;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -181,10 +184,7 @@ public class CustomUtil
 
         return list;
     }
-
-
-    public static Field getFieldForJsonObject(vList<Field> fields,String name)
-    {
+    public static Field getFieldForJsonObject(vList<Field> fields,String name) {
         Field field = null;
         try{field = fields.Filter(f-> f.getName().equals(name)).get(0);}catch (Exception ex){}
         if (field == null)
@@ -207,15 +207,33 @@ public class CustomUtil
         return field;
 
     }
+    public static List<Field> getFieldsForJsonObject(vList<Field> fields,String name) {
+        List<Field> field = null;
+        try{field = fields.Filter(f-> f.getName().equals(name));}catch (Exception ex){}
+        if (field.size() == 0)
+        {
+            try
+            {
+                field = fields.Filter(f->
+                {
+                    Json js = f.getAnnotation(Json.class);
+                    if (js == null)
+                        return false;
+                    return js.name().equals(name);
+                });
+            }
+            catch (Exception ex)
+            {
 
+            }
+        }
+        return field;
 
-
-    public static BindProperty getFieldProperty(Object ob, String fieldName)
-    {
+    }
+    public static BindProperty getFieldProperty(Object ob, String fieldName) {
         return getFieldProperty(getField(ob,fieldName));
     }
-    public static BindProperty getFieldProperty(Field field)
-    {
+    public static BindProperty getFieldProperty(Field field) {
         if (field.isAnnotationPresent(BindProperty.class))
             return  field.getAnnotation(BindProperty.class);
         else
@@ -252,5 +270,49 @@ public class CustomUtil
                     return true;
                 }
             };
+    }
+
+    public static View.OnClickListener getOnClickListener(View view) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            return getOnClickListenerV14(view);
+        } else {
+            return getOnClickListenerV(view);
+        }
+    }
+    private static View.OnClickListener getOnClickListenerV(View view) {
+        View.OnClickListener retrievedListener = null;
+        String viewStr = "android.view.View";
+        Field field;
+
+        try {
+            field = Class.forName(viewStr).getDeclaredField("mOnClickListener");
+            retrievedListener = (View.OnClickListener) field.get(view);
+        } catch (Exception ex) { }
+
+        return retrievedListener;
+    }
+    private static View.OnClickListener getOnClickListenerV14(View view) {
+        View.OnClickListener retrievedListener = null;
+        String viewStr = "android.view.View";
+        String lInfoStr = "android.view.View$ListenerInfo";
+
+        try {
+            Field listenerField = Class.forName(viewStr).getDeclaredField("mListenerInfo");
+            Object listenerInfo = null;
+
+            if (listenerField != null) {
+                listenerField.setAccessible(true);
+                listenerInfo = listenerField.get(view);
+            }
+
+            Field clickListenerField = Class.forName(lInfoStr).getDeclaredField("mOnClickListener");
+
+            if (clickListenerField != null && listenerInfo != null) {
+                retrievedListener = (View.OnClickListener) clickListenerField.get(listenerInfo);
+            }
+        }
+        catch (Exception ex) { }
+
+        return retrievedListener;
     }
 }

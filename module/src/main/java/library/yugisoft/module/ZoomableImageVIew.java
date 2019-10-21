@@ -1,16 +1,28 @@
 package library.yugisoft.module;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
-public class ZoomableImageVIew extends ImageView implements View.OnTouchListener {
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+public class ZoomableImageVIew extends ImageView implements View.OnTouchListener
+{
 
 
     public Matrix matrix = new Matrix();
@@ -46,6 +58,7 @@ public class ZoomableImageVIew extends ImageView implements View.OnTouchListener
     private int mBitmapWidth = -1;
     private int mBitmapHeight = -1;
     private boolean mDraggable = false;
+    private Dialog dialog;
 
 
     public ZoomableImageVIew(Context context) {
@@ -247,7 +260,7 @@ public class ZoomableImageVIew extends ImageView implements View.OnTouchListener
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
 
-        return (float) Math.sqrt(x * x + y * y);
+        return (float)Math.sqrt(x * x + y * y);
     }
 
     /** Calculate the mid point of the first two fingers */
@@ -257,5 +270,83 @@ public class ZoomableImageVIew extends ImageView implements View.OnTouchListener
         point.set(x / 2, y / 2);
     }
 
+
+
+    public void show() {
+        getDialog().show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                RectF drawableRect = new RectF(0, 0, getDrawable().getBounds().width(), getDrawable().getBounds().height());
+                RectF viewRect = new RectF(0, 0, getWidth(), getHeight());
+                Matrix matrix = getImageMatrix();
+                matrix.setRectToRect(drawableRect, viewRect, Matrix.ScaleToFit.CENTER);
+                setImageMatrix(matrix);
+               ZoomableImageVIew.this.matrix = matrix;
+            }
+        },100);
+    }
+    public void show(Drawable drawable) {
+         this.setImageDrawable(drawable);
+         show();
+    }
+    public void show(ImageView imageView) {
+         show(imageView.getDrawable());
+    }
+
+    public void show(String view)
+    {
+        getDialog().show();
+        yugi.imageLoader.displayImage(view, this, yugi.options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                RectF drawableRect = new RectF(0, 0, getDrawable().getBounds().width(), getDrawable().getBounds().height());
+                RectF viewRect = new RectF(0, 0, getWidth(), getHeight());
+                Matrix matrix = getImageMatrix();
+                matrix.setRectToRect(drawableRect, viewRect, Matrix.ScaleToFit.CENTER);
+                setImageMatrix(matrix);
+                ZoomableImageVIew.this.matrix = matrix;
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+    }
+
+    public Dialog getDialog() {
+        if (dialog == null)
+        {
+            dialog = new Dialog(getContext());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            this.setLayoutParams(new ViewGroup.LayoutParams(-1,-1));
+            dialog.setContentView(this);
+            dialog.getWindow().setLayout((int) (getScreenWidth() * .9), (int)(getScreenHeight() * .9) );
+        }
+        return dialog;
+    }
+    public static int getScreenWidth() {
+        Point size = new Point();
+        yugi.activity.getWindowManager().getDefaultDisplay().getSize(size);
+        return size.x;
+    }
+    public static int getScreenHeight() {
+        Point size = new Point();
+        yugi.activity.getWindowManager().getDefaultDisplay().getSize(size);
+        return size.y;
+    }
 
 }

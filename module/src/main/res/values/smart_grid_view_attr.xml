@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SmartGridView">
+
+    </style>
+    <style name="SmartGridView.Title">
+
+        <item name="android:minHeight">35dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">#F5F5F5</item>
+        <item name="android:textColor">#A2A2A2</item>
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
+    <style name="SmartGridView.GroupButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/radius5</item>
+        <item name="android:backgroundTint">@android:color/white</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_margin">7dp</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+
+    <attr name="numColumns" format="integer" />
+    <attr name="pageViewCount" format="integer" />
+    <attr name="pageMoreCount" format="integer" />
+
+    <declare-styleable name="SmartGridView">
+        <attr name="detailViewID" />
+        <attr name="numColumns" />
+        <attr name="pageViewCount" />
+        <attr name="pageMoreCount" />
+    </declare-styleable>
+
+</resources>

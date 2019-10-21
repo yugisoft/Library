@@ -78,7 +78,14 @@ public class INTERFACES
     {
         void onResponse(T item);
     }
-
+    public interface OnResponse2<T,E>
+    {
+        void onResponse(T p1, E p2);
+    }
+    public interface OnResponse3<T,E,K>
+    {
+        void onResponse(T p1, E p2, K p3);
+    }
     public interface getGenericItem<T>
     {
         T getItem();

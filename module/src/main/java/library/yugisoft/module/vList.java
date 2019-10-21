@@ -341,7 +341,7 @@ public class vList<E>  implements List<E>{
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
-            item.item  = list.stream().max(comp).get();
+            item.item  = list.stream().min(comp).get();
             item.value = pre.get(item.item);
 
         } else {

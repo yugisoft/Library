@@ -172,9 +172,56 @@ public class JsonConverter<T> {
 
             for (Iterator<String> it = jsonObject.keys(); it.hasNext(); ) {
                 String key = it.next();
-                Field f = CustomUtil.getFieldForJsonObject(fields, key);
+                List<Field> fs = CustomUtil.getFieldsForJsonObject(fields, key);
 
-                if (f != null) {
+                if (fs != null) {
+
+                    for (Field f : fs)
+                    {
+                        try
+                        {
+                            f.setAccessible(true);
+                            String fType = f.getType().getSimpleName().toLowerCase();
+                            if (f.isAnnotationPresent(Json.class)) {
+                                Json json = f.getAnnotation(Json.class);
+                                if (json.ignoreJsonTo())
+                                    continue;
+                            }
+                            Object value = jsonObject.get(key);
+                            Class<?> clazz = f.getType();
+                            if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
+                                f.setInt(item, parse.toInt(value));
+                            } else if (clazz.equals(Long.class) || clazz.equals(long.class)) {
+                                f.setLong(item, parse.toLong(value));
+                            } else if (clazz.equals(Double.class) || clazz.equals(double.class)) {
+                                f.setDouble(item, parse.toDouble(value));
+                            } else if (clazz.equals(DataTable.class)) {
+                                f.set(item, parse.toDataTable(value));
+                            } else if (clazz.equals(List.class) || fType.equals("list")) {
+                                f.set(item, JsonConverter.convertJsonToList(value.toString(), Generic.getGenericInstance(f).getClass()));
+                            } else if (clazz.equals(vList.class) || fType.equals("vlist")) {
+                                vList l = new vList();
+                                l.list = JsonConverter.convertJsonToList(value.toString(), Generic.getGenericInstance(f).getClass());
+                                f.set(item, l);
+                            } else if (clazz.equals(DateTime.class) || fType.equals("datetime")) {
+                                f.set(item, parse.toDateTime(value));
+                            } else if (clazz.equals(Boolean.class) || fType.equals("boolean"))
+                                f.setBoolean(item, parse.toBoolean(value));
+                            else if (clazz.equals(String.class) || fType.equals("string")) {
+                                if (value.equals("null")) value = null;
+                                f.set(item, String.valueOf(value));
+                            }
+                            else
+                                f.set(item,JsonConverter.convertJsonToModel(value.toString(),clazz));
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                       // setFieldValue(jsonObject,item,_f);
+                    //region RAM
+                    /*
                     f.setAccessible(true);
                     String fType = f.getType().getSimpleName().toLowerCase();
                     if (f.isAnnotationPresent(Json.class)) {
@@ -206,6 +253,10 @@ public class JsonConverter<T> {
                         if (value.equals("null")) value = null;
                         f.set(item, String.valueOf(value));
                     }
+                    else
+                        f.set(item,JsonConverter.convertJsonToModel(value.toString(),clazz));
+                    */
+                    //endregion
                 }
             }
 
@@ -214,6 +265,8 @@ public class JsonConverter<T> {
         }
         return item;
     }
+
+
 
     private List<T> jsonArrayCaster(JSONArray jsonArray) {
 

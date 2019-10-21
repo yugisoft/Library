@@ -67,4 +67,16 @@
         <attr name="_Backgorund" />
     </declare-styleable>
 
+
+    <attr name="contentViewID" format="integer|reference" />
+
+
+    <declare-styleable name="BaseCustomLayout">
+
+        <attr name="contentViewID" />
+
+    </declare-styleable>
+
+
+
 </resources>
