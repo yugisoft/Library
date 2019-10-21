@@ -7,16 +7,20 @@
     android:orientation="vertical"
     tools:context=".yugiTest">
 
-    <TextView
-        android:id="@+id/Text1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="${deneme1} Alanı"
-        android:text="TextView" />
 
-    <TextView
-        android:id="@+id/Text2"
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_height="wrap_content">
+
+        <library.yugisoft.module.Utils.pBottomIntegrator.BottomIntegrator
+            android:id="@+id/pageIntegrator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </HorizontalScrollView>
+
+    <library.yugisoft.module.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </LinearLayout>

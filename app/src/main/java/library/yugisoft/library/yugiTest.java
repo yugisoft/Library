@@ -1,43 +1,57 @@
 package library.yugisoft.library;
-    import android.graphics.Bitmap;
-    import android.graphics.BitmapFactory;
-    import android.graphics.Canvas;
-    import android.graphics.Color;
-    import android.graphics.RectF;
+    import android.os.Build;
     import android.os.Bundle;
-    import android.support.v7.widget.RecyclerView;
-    import android.support.v7.widget.helper.ItemTouchHelper;
+    import android.support.annotation.RequiresApi;
     import android.view.View;
-    import android.widget.ArrayAdapter;
-    import android.widget.GridView;
+    import android.view.ViewGroup;
+    import android.widget.TextView;
 
+    import java.io.IOException;
+    import java.io.InputStream;
+    import java.nio.file.Files;
+    import java.nio.file.Paths;
     import java.util.ArrayList;
-    import java.util.Arrays;
+    import java.util.Collections;
     import java.util.List;
-
-    import library.yugisoft.module.DialogBox;
-    import library.yugisoft.module.ItemAdapter;
-
+    import library.yugisoft.library.Activitys.UI.UI_activity_main;
     import library.yugisoft.module.Json;
-    import library.yugisoft.module.Utils.CustomBinding.BindProperty;
-    import library.yugisoft.module.Utils.CustomBinding.CustomBindingAdapter;
     import library.yugisoft.module.Utils.JsonConverter;
+    import library.yugisoft.module.ViewPager;
+    import library.yugisoft.module.vList;
     import library.yugisoft.module.yugi;
 
-public class yugiTest extends yugi.vActivity implements View.OnClickListener {
+public class yugiTest extends UI_activity_main implements View.OnClickListener {
+
+
+
+
+    //region jsondata
+    String jsonData = "";
+    //endregion
 
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void Ready()
 
-        JsonConverter<Deneme> converter = new JsonConverter<>("[{\"Field1\":\"Value1\",\"Field2\":2,\"Item\":{\"Field1\":\"Value1\",\"Field2\":2},\"ListItem\":[{\"Field1\":\"Value1\",\"Field2\":2},{\"Field1\":\"Value1\",\"Field2\":2}]},{\"Field1\":\"Value1\",\"Field2\":2,\"Item\":{\"Field1\":\"Value1\",\"Field2\":2},\"ListItem\":[{\"Field1\":\"Value1\",\"Field2\":2},{\"Field1\":\"Value1\",\"Field2\":2}]}]",Deneme.class);
-        converter.setKey("Item");
-        Deneme deneme = converter.convertToClass();
+    {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            try {
+                InputStream is = yugi.activity.getAssets().open("JsonData.json");
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                is.close();
+                jsonData = new String(buffer);
+                if ((int)jsonData.charAt(0) == '\uFEFF')
+                    jsonData = jsonData.replace(jsonData.substring(0,1),"");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-        DialogBox.showOK("",null);
+
+
 
     }
 
@@ -45,39 +59,13 @@ public class yugiTest extends yugi.vActivity implements View.OnClickListener {
     public void onClick(View v)
     {
 
-    }
-
-
-
-    public static class Deneme
-    {
-
-        //region Field1
-        @Json(name = "Field1")
-        private String field1;
-        public String getField1(){
-            return field1;
-        }
-        public void setField1( String field1 )
-        {
-            this.field1= field1;
-        }
-        //endregion
-        //region Field2
-
-        private int Field2;
-        public int getField2(){
-            return Field2;
-        }
-        public void setField2( int field2 )
-        {
-            this.Field2= field2;
-        }
-        //endregion
-
-        public List<Deneme> ListItem;
 
     }
+
+
+
+
+
 
 
 }
