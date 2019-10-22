@@ -2,6 +2,7 @@ package library.yugisoft.module.Utils.pSmartGridView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -121,6 +122,8 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     }
     //endregion
 
+    private Drawable drawableEmpty;
+
     public void setNumColumns(int numColumns) {
         if (getSmartGridAdapter() != null)
             getSmartGridAdapter().setNumColumns(numColumns);
@@ -211,7 +214,13 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
 
 
     @Override
-    public void onFinish() {
+    public void onFinish()
+    {
+        if (bar_detail.getChildCount() == 0 && getDrawableEmpty() != null)
+            bar_detail.setBackground(getBackground());
+        else if (bar_detail.getBackground().equals(getDrawableEmpty()))
+            bar_detail.setBackground(null);
+
         swipe.setRefreshing(false);
         scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> onScrollChange(v,scrollX,scrollY,oldScrollX,oldScrollY));
     }
@@ -240,4 +249,11 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     }
 
 
+    public Drawable getDrawableEmpty() {
+        return drawableEmpty;
+    }
+
+    public void setDrawableEmpty(Drawable drawableEmpty) {
+        this.drawableEmpty = drawableEmpty;
+    }
 }

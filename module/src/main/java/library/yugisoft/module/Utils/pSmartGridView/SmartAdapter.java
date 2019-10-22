@@ -73,7 +73,7 @@ public class SmartAdapter<T>
             return;
 
 
-
+        controller.onStart();
         new AsyncTask<Void, View, String>() {
 
             @SuppressLint("WrongThread")
@@ -97,7 +97,7 @@ public class SmartAdapter<T>
             @Override
             protected void onPostExecute(String s)
             {
-
+                controller.onFinish();
             }
             public  void onProgressUpdate(View view ,T item,int index) {
                 yugi.activity.runOnUiThread(new Runnable()
