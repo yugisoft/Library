@@ -217,9 +217,9 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     public void onFinish()
     {
         if (bar_detail.getChildCount() == 0 && getDrawableEmpty() != null)
-            bar_detail.setBackground(getBackground());
-        else if (bar_detail.getBackground() != null && bar_detail.getBackground().equals(getDrawableEmpty()))
-            bar_detail.setBackground(null);
+            scrollView.setBackground(getBackground());
+        else if (scrollView.getBackground() != null && scrollView.getBackground().equals(getDrawableEmpty()))
+            scrollView.setBackground(null);
 
         swipe.setRefreshing(false);
         scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> onScrollChange(v,scrollX,scrollY,oldScrollX,oldScrollY));
