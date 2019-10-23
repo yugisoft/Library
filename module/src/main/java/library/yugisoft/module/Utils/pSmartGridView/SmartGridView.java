@@ -198,12 +198,21 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
 
 
     /*Selected Item Event*/
-    public void onItemClick(View view)
+    public void onItemClick(View view, Object item)
     {
 
-        View.OnClickListener onClickListener = CustomUtil.getOnClickListener(view);
-       if (onClickListener != null)
-            onClickListener.onClick(view);
+        if (item instanceof ISmartViewItem)
+        {
+            ((ISmartViewItem)item).onItemClick(view);
+        }
+        else
+        {
+            View.OnClickListener onClickListener = CustomUtil.getOnClickListener(view);
+            if (onClickListener != null)
+                onClickListener.onClick(view);
+        }
+
+
     }
 
     /*İstenilen Grup Başlığına Scrol Yapar*/

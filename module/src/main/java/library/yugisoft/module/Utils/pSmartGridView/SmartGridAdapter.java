@@ -221,7 +221,7 @@ public class SmartGridAdapter<T>
                             cell_holder.cell_detail.addView(buildView(this));
                             cell_holder.cell_detail.setOnClickListener(v-> {
                                 if (getAdapterListener() != null)
-                                    getAdapterListener().onItemClick(cell_holder.cell_detail.getChildAt(0));
+                                    getAdapterListener().onItemClick(cell_holder.cell_detail.getChildAt(0),item);
 
                             });
                             lastViewIndex++;

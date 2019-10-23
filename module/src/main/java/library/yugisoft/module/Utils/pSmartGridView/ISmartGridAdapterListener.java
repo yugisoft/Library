@@ -9,5 +9,5 @@ public interface ISmartGridAdapterListener
     default void onReadyView(View view){};
     default void onAddHeader(View view){};
     default void onRemoveAllViews(){};
-    default void onItemClick(View view){};
+    default void onItemClick(View view,Object item){};
 }

@@ -24,4 +24,6 @@ public interface ISmartViewItem
     default String getGroupTitle() { return  "";}
 
     int getIndex();
+
+    default  void onItemClick(View view) {}
 }
