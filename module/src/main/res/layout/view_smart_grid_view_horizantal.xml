@@ -25,8 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
-            android:id="@+id/scrollViewv"
+        <HorizontalScrollView
+            android:id="@+id/scrollViewh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -53,7 +53,7 @@
                     android:orientation="horizontal"></LinearLayout>
             </LinearLayout>
 
-        </ScrollView>
+        </HorizontalScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

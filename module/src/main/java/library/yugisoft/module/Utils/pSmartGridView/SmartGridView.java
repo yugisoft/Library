@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -179,12 +180,14 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     {
         if (getSmartGridAdapter() != null)
         {
-            View view = (View) scrollView.getChildAt(scrollView.getChildCount() - 1);
-            int diff = (view.getBottom() - (scrollView.getHeight() + scrollView.getScrollY()));
+            View view = ScrollChild();
+            int diff = (view.getBottom() - (scrollViewgetHeight() + scrollViewgetScrollY()));
             if (diff == 0)
             {
-                if (getLastViewIndex() < getData().size()) {
-                    scrollView.setOnScrollChangeListener(null);
+                if (getLastViewIndex() < getData().size())
+                {
+
+                    setScrollChangeListener(null);
                     setPageViewCount(getPageViewCount()+getPageMoreCount());
                     notifyDataSetChanged(true);
                 }
@@ -192,6 +195,46 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
                     getViewListener().onScrollToMoreLoad();
             }
         }
+    }
+
+    public int scrollViewgetHeight() {
+        if (scrollViewv != null)
+            return  scrollViewv.getHeight();
+        if (scrollViewh != null)
+            return  scrollViewh.getHeight();
+        return 0;
+    }
+    public int scrollViewgetScrollY() {
+        if (scrollViewv != null)
+            return  scrollViewv.getScrollY();
+        if (scrollViewh != null)
+            return  scrollViewh.getScrollY();
+        return 0;
+    }
+    public void setScrollChangeListener(OnScrollChangeListener o) {
+       if (scrollViewv != null)
+           scrollViewv.setOnScrollChangeListener(o);
+        if (scrollViewh != null)
+            scrollViewh.setOnScrollChangeListener(o);
+    }
+    public View ScrollChild() {
+        if (scrollViewv != null)
+            return  (View) scrollViewv.getChildAt(scrollViewv.getChildCount() - 1);
+        if (scrollViewh != null)
+            return  (View) scrollViewh.getChildAt(scrollViewh.getChildCount() - 1);
+
+        return  null;
+    }
+    public void scrollViewsmoothScrollTo(int i, int top) {
+        if (scrollViewv != null)
+            scrollViewv.smoothScrollTo(i, top);
+        if (scrollViewh != null)
+            scrollViewh.smoothScrollTo(i, top);
+    }
+    public View scrollView() {
+        if (scrollViewv != null)
+            return scrollViewv;
+        return scrollViewh;
     }
     //endregion
 
@@ -218,20 +261,22 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     /*İstenilen Grup Başlığına Scrol Yapar*/
     public void scrollTo(String s) {
         View view = bar_detail.findViewWithTag(s);
-        scrollView.smoothScrollTo(0, (int)((View)view.getParent()).getTop());
+        scrollViewsmoothScrollTo(0, (int)((View)view.getParent()).getTop());
     }
+
+
 
 
     @Override
     public void onFinish()
     {
         if (bar_detail.getChildCount() == 0 && getDrawableEmpty() != null)
-            scrollView.setBackground(getBackground());
-        else if (scrollView.getBackground() != null && scrollView.getBackground().equals(getDrawableEmpty()))
-            scrollView.setBackground(null);
+            scrollView().setBackground(getBackground());
+        else if ( scrollView().getBackground() != null &&  scrollView().getBackground().equals(getDrawableEmpty()))
+            scrollView().setBackground(null);
 
         swipe.setRefreshing(false);
-        scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> onScrollChange(v,scrollX,scrollY,oldScrollX,oldScrollY));
+        scrollView().setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> onScrollChange(v,scrollX,scrollY,oldScrollX,oldScrollY));
     }
 
     @Override

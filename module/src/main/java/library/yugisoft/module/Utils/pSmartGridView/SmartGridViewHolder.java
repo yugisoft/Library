@@ -3,6 +3,7 @@ package library.yugisoft.module.Utils.pSmartGridView;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -26,7 +27,8 @@ public abstract class SmartGridViewHolder extends BaseCustomLayout
     
 public LinearLayout bar_header;
 public android.support.v4.widget.SwipeRefreshLayout swipe;
-public ScrollView scrollView;
+public ScrollView scrollViewv;
+public HorizontalScrollView scrollViewh;
 public LinearLayout contentPanel;
 public LinearLayout bar_detail;
 public LinearLayout bar_footer;
@@ -35,13 +37,14 @@ public LinearLayout bar_footer;
     @Override
     public void init(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super.init(context, attrs, defStyle);
-        
-bar_header = (LinearLayout)findViewById(R.id.bar_header);
-swipe = (android.support.v4.widget.SwipeRefreshLayout)findViewById(R.id.swipe);
-scrollView = (ScrollView)findViewById(R.id.scrollView);
-contentPanel = (LinearLayout)findViewById(R.id.contentPanel);
-bar_detail = (LinearLayout)findViewById(R.id.bar_detail);
-bar_footer = (LinearLayout)findViewById(R.id.bar_footer);
+
+        bar_header = (LinearLayout) findViewById(R.id.bar_header);
+        swipe = (android.support.v4.widget.SwipeRefreshLayout) findViewById(R.id.swipe);
+        scrollViewv = (ScrollView) findViewById(R.id.scrollView);
+        scrollViewh = (HorizontalScrollView) findViewById(R.id.scrollViewh);
+        contentPanel = (LinearLayout) findViewById(R.id.contentPanel);
+        bar_detail = (LinearLayout) findViewById(R.id.bar_detail);
+        bar_footer = (LinearLayout) findViewById(R.id.bar_footer);
     }
 
     
