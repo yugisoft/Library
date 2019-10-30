@@ -40,7 +40,7 @@ public LinearLayout bar_footer;
 
         bar_header = (LinearLayout) findViewById(R.id.bar_header);
         swipe = (android.support.v4.widget.SwipeRefreshLayout) findViewById(R.id.swipe);
-        scrollViewv = (ScrollView) findViewById(R.id.scrollView);
+        scrollViewv = (ScrollView) findViewById(R.id.scrollViewv);
         scrollViewh = (HorizontalScrollView) findViewById(R.id.scrollViewh);
         contentPanel = (LinearLayout) findViewById(R.id.contentPanel);
         bar_detail = (LinearLayout) findViewById(R.id.bar_detail);
