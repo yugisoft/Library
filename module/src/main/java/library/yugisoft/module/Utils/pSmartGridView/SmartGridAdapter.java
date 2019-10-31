@@ -224,7 +224,8 @@ public class SmartGridAdapter<T>
                                     getAdapterListener().onItemClick(cell_holder.cell_detail.getChildAt(0),item);
 
                             });
-                            lastViewIndex++;
+                            if (numColumns > 1)
+                                 lastViewIndex++;
                         }
                     }
                     onProgressUpdate(row_holder.itemView);
