@@ -18,6 +18,11 @@ import library.yugisoft.module.vList;
 public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdapterListener {
 
 
+    public boolean isVertical()
+    {
+        return  scrollViewv != null;
+    }
+
     //region CONSTR
     public SmartGridView(Context context) {
         super(context);
@@ -35,6 +40,8 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     SmartGridAdapter smartGridAdapter;
     public void setSmartGridAdapter(SmartGridAdapter smartGridAdapter) {
         this.smartGridAdapter = smartGridAdapter;
+        this.smartGridAdapter.setVertical(isVertical());
+
     }
     public SmartGridAdapter getSmartGridAdapter() {
         return smartGridAdapter;

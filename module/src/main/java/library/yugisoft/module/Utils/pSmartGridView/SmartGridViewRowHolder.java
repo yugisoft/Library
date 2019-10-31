@@ -19,6 +19,10 @@ public SmartGridViewRowHolder(View itemView) {
     super(itemView== null ? yugi.activity.getLayoutInflater().inflate(R.layout.view_smart_grid_row,null) :itemView);
     init();
 }
+    public SmartGridViewRowHolder(int itemView) {
+        super(yugi.activity.getLayoutInflater().inflate(itemView,null));
+        init();
+    }
 
 
 //region DECLARE

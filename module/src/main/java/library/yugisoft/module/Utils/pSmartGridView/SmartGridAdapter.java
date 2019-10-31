@@ -155,7 +155,7 @@ public class SmartGridAdapter<T>
                 for (;lastViewIndex < getCount();lastViewIndex++)
                 {
 
-                    SmartGridViewRowHolder row_holder = new SmartGridViewRowHolder();
+                    SmartGridViewRowHolder row_holder = new SmartGridViewRowHolder(isVertical() ? R.layout.view_smart_grid_row : R.layout.view_smart_grid_row_horizantal);
                     for (int i = 0; i < numColumns  ; i++)
                     {
 
@@ -281,5 +281,14 @@ public class SmartGridAdapter<T>
 
     public void setAdapterListener(ISmartGridAdapterListener adapterListener) {
         this.adapterListener = adapterListener;
+    }
+
+    private boolean vertical;
+    public void setVertical(boolean vertical) {
+        this.vertical = vertical;
+    }
+
+    public boolean isVertical() {
+        return vertical;
     }
 }
