@@ -3,7 +3,7 @@ package library.yugisoft.module.Utils.pSmartGridView;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
+
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ScrollView;
@@ -27,10 +27,10 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     public SmartGridView(Context context) {
         super(context);
     }
-    public SmartGridView(Context context, @Nullable AttributeSet attrs) {
+    public SmartGridView(Context context,  AttributeSet attrs) {
         super(context, attrs);
     }
-    public SmartGridView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SmartGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
     //endregion
@@ -144,7 +144,7 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     }
 
     @Override
-    public void init(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public void init(Context context,  AttributeSet attrs, int defStyle) {
         super.init(context, attrs, defStyle);
 
         setSmartGridAdapter(new SmartGridAdapter());
@@ -246,6 +246,8 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     //endregion
 
 
+    private OnSmartItemClickListener onSmartItemClickListener;
+
 
     /*Selected Item Event*/
     public void onItemClick(View view, Object item)
@@ -261,6 +263,9 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
             if (onClickListener != null)
                 onClickListener.onClick(view);
         }
+
+        if (getOnSmartItemClickListener()!=null)
+            getOnSmartItemClickListener().onItemClick(view,item);
 
 
     }
@@ -316,5 +321,13 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
 
     public void setDrawableEmpty(Drawable drawableEmpty) {
         this.drawableEmpty = drawableEmpty;
+    }
+
+    public OnSmartItemClickListener getOnSmartItemClickListener() {
+        return onSmartItemClickListener;
+    }
+
+    public void setOnSmartItemClickListener(OnSmartItemClickListener onSmartItemClickListener) {
+        this.onSmartItemClickListener = onSmartItemClickListener;
     }
 }
