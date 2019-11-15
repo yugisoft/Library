@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import library.yugisoft.module.R;
@@ -329,5 +330,13 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
 
     public void setOnSmartItemClickListener(OnSmartItemClickListener onSmartItemClickListener) {
         this.onSmartItemClickListener = onSmartItemClickListener;
+    }
+
+    public void setItemViewController(Object object)
+    {
+        getSmartGridAdapter().setItemViewController(object);
+    }
+    public void callItemViewController(String methodName,Object... prms) {
+        getSmartGridAdapter().callItemViewController(methodName,prms);
     }
 }

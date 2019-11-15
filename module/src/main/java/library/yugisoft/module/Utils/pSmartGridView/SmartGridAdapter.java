@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class SmartGridAdapter<T>
 
     private SmartGridView smartGridView;
     private TextView selectedGroup;
-    protected  int detailViewID;
+    protected  int detailViewID = 0;
     protected vList<T> vData = new vList<T>();
     protected List<T>  sData = new ArrayList<T>();
     protected int lastViewIndex = 0;
@@ -136,8 +137,6 @@ public class SmartGridAdapter<T>
         }
         loadMoreData();
     }
-
-
 
     Context getContext() {
         return  getSmartGridView() != null ? getSmartGridView().getContext() : yugi.activity;
@@ -256,22 +255,31 @@ public class SmartGridAdapter<T>
         }.execute();
     }
 
-
     private View buildView(AsyncTask<Void, View, String> task) {
 
         boolean insertView = false;
         Object item = vData.get(lastViewIndex);
         View view = null;
-        if (view == null)
+
+
+        if (item instanceof ISmartViewItem)
+        {
+            view = ((ISmartViewItem) item).getView();
+        }
+
+        if (view == null && getDetailViewID() != 0)
         {
             view = yugi.activity.getLayoutInflater().inflate(getDetailViewID(),null);
             view.setId(lastViewIndex);
             insertView = true;
         }
 
+
         if (item instanceof ISmartViewItem )
         {
             ((ISmartViewItem)item).setView(getSmartGridView(),view,lastViewIndex,!insertView);
+            view = ((ISmartViewItem) item).getView();
+            insertView = true;
         }
         return  insertView ? view : null;
     }
@@ -291,5 +299,25 @@ public class SmartGridAdapter<T>
 
     public boolean isVertical() {
         return vertical;
+    }
+
+
+    private  Object itemViewController;
+    public Object getItemViewController() {
+        return itemViewController;
+    }
+    public void setItemViewController(Object itemViewController) {
+        this.itemViewController = itemViewController;
+    }
+    public void callItemViewController(String methodName,Object... prms) {
+        if (getItemViewController()!= null)
+        {
+            Method method = null;
+            try { method = this.getClass().getDeclaredMethod(methodName); } catch (NoSuchMethodException e) { e.printStackTrace(); }
+            if (method == null)
+                try { method = this.getClass().getMethod(methodName); } catch (NoSuchMethodException e) { e.printStackTrace(); }
+            if (method != null)
+                try { method.invoke(getItemViewController(),prms); } catch (Exception e) { e.printStackTrace(); }
+        }
     }
 }
