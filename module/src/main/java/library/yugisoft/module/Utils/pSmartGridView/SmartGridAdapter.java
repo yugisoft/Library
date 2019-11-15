@@ -328,9 +328,9 @@ public class SmartGridAdapter<T>
         if (getItemViewController()!= null)
         {
             Method method = null;
-            try { method = this.getClass().getDeclaredMethod(methodName); } catch (NoSuchMethodException e) { e.printStackTrace(); }
+            try { method = getItemViewController().getClass().getDeclaredMethod(methodName); } catch (NoSuchMethodException e) { e.printStackTrace(); }
             if (method == null)
-                try { method = this.getClass().getMethod(methodName); } catch (NoSuchMethodException e) { e.printStackTrace(); }
+                try { method = getItemViewController().getClass().getMethod(methodName); } catch (NoSuchMethodException e) { e.printStackTrace(); }
             if (method != null)
                 try { method.invoke(getItemViewController(),prms); } catch (Exception e) { e.printStackTrace(); }
         }
