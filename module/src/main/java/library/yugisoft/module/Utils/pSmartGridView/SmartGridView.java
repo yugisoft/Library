@@ -2,6 +2,7 @@ package library.yugisoft.module.Utils.pSmartGridView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 
 import android.util.AttributeSet;
@@ -166,6 +167,7 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
             setPageViewCount(typedArray.getInteger(R.styleable.SmartGridView_pageViewCount,30));
             setPageMoreCount(typedArray.getInteger(R.styleable.SmartGridView_pageMoreCount,30));
             setNumColumns(typedArray.getInteger(R.styleable.SmartGridView_numColumns,1));
+            setBackGroundColor(typedArray.getColor(R.styleable.SmartGridView_rowBackColor, Color.WHITE));
         }
 
 
@@ -338,5 +340,15 @@ public class SmartGridView extends SmartGridViewHolder implements ISmartGridAdap
     }
     public void callItemViewController(String methodName,Object... prms) {
         getSmartGridAdapter().callItemViewController(methodName,prms);
+    }
+
+    public void setBackGroundColor(int backGroundColor)
+    {
+        getSmartGridAdapter().setBackGroundColor(backGroundColor);
+
+    }
+
+    public int getBackGbackGroundColor() {
+        return getSmartGridAdapter().getBackGroundColor();
     }
 }

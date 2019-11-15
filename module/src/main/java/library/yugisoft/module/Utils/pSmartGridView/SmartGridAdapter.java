@@ -3,6 +3,7 @@ package library.yugisoft.module.Utils.pSmartGridView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,15 @@ import library.yugisoft.module.yugi;
 public class SmartGridAdapter<T>
 {
 
+    private int backGroundColor = Color.WHITE;
+
+    public void setBackGroundColor(int backGroundColor) {
+        this.backGroundColor = backGroundColor;
+    }
+
+    public int getBackGroundColor() {
+        return backGroundColor;
+    }
     //region Declare
 
     public static final int VISIBLE = 0x00000000;
@@ -155,12 +165,14 @@ public class SmartGridAdapter<T>
                 {
 
                     SmartGridViewRowHolder row_holder = new SmartGridViewRowHolder(isVertical() ? R.layout.view_smart_grid_row : R.layout.view_smart_grid_row_horizantal);
+                    row_holder.row_detail.setBackgroundColor(getBackGroundColor());
                     for (int i = 0; i < numColumns  ; i++)
                     {
 
 
                         SmartGridViewCellHolder cell_holder = new SmartGridViewCellHolder();
                         ((ViewGroup)cell_holder.itemView).removeAllViews();
+                        cell_holder.cell_detail.setBackgroundColor(getBackGroundColor());
                         row_holder.row_detail.addView(cell_holder.cell_detail);
 
                         if (lastViewIndex < getCount())
@@ -277,7 +289,10 @@ public class SmartGridAdapter<T>
 
         if (item instanceof ISmartViewItem )
         {
-            ((ISmartViewItem)item).setView(getSmartGridView(),view,lastViewIndex,!insertView);
+            if (view == null)
+                ((ISmartViewItem)item).setView(getSmartGridView(),view,lastViewIndex,!insertView);
+            else
+                ((ISmartViewItem)item).setView(getSmartGridView(),view,lastViewIndex);
             view = ((ISmartViewItem) item).getView();
             insertView = true;
         }

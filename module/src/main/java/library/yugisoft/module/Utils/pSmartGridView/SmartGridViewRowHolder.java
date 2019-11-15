@@ -36,6 +36,8 @@ public void init()
     
 txt_title = (TextView)itemView.findViewById(R.id.txt_title);
 row_detail = (LinearLayout)itemView.findViewById(R.id.row_detail);
+
+
 }
 
 
