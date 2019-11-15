@@ -289,7 +289,7 @@ public class SmartGridAdapter<T>
 
         if (item instanceof ISmartViewItem )
         {
-            if (view == null)
+            if (view != null)
                 ((ISmartViewItem)item).setView(getSmartGridView(),view,lastViewIndex,!insertView);
             else
                 ((ISmartViewItem)item).setView(getSmartGridView(),view,lastViewIndex);
