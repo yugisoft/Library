@@ -540,9 +540,14 @@ public class parse {
                     List l = new ArrayList();
                     JSONArray listJson = new JSONArray(value.toString());
                     for (int ds = 0; ds < listJson.length(); ds++) {
-
-                        Object o = jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
-                        l.add(o);
+                        Object o = null;
+                        Object GItem = Generic.getGenericInstance(f);
+                        if(GItem != null)
+                            jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
+                        else
+                            o = Generic.getGenericValue(object,f,listJson.getString(ds));
+                        if (o!= null)
+                            l.add(o);
                     }
                     f.set(object, l);
                 }
@@ -552,8 +557,15 @@ public class parse {
                     JSONArray listJson = new JSONArray(value.toString());
                     for (int ds = 0; ds < listJson.length(); ds++) {
 
-                        Object o = jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
-                        l.add(o);
+                        Object o = null;
+
+                        Object GItem = Generic.getGenericInstance(f);
+                        if(GItem != null)
+                             o = jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
+                        else
+                            o = Generic.getGenericValue(object,f,listJson.getString(ds));
+                        if (o!= null)
+                            l.add(o);
                     }
                     f.set(object, l);
                 }
@@ -643,8 +655,7 @@ public class parse {
             view.setLayoutParams(new FrameLayout.LayoutParams(Wi, He));
     }
 
-    public static class Formatter
-    {
+    public static class Formatter {
         public static String get(String format, Object args) {
             format = args instanceof DataTable.DataRow ? purifyDR(format, (DataTable.DataRow) args) : purify(format, args);
             return String.format(format, args);

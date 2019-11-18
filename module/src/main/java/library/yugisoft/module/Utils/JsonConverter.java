@@ -197,11 +197,12 @@ public class JsonConverter<T> {
                                 f.setDouble(item, parse.toDouble(value));
                             } else if (clazz.equals(DataTable.class)) {
                                 f.set(item, parse.toDataTable(value));
-                            } else if (clazz.equals(List.class) || fType.equals("list")) {
-                                f.set(item, JsonConverter.convertJsonToList(value.toString(), Generic.getGenericInstance(f).getClass()));
+                            } else if (clazz.equals(List.class) || fType.equals("list"))
+                            {
+                                f.set(item, JsonConverter.convertJsonToList(value.toString(), Generic.getGenericClass(f)));
                             } else if (clazz.equals(vList.class) || fType.equals("vlist")) {
                                 vList l = new vList();
-                                l.list = JsonConverter.convertJsonToList(value.toString(), Generic.getGenericInstance(f).getClass());
+                                l.list = JsonConverter.convertJsonToList(value.toString(), Generic.getGenericClass(f));
                                 f.set(item, l);
                             } else if (clazz.equals(DateTime.class) || fType.equals("datetime")) {
                                 f.set(item, parse.toDateTime(value));

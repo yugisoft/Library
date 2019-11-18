@@ -1,11 +1,14 @@
 package library.yugisoft.module;
 
+import org.json.JSONArray;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Generic<T> implements IGeneric<T>
@@ -15,6 +18,17 @@ public class Generic<T> implements IGeneric<T>
         {
             Class<?> cl = (Class<?>)((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
             return  cl.newInstance();
+        }
+        catch (Exception ex)
+        {
+            return  null;
+        }
+    }
+    public static Class<?> getGenericClass(Field field) {
+        try
+        {
+            Class<?> cl = (Class<?>)((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
+            return cl;
         }
         catch (Exception ex)
         {
@@ -69,5 +83,67 @@ public class Generic<T> implements IGeneric<T>
             yugi.Print("e","genericClass Can Not be Created! : "+ex.getMessage());
             return  null;
         }
+    }
+
+
+    public static Object getGenericValue(Object object,Field f,Object value) {
+
+        try
+        {
+            Class<?> clazz = (Class<?>) ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
+            String fType = f.getType().getSimpleName().toLowerCase();
+            if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
+                f.setInt(object,parse.toInt(value));
+            } else if (clazz.equals(Long.class) || clazz.equals(long.class)) {
+                f.setLong(object, parse.toLong(value));
+            } else if (clazz.equals(Double.class) || clazz.equals(double.class)) {
+                f.setDouble(object, parse.toDouble(value));
+            } else if (clazz.equals(DataTable.class)) {
+                f.set(object, parse.toDataTable(value));
+            }
+            else if (clazz.equals(DateTime.class) || fType.equals("datetime")) {
+                f.set(object,parse. toDateTime(value));
+            } else if (clazz.equals(Boolean.class) || fType.equals("boolean"))
+                f.setBoolean(object, parse.toBoolean(value));
+            else if (clazz.equals(List.class) || fType.equals("list"))
+            {
+                List l = new ArrayList();
+                JSONArray listJson = new JSONArray(value.toString());
+                for (int ds = 0; ds < listJson.length(); ds++) {
+                    Object o = null;
+                    Object GItem = Generic.getGenericInstance(f);
+                    if(GItem != null)
+                        parse.jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
+                    else
+                        o = Generic.getGenericValue(object,f,listJson.getString(ds));
+                    if (o!= null)
+                        l.add(o);
+                }
+                f.set(object, l);
+            }
+            else if (clazz.equals(vList.class) || fType.equals("vlist"))
+            {
+                vList l = new vList();
+                JSONArray listJson = new JSONArray(value.toString());
+                for (int ds = 0; ds < listJson.length(); ds++) {
+
+                    Object o = null;
+
+                    Object GItem = Generic.getGenericInstance(f);
+                    if(GItem != null)
+                        o = parse.jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
+                    else
+                        o = Generic.getGenericValue(object,f,listJson.getString(ds));
+                    if (o!= null)
+                        l.add(o);
+                }
+                f.set(object, l);
+            }
+
+            return f.get(object);
+        } catch (Exception ex) {
+            return null;
+        }
+
     }
 }
