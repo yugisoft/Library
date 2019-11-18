@@ -543,7 +543,7 @@ public class parse {
                         Object o = null;
                         Object GItem = Generic.getGenericInstance(f);
                         if(GItem != null)
-                            jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
+                           o = jsonTo(Generic.getGenericInstance(f), listJson.getString(ds), "", 0);
                         else
                             o = Generic.getGenericValue(object,f,listJson.getString(ds));
                         if (o!= null)
