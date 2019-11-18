@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import library.yugisoft.module.Utils.CustomBinding.BindingGridView;
+import library.yugisoft.module.Utils.CustomBinding.OnRowDrawing;
 
 public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
 
@@ -67,6 +68,7 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
                         getOnItemLooperSelected().onSelected(index,Item);
                 }
             });
+            itemLooper.setOnRowDrawing(getOnRowDrawing());
         }
         return itemLooper;
     }
@@ -124,6 +126,16 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
 
     public void setOnItemLooperSelected(ItemLooper.OnItemLooperSelected onItemLooperSelected) {
         this.onItemLooperSelected = onItemLooperSelected;
-        
+
+    }
+
+    private OnRowDrawing onRowDrawing;
+
+    public OnRowDrawing getOnRowDrawing() {
+        return onRowDrawing;
+    }
+
+    public void setOnRowDrawing(OnRowDrawing onRowDrawing) {
+        this.onRowDrawing = onRowDrawing;
     }
 }

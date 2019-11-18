@@ -26,227 +26,227 @@ package library.yugisoft.module;
 
  import library.yugisoft.module.Base.BaseDialog;
  import library.yugisoft.module.Utils.CustomBinding.BindingGridView;
+ import library.yugisoft.module.Utils.CustomBinding.OnRowDrawing;
 
-public class ItemLooper<T>
-{
+public class ItemLooper<T> {
 
-        private int detailViewID;
+    private int detailViewID;
 
-        public ItemLooper() {
+    public ItemLooper() {
         this(yugi.activity);
-}
+    }
 
-public ItemLooper(Context context) {
+    public ItemLooper(Context context) {
         this(context, new ArrayList<>());
-}
+    }
 
-public ItemLooper(List<T> list) {
+    public ItemLooper(List<T> list) {
         this(yugi.activity, list);
-}
+    }
 
-public ItemLooper(Context context, List<T> list) {
+    public ItemLooper(Context context, List<T> list) {
         setContext(context);
         setList(list);
-}
+    }
 
-//region DECLARE
-private Context context;
-private List<T> list;
-private LoopView loopView = null;
-private int textSize = 12, drawItemsCount = 7, textAlignment = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, textColor = Color.BLACK, BackColor = Color.TRANSPARENT;
-private boolean canLoop, showConfirm;
-private Object parentObject;
+    //region DECLARE
+    private Context context;
+    private List<T> list;
+    private LoopView loopView = null;
+    private int textSize = 12, drawItemsCount = 7, textAlignment = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, textColor = Color.BLACK, BackColor = Color.TRANSPARENT;
+    private boolean canLoop, showConfirm;
+    private Object parentObject;
 
 
-private OnItemLooperSelected<T> onItemLooperSelected;
+    private OnItemLooperSelected<T> onItemLooperSelected;
 
-public OnItemLooperSelected<T> getOnItemLooperSelected() {
+    public OnItemLooperSelected<T> getOnItemLooperSelected() {
         return onItemLooperSelected;
-}
+    }
 
-public void setOnItemLooperSelected(OnItemLooperSelected<T> onItemLooperSelected) {
+    public void setOnItemLooperSelected(OnItemLooperSelected<T> onItemLooperSelected) {
         this.onItemLooperSelected = onItemLooperSelected;
-}
+    }
 //endregion
-//region Builds
+    //region Builds
 
-public ItemLooper<T> setContext(Context context) {
+    public ItemLooper<T> setContext(Context context) {
         this.context = context;
         return this;
-}
+    }
 
-public ItemLooper<T> setList(List<T> list) {
+    public ItemLooper<T> setList(List<T> list) {
         this.list = list;
         if (loopView == null)
-       createLoopView();
+            createLoopView();
         else
-       loopView.setDataList(list);
+            loopView.setDataList(list);
         return this;
-}
+    }
 
-public ItemLooper<T> setCanLoop(boolean canLoop) {
+    public ItemLooper<T> setCanLoop(boolean canLoop) {
         loopView = null;
         this.canLoop = canLoop;
         return this;
-}
+    }
 
-public ItemLooper<T> setTextSize(int textSize) {
+    public ItemLooper<T> setTextSize(int textSize) {
         loopView = null;
         this.textSize = textSize;
         return this;
-}
+    }
 
-public ItemLooper<T> setDrawItemsCount(int drawItemsCount) {
+    public ItemLooper<T> setDrawItemsCount(int drawItemsCount) {
         loopView = null;
         this.drawItemsCount = drawItemsCount;
         return this;
-}
+    }
 
-public ItemLooper<T> setTextAlignment(int textAlignment) {
+    public ItemLooper<T> setTextAlignment(int textAlignment) {
         loopView = null;
         this.textAlignment = textAlignment;
         return this;
-}
+    }
 
-public ItemLooper<T> setTextColor(int textColor) {
+    public ItemLooper<T> setTextColor(int textColor) {
         loopView = null;
         this.textColor = textColor;
         return this;
-}
+    }
 
-public ItemLooper<T> setBackColor(int backColor) {
+    public ItemLooper<T> setBackColor(int backColor) {
         loopView = null;
         BackColor = backColor;
         return this;
-}
+    }
 
-public ItemLooper<T> setLoopView(LoopView loopView) {
+    public ItemLooper<T> setLoopView(LoopView loopView) {
         this.loopView = loopView;
         return this;
-}
+    }
 
-public ItemLooper<T> setParentObject(Object parentObject) {
+    public ItemLooper<T> setParentObject(Object parentObject) {
         this.parentObject = parentObject;
         return this;
-}
+    }
 
-public ItemLooper<T> setShowConfirm(boolean showConfirm)
-{
-    this.showConfirm = showConfirm;
-    return  this;
-}
+    public ItemLooper<T> setShowConfirm(boolean showConfirm) {
+        this.showConfirm = showConfirm;
+        return this;
+    }
 
-//endregion
-//region Getters
-public Context getContext() {
+    //endregion
+    //region Getters
+    public Context getContext() {
         return context;
-}
+    }
 
-public List<T> getList() {
+    public List<T> getList() {
         return list;
-}
+    }
 
-public boolean isCanLoop() {
+    public boolean isCanLoop() {
         return canLoop;
-}
+    }
 
-public int getTextSize() {
+    public int getTextSize() {
         return textSize;
-}
+    }
 
-public int getDrawItemsCount() {
+    public int getDrawItemsCount() {
         return drawItemsCount;
-}
+    }
 
-public LoopView getLoopView() {
+    public LoopView getLoopView() {
         return loopView;
-}
+    }
 
-public int getTextAlignment() {
+    public int getTextAlignment() {
         return textAlignment;
-}
+    }
 
-public int getTextColor() {
+    public int getTextColor() {
         return textColor;
-}
+    }
 
-public int getBackColor() {
+    public int getBackColor() {
         return BackColor;
-}
+    }
 
-public Object getParentObject() {
+    public Object getParentObject() {
         return parentObject;
-}
+    }
 
     public boolean isShowConfirm() {
         return showConfirm;
     }
 //endregion
 
-void createLoopView() {
+    void createLoopView() {
         loopView = new LoopView(getContext());
         loopView.setCanLoop(isCanLoop());
         loopView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1F));
         loopView.setTextSize(getTextSize());
         loopView.setDrawItemsCount(getDrawItemsCount());
         loopView.setDataList(getList());
-}
+    }
 
-//region Popup
-IL_Popup<T> popup;
+    //region Popup
+    IL_Popup<T> popup;
 
-public void show() {
+    public void show() {
         if (popup == null) {
-       popup = new IL_Popup<T>(getContext(), this) {
-      @Override
-      public void Confirm() {
-     if (getOnItemLooperSelected() != null) {
-    getOnItemLooperSelected().onSelected(loopView.getSelectedItem(), getList().get(loopView.getSelectedItem()));
-     }
-      }
-       };
+            popup = new IL_Popup<T>(getContext(), this) {
+                @Override
+                public void Confirm() {
+                    if (getOnItemLooperSelected() != null) {
+                        getOnItemLooperSelected().onSelected(loopView.getSelectedItem(), getList().get(loopView.getSelectedItem()));
+                    }
+                }
+            };
 
         }
         popup.show();
-}
+    }
 //endregion
 
-//region ListPopup
-IL_ListPopup<T> listPopup;
+    //region ListPopup
+    IL_ListPopup<T> listPopup;
 
-public void show(View anchorView) {
+    public void show(View anchorView) {
         if (listPopup == null) {
-       listPopup = new IL_ListPopup<T>(getContext(), this);
-       listPopup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listPopup = new IL_ListPopup<T>(getContext(), this);
+            listPopup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-     listPopup.dismiss();
-     if (getOnItemLooperSelected() != null) {
-    getOnItemLooperSelected().onSelected(position, getList().get(position));
-     }
-      }
-       });
+                    listPopup.dismiss();
+                    if (getOnItemLooperSelected() != null) {
+                        getOnItemLooperSelected().onSelected(position, getList().get(position));
+                    }
+                }
+            });
         }
         listPopup.setAnchorView(anchorView);
         listPopup.show();
         ;
-}
+    }
 //endregion
 
-//region Dialog
-IL_Dialog dialog;
+    //region Dialog
+    IL_Dialog dialog;
 
     public void showDialog(String title) {
-       showDialog(title,R.layout.view_item_looper);
+        showDialog(title, R.layout.view_item_looper);
     }
+
     public void showFullScreen(String title) {
-        showFullScreen(title,R.layout.view_item_looper);
+        showFullScreen(title, R.layout.view_item_looper);
     }
-    public void showDialog(String title,int id) {
-        if (dialog == null)
-        {
-            dialog = new IL_Dialog(getContext(),id) {
+
+    public void showDialog(String title, int id) {
+        if (dialog == null) {
+            dialog = new IL_Dialog(getContext(), id) {
                 @Override
                 public void onConfirm() {
                     if (getOnItemLooperSelected() != null) {
@@ -262,15 +262,17 @@ IL_Dialog dialog;
         }
         try {
             ((ViewGroup) loopView.getParent()).removeAllViews();
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+        }
 
         dialog.bar_loop.addView(loopView);
         dialog.txt_dialog_title.setText(title);
         dialog.show();
     }
-    public void showFullScreen(String title,int id) {
+
+    public void showFullScreen(String title, int id) {
         if (dialog == null) {
-            dialog = new IL_Dialog(getContext(),id) {
+            dialog = new IL_Dialog(getContext(), id) {
                 @Override
                 public void onConfirm() {
                     if (getOnItemLooperSelected() != null) {
@@ -294,46 +296,50 @@ IL_Dialog dialog;
     }
 
 
-public static int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT, WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
+    public static int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT, WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public void showDialog(String title, int witdh, int height) {
+    public void showDialog(String title, int witdh, int height) {
         showDialog(title);
         dialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT, 1));
         dialog.dialog.getWindow().setLayout(witdh, height);
-}
+    }
 
 
 //endregion
 
 
+    //region ListDialog
 
-//region ListDialog
-
-IL_Dialog listDialog = null;
+    IL_Dialog listDialog = null;
     public BindingGridView bindingGridView = null;
 
-        public BindingGridView showListDialog(String title) { return  showListDialog(title,R.layout.view_item_looper); }
+    public BindingGridView showListDialog(String title) {
+        return showListDialog(title, R.layout.view_item_looper);
+    }
 
-        public BindingGridView showListFullDialog(String title) { return showListFullDialog(title,R.layout.view_item_looper); }
+    public BindingGridView showListFullDialog(String title) {
+        return showListFullDialog(title, R.layout.view_item_looper);
+    }
 
-        public BindingGridView showListDialog(String title,int id) {
+    public BindingGridView showListDialog(String title, int id) {
         if (listDialog == null)
-            listDialog = new IL_Dialog(getContext(),id);
+            listDialog = new IL_Dialog(getContext(), id);
         listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) yugi.activity.getResources().getDimension(R.dimen.dimen_loop_Bar_height), 0));
 
-            listDialog.btn_confirm.setVisibility(isShowConfirm() ? View.VISIBLE : View.GONE);
+        listDialog.btn_confirm.setVisibility(isShowConfirm() ? View.VISIBLE : View.GONE);
 
         if (bindingGridView == null)
             bindingGridView = new BindingGridView(getContext());
         bindingGridView.setDetailViewID(getDetailViewID());
         bindingGridView.setData(getList());
+        bindingGridView.setOnRowDrawing(getOnRowDrawing());
 
         bindingGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (getOnItemLooperSelected() != null)
-                    getOnItemLooperSelected().onSelected(position,getList().get(position));
+                    getOnItemLooperSelected().onSelected(position, getList().get(position));
                 listDialog.dismiss();
             }
         });
@@ -346,9 +352,9 @@ IL_Dialog listDialog = null;
         return bindingGridView;
     }
 
-        public BindingGridView showListFullDialog(String title,int id) {
+    public BindingGridView showListFullDialog(String title, int id) {
         if (listDialog == null)
-            listDialog = new IL_Dialog(getContext(),id);
+            listDialog = new IL_Dialog(getContext(), id);
         listDialog.dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         listDialog.bar_loop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
         listDialog.btn_confirm.setVisibility(isShowConfirm() ? View.VISIBLE : View.GONE);
@@ -356,12 +362,12 @@ IL_Dialog listDialog = null;
             bindingGridView = new BindingGridView(getContext());
         bindingGridView.setDetailViewID(getDetailViewID());
         bindingGridView.setData(getList());
-
+        bindingGridView.setOnRowDrawing(getOnRowDrawing());
         bindingGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (getOnItemLooperSelected() != null)
-                    getOnItemLooperSelected().onSelected(position,getList().get(position));
+                    getOnItemLooperSelected().onSelected(position, getList().get(position));
                 listDialog.dismiss();
             }
         });
@@ -374,17 +380,16 @@ IL_Dialog listDialog = null;
         return bindingGridView;
     }
 
-        public int getDetailViewID() {
-                return detailViewID;
-        }
+    public int getDetailViewID() {
+        return detailViewID;
+    }
 
-        public ItemLooper<T>  setDetailViewID(int detailViewID) {
-                this.detailViewID = detailViewID;
-                return  this;
-        }
+    public ItemLooper<T> setDetailViewID(int detailViewID) {
+        this.detailViewID = detailViewID;
+        return this;
+    }
 
-        private T SelectedITem;
-
+    private T SelectedITem;
 
 
     public T getSelectedITem() {
@@ -393,15 +398,26 @@ IL_Dialog listDialog = null;
 
     public void setSelectedITem(T selectedITem) {
         SelectedITem = selectedITem;
-        getOnItemLooperSelected().onSelected(getList().indexOf(selectedITem),selectedITem);
+        getOnItemLooperSelected().onSelected(getList().indexOf(selectedITem), selectedITem);
     }
 
 //endregion
 
-public interface OnItemLooperSelected<T> {
+    public interface OnItemLooperSelected<T> {
         void onSelected(int index, T Item);
+    }
+
+    private OnRowDrawing onRowDrawing;
+
+    public OnRowDrawing getOnRowDrawing() {
+        return onRowDrawing;
+    }
+
+    public void setOnRowDrawing(OnRowDrawing onRowDrawing) {
+        this.onRowDrawing = onRowDrawing;
+    }
+
 }
- }
 
  class IL_ListPopup<T> extends ListPopupWindow {
 int layout = R.layout.view_item_looper;
