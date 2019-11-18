@@ -104,11 +104,11 @@ public class Generic<T> implements IGeneric<T>
             } else if (clazz.equals(DataTable.class)) {
                 value=(parse.toDataTable(value));
             }
-            else if (clazz.equals(DateTime.class) || fType.equals("datetime")) {
+            else if (clazz.equals(DateTime.class) ) {
                 value=(parse. toDateTime(value));
-            } else if (clazz.equals(Boolean.class) || fType.equals("boolean"))
+            } else if (clazz.equals(Boolean.class))
                 value=(parse.toBoolean(value));
-            else if (clazz.equals(List.class) || fType.equals("list"))
+            else if (clazz.equals(List.class))
             {
                 List l = new ArrayList();
                 JSONArray listJson = new JSONArray(value.toString());
@@ -141,6 +141,10 @@ public class Generic<T> implements IGeneric<T>
                         l.add(o);
                 }
                 value=( l);
+            }
+            else if (clazz.equals(String.class))
+            {
+                value = value.toString();
             }
 
             return value;
