@@ -17,6 +17,8 @@ public class Generic<T> implements IGeneric<T>
         try
         {
             Class<?> cl = (Class<?>)((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
+            if (cl.equals(String.class))
+                return  null;
             return  cl.newInstance();
         }
         catch (Exception ex)
