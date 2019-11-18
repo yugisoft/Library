@@ -310,7 +310,7 @@ public void showDialog(String title, int witdh, int height) {
 //region ListDialog
 
 IL_Dialog listDialog = null;
-BindingGridView bindingGridView = null;
+    public BindingGridView bindingGridView = null;
 
         public BindingGridView showListDialog(String title) { return  showListDialog(title,R.layout.view_item_looper); }
 

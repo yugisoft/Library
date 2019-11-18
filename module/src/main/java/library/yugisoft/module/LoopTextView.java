@@ -124,5 +124,6 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
 
     public void setOnItemLooperSelected(ItemLooper.OnItemLooperSelected onItemLooperSelected) {
         this.onItemLooperSelected = onItemLooperSelected;
+        
     }
 }

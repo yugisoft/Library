@@ -238,11 +238,20 @@ public class CustomBindingAdapter {
 
     public void bind(Object bindingObject) {
         setBindingObject(bindingObject);
-        if (bindingObject != null) {
+        if (bindingObject != null)
+        {
             viewList = new ArrayList<>();
-            for (int id : IDs.keySet()) {
-                viewList.add(getBindingView().findViewById(id));
-                setViewValue(getBindingView().findViewById(id), IDs.get(id));
+            if (IDs.size()>0)
+            {
+                for (int id : IDs.keySet())
+                {
+                    viewList.add(getBindingView().findViewById(id));
+                    setViewValue(getBindingView().findViewById(id), IDs.get(id));
+                }
+            }
+            else
+            {
+
             }
             if (getOnRowDrawing() != null) {
                 getOnRowDrawing().onDraw(getRow(), getBindingView(), getBindingObject());
@@ -345,11 +354,7 @@ public class CustomBindingAdapter {
             fValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel) getBindingObject()).getValue(fieldName) : CustomUtil.getFieldValue(getBindingObject(), fieldName);
         }
         String sValue = pValue == null ? "" : String.valueOf(pValue);
-
-
         bindTextView(field, view, pValue, fValue, sValue);
-
-
         if (view instanceof Checkable) {
             Checkable cView = (Checkable) view;
 
@@ -448,14 +453,10 @@ public class CustomBindingAdapter {
                 });
             }
         }
-
         if (getOnCustomBindingAdapterSetView() != null)
             getOnCustomBindingAdapterSetView().SetViewValue(this, field, view, pValue, fValue, sValue);
-
         if (onViewDrawings.get(fieldName) != null)
             onViewDrawings.get(fieldName).onDraw(getRow(), view, fieldName, pValue);
-
-
     }
 
 
