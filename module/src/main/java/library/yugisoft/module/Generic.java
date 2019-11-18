@@ -90,21 +90,22 @@ public class Generic<T> implements IGeneric<T>
 
         try
         {
+
             Class<?> clazz = (Class<?>) ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
             String fType = f.getType().getSimpleName().toLowerCase();
             if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
-                f.setInt(object,parse.toInt(value));
+                value=(parse.toInt(value));
             } else if (clazz.equals(Long.class) || clazz.equals(long.class)) {
-                f.setLong(object, parse.toLong(value));
+                value=( parse.toLong(value));
             } else if (clazz.equals(Double.class) || clazz.equals(double.class)) {
-                f.setDouble(object, parse.toDouble(value));
+                value=(parse.toDouble(value));
             } else if (clazz.equals(DataTable.class)) {
-                f.set(object, parse.toDataTable(value));
+                value=(parse.toDataTable(value));
             }
             else if (clazz.equals(DateTime.class) || fType.equals("datetime")) {
-                f.set(object,parse. toDateTime(value));
+                value=(parse. toDateTime(value));
             } else if (clazz.equals(Boolean.class) || fType.equals("boolean"))
-                f.setBoolean(object, parse.toBoolean(value));
+                value=(parse.toBoolean(value));
             else if (clazz.equals(List.class) || fType.equals("list"))
             {
                 List l = new ArrayList();
@@ -119,7 +120,7 @@ public class Generic<T> implements IGeneric<T>
                     if (o!= null)
                         l.add(o);
                 }
-                f.set(object, l);
+                value=(l);
             }
             else if (clazz.equals(vList.class) || fType.equals("vlist"))
             {
@@ -137,10 +138,10 @@ public class Generic<T> implements IGeneric<T>
                     if (o!= null)
                         l.add(o);
                 }
-                f.set(object, l);
+                value=( l);
             }
 
-            return f.get(object);
+            return value;
         } catch (Exception ex) {
             return null;
         }
