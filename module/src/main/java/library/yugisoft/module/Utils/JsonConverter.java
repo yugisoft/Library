@@ -199,10 +199,36 @@ public class JsonConverter<T> {
                                 f.set(item, parse.toDataTable(value));
                             } else if (clazz.equals(List.class) || fType.equals("list"))
                             {
-                                f.set(item, JsonConverter.convertJsonToList(value.toString(), Generic.getGenericClass(f)));
+                                Object o = null;
+                                Object GItem = Generic.getGenericInstance(f);
+                                if(GItem != null)
+                                    f.set(item, JsonConverter.convertJsonToList(value.toString(), Generic.getGenericClass(f)));
+                                else
+                                {
+                                    List l = new ArrayList();
+                                    JSONArray listJson = new JSONArray(value.toString());
+                                    for (int ds = 0; ds < listJson.length(); ds++) {
+                                            o = Generic.getGenericValue(item,f,listJson.getString(ds));
+                                        if (o!= null)
+                                            l.add(o);
+                                    }
+                                    f.set(item, l);
+                                }
                             } else if (clazz.equals(vList.class) || fType.equals("vlist")) {
                                 vList l = new vList();
-                                l.list = JsonConverter.convertJsonToList(value.toString(), Generic.getGenericClass(f));
+                                Object o = null;
+                                Object GItem = Generic.getGenericInstance(f);
+                                if(GItem != null)
+                                    l.list = JsonConverter.convertJsonToList(value.toString(), Generic.getGenericClass(f));
+                                else
+                                {
+                                    JSONArray listJson = new JSONArray(value.toString());
+                                    for (int ds = 0; ds < listJson.length(); ds++) {
+                                        o = Generic.getGenericValue(item,f,listJson.getString(ds));
+                                        if (o!= null)
+                                            l.add(o);
+                                    }
+                                }
                                 f.set(item, l);
                             } else if (clazz.equals(DateTime.class) || fType.equals("datetime")) {
                                 f.set(item, parse.toDateTime(value));
@@ -274,7 +300,10 @@ public class JsonConverter<T> {
         List<T> list = getTargetObject() ==null ? new ArrayList() : (List<T>)getTargetObject();
         for (int ds = 0; ds < jsonArray.length(); ds++) {
             try {
-                list.add(jsonObjectCaster(jsonArray.getJSONObject(ds)));
+                Object jObject = jsonArray.get(ds);
+                if (jObject instanceof  JSONObject)
+                    list.add(jsonObjectCaster(jsonArray.getJSONObject(ds)));
+
             } catch (Exception ex) {
                 yugi.Print("e", "JsonConverter.jsonArrayCaster", ex.getMessage());
             }
