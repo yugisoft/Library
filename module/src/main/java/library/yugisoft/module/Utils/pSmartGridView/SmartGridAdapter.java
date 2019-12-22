@@ -168,7 +168,8 @@ public class SmartGridAdapter<T>
                     row_holder.row_detail.setBackgroundColor(getBackGroundColor());
                     for (int i = 0; i < numColumns  ; i++)
                     {
-
+                        if (numColumns > 1 && i > 0)
+                            lastViewIndex++;
 
                         SmartGridViewCellHolder cell_holder = new SmartGridViewCellHolder();
                         ((ViewGroup)cell_holder.itemView).removeAllViews();
@@ -235,8 +236,7 @@ public class SmartGridAdapter<T>
                                     getAdapterListener().onItemClick(cell_holder.cell_detail.getChildAt(0),item);
 
                             });
-                            if (numColumns > 1)
-                                 lastViewIndex++;
+
                         }
                     }
                     onProgressUpdate(row_holder.itemView);

@@ -17,7 +17,7 @@
         android:id="@+id/row_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@android:color/transparent"
         android:elevation="5dp"
         android:orientation="horizontal">
 
