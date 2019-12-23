@@ -26,6 +26,7 @@ import library.yugisoft.module.DateTextView;
 import library.yugisoft.module.DateTime;
 import library.yugisoft.module.LoopTextView;
 import library.yugisoft.module.PhoneTextEdit;
+import library.yugisoft.module.R;
 import library.yugisoft.module.Utils.CustomUtil;
 import library.yugisoft.module.parse;
 import library.yugisoft.module.vList;
@@ -231,27 +232,46 @@ public class CustomBindingAdapter {
 
     }
 
+
+    public  static int[] PrimateIds = new int[] {R.id.Text,R.id.txt_title,R.id.exTitle};
     //endregion
     public void bind() {
         bind(getBindingObject());
     }
 
+
     public void bind(Object bindingObject) {
         setBindingObject(bindingObject);
         if (bindingObject != null)
         {
-            viewList = new ArrayList<>();
-            if (IDs.size()>0)
+            if (CustomUtil.isPrimite(bindingObject))
             {
-                for (int id : IDs.keySet())
+                for (int i=0;i<PrimateIds.length;i++)
                 {
-                    viewList.add(getBindingView().findViewById(id));
-                    setViewValue(getBindingView().findViewById(id), IDs.get(id));
+                    TextView v = (TextView)getBindingView().findViewById(PrimateIds[0]);
+                    if (v!=null)
+                    {
+                        v.setText(CustomUtil.getValue(bindingObject).toString());
+                        return;
+                    }
+
                 }
             }
             else
             {
+                viewList = new ArrayList<>();
+                if (IDs.size()>0)
+                {
+                    for (int id : IDs.keySet())
+                    {
+                        viewList.add(getBindingView().findViewById(id));
+                        setViewValue(getBindingView().findViewById(id), IDs.get(id));
+                    }
+                }
+                else
+                {
 
+                }
             }
             if (getOnRowDrawing() != null) {
                 getOnRowDrawing().onDraw(getRow(), getBindingView(), getBindingObject());

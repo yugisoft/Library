@@ -1,6 +1,7 @@
 package library.yugisoft.module;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import library.yugisoft.module.Utils.CustomBinding.OnRowDrawing;
 public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
 
 
+    AttributeSet attrs; int defStyle;
+    public TypedArray getTypedArray(int[] style) { return  getContext().obtainStyledAttributes(attrs, style, defStyle, 0); }
+
     private ItemLooper itemLooper;
     private int index;
     public Object getSelectedObject() {
@@ -19,10 +23,41 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
         else
             return getItemLooper().getList().get(index);
     }
-    public LoopTextView(Context context) { this(context,null,0); }
-    public LoopTextView(Context context, AttributeSet attrs) { this(context, attrs,0); }
+    public LoopTextView(Context context) { this(context,null,0);init(); }
+    public LoopTextView(Context context, AttributeSet attrs) {
+        this(context, attrs,0);
+        this.attrs = attrs;
+        init();
+    }
     public LoopTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.defStyle =defStyleAttr;
+
+        init();
+    }
+
+    private int contentViewID = R.layout.list_item_text;
+
+    public int getContentViewID() {
+        return contentViewID;
+    }
+
+    public void setContentViewID(int contentViewID) {
+        this.contentViewID = contentViewID;
+        getItemLooper().setDetailViewID(contentViewID);
+    }
+
+    private void init()
+    {
+
+        TypedArray typeArray = getTypedArray(R.styleable.LoopTextView);
+
+        if (typeArray != null)
+        {
+            contentViewID = typeArray.getResourceId(R.styleable.LoopTextView_contentViewID,R.layout.list_item_text);
+            setLoopDisplayType(LoopDisplayType.GetValue(typeArray.getInt(R.styleable.LoopTextView_LoopDisplayType,0)));
+        }
+
         setOnClickListener(p->loop());
     }
 
@@ -68,7 +103,9 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
                         getOnItemLooperSelected().onSelected(index,Item);
                 }
             });
+            itemLooper.setDetailViewID(contentViewID);
             itemLooper.setOnRowDrawing(getOnRowDrawing());
+
         }
         return itemLooper;
     }

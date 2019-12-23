@@ -79,4 +79,22 @@
 
 
 
+    <attr name="LoopDisplayType" format="enum">
+        <enum name="Popop" value="0" />
+        <enum name="ListPopup" value="1" />
+        <enum name="Dialog" value="2" />
+        <enum name="FullScreenDialog" value="3" />
+        <enum name="ListDialog" value="4" />
+        <enum name="FullScreenListDialog" value="5" />
+    </attr>
+
+    <declare-styleable name="LoopTextView">
+
+        <attr name="contentViewID" />
+        <attr name="LoopDisplayType" />
+
+    </declare-styleable>
+
+
+
 </resources>

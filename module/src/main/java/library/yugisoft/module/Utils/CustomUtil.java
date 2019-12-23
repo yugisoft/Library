@@ -34,6 +34,134 @@ public class CustomUtil
     }
 
 
+    public  static boolean isPrimite(Object value,Field field)
+    {
+       try
+       {
+           return isPrimite(field.get(value));
+       }
+       catch (Exception ex)
+       {
+           return  false;
+       }
+    }
+    public  static boolean isPrimite(Object value)
+    {
+        Class typeClass = value.getClass();
+
+        if
+        (
+               typeClass.equals(Integer.class)
+             ||typeClass.equals(int.class)
+             ||typeClass.equals(Long.class)
+             ||typeClass.equals(long.class)
+             ||typeClass.equals(Double.class)
+             ||typeClass.equals(double.class)
+             ||typeClass.equals(Boolean.class)
+             ||typeClass.equals(boolean.class)
+             ||typeClass.equals(DateTime.class)
+             ||typeClass.equals(String.class)
+        )
+            return  true;
+
+        return false;
+    }
+
+    public static Object getValue(Object pValue) {
+
+        try
+        {
+
+            if (pValue != null)
+            {
+                Class typeClass = pValue.getClass();
+
+                if (pValue.equals(Integer.class) ||typeClass.equals(int.class))
+                {
+                    if (pValue.getClass().isAnnotationPresent(BindingImage.class))
+                    {
+                        int ret = pValue.getClass().getAnnotation(BindingImage.class).defaultResource();
+                        if (parse.toInt(pValue) == 0 && ret > 0)
+                            return  ret;
+                    }
+                    return yugi.NF(pValue,0);
+                }
+
+                if (typeClass.equals(Long.class) ||typeClass.equals(long.class))
+                {
+                    return yugi.NF(pValue,0);
+                }
+                if (typeClass.equals(Double.class) ||typeClass.equals(double.class))
+                {
+                    return yugi.NF(pValue,2);
+                }
+                if (typeClass.equals(Boolean.class) ||typeClass.equals(boolean.class))
+                {
+                    if (pValue.getClass().isAnnotationPresent(BindingBoolean.class))
+                    {
+                        switch (pValue.getClass().getAnnotation(BindingBoolean.class).BooleanType())
+                        {
+
+                            case BOOLEAN_TYPE:
+                                return pValue;
+                            case TEXT_TYPE:
+                                return  pValue.equals(true) ? pValue.getClass().getAnnotation(BindingBoolean.class).EnableText() : pValue.getClass().getAnnotation(BindingBoolean.class).DisableText();
+                        }
+                    }
+                    else
+                    {
+                        return pValue;
+                    }
+                }
+                if (typeClass.equals(DateTime.class))
+                {
+                    if (pValue.getClass().isAnnotationPresent(BindingDateTime.class))
+                    {
+                        switch (pValue.getClass().getAnnotation(BindingDateTime.class).DateTimeType())
+                        {
+
+                            case ShortDate:
+                                return ((DateTime)pValue).toShortDateString();
+                            case LongDate:
+                                return ((DateTime)pValue).toLongDateString();
+                            case ShortTime:
+                                return ((DateTime)pValue).toShortTimeString();
+                            case LongTime:
+                                return ((DateTime)pValue).toLongTimeString();
+                            case ShortDateTime:
+                                return ((DateTime)pValue).toShortDateTimeString();
+                            case LongDateTime:
+                                return ((DateTime)pValue).toLongDateTimeString();
+                        }
+                    }
+                    else
+                        return ((DateTime)pValue).toShortDateString();
+                }
+                else if(pValue instanceof IBindableModel)
+                {
+                    return  ((IBindableModel)pValue).getValue(pValue.getClass().getName());
+                }
+                else if (typeClass.equals(String.class))
+                {
+                    if (pValue.getClass().isAnnotationPresent(BindingImage.class))
+                    {
+                        String ret = pValue.getClass().getAnnotation(BindingImage.class).defaultUrl();
+                        if (String.valueOf(pValue).length() ==0 && ret.length() > 0)
+                            return  ret;
+                    }
+                    return pValue;
+                }
+                else
+                {
+                    return pValue;
+                }
+            }
+        }
+        catch (Exception ignored)
+        {}
+        return  "";
+
+    }
     private static Object getValue(Object ob,Field field) {
 
         try
