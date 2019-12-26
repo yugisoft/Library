@@ -168,6 +168,16 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
 
     public void setIndex(int index) {
         this.index = index;
+        if (index >= 0)
+        {
+            getItemLooper().setSelectedITem(getList().get(index));
+            LoopTextView.this.setText(getList().get(index).toString());
+        }
+        else
+        {
+            getItemLooper().setSelectedITem(null);
+            LoopTextView.this.setText(R.string.str_seciniz);
+        }
     }
 
     public ItemLooper.OnItemLooperSelected getOnItemLooperSelected() {

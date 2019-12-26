@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Module</string>
+
     <string name="testText">TURKISH</string>
     <string name="kaydet">Kaydet</string>
     <string name="iptal">İptal</string>
@@ -13,4 +13,5 @@
     <string name="str_tamam">Tamam</string>
     <string name="str_bir_deger_girin">Bir Deger Girin</string>
     <string name="str_onayla_sec">Seç</string>
+    <string name="str_seciniz">Seçiniz</string>
 </resources>
