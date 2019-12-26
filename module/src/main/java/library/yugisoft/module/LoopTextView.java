@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import library.yugisoft.module.Utils.CustomBinding.BindingGridView;
 import library.yugisoft.module.Utils.CustomBinding.OnRowDrawing;
 
@@ -16,12 +18,12 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
     public TypedArray getTypedArray(int[] style) { return  getContext().obtainStyledAttributes(attrs, style, defStyle, 0); }
 
     private ItemLooper itemLooper;
-    private int index;
-    public Object getSelectedObject() {
+    private int index = -1;
+    public <T> T getSelectedObject() {
         if (index < 0)
             return null;
         else
-            return getItemLooper().getList().get(index);
+            return (T)getItemLooper().getList().get(index);
     }
     public LoopTextView(Context context) { this(context,null,0);init(); }
     public LoopTextView(Context context, AttributeSet attrs) {
@@ -89,8 +91,7 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
 
     private ItemLooper.OnItemLooperSelected onItemLooperSelected;
 
-    public ItemLooper getItemLooper()
-    {
+    public ItemLooper getItemLooper() {
         if (itemLooper == null)
         {
             itemLooper = new ItemLooper();
@@ -123,6 +124,18 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
             }
         });
     }
+
+    public void  setList(List list)
+    {
+        getItemLooper().setList(list);
+    }
+
+    public <T> List<T> getList()
+    {
+        return (List<T>)getItemLooper().getList();
+    }
+
+
 
     private LoopDisplayType loopDisplayType = LoopDisplayType.listPopup;
 
