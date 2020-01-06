@@ -296,6 +296,10 @@ public class SmartGridAdapter<T>
             view = ((ISmartViewItem) item).getView();
             insertView = true;
         }
+        if (view !=null && view.getParent() !=null)
+        {
+            ((ViewGroup)view.getParent()).removeView(view);
+        }
         return  insertView ? view : null;
     }
 
