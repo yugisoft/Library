@@ -8,19 +8,22 @@
     tools:context=".yugiTest">
 
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <library.yugisoft.module.CurrencyTextView
+        android:id="@+id/txt_adet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="35dp"
+        android:minHeight="35dp"
+        android:gravity="center"
+        android:text="1"
+        android:background="@drawable/radius5"
+        android:backgroundTint="@color/color_new_green"
+        android:padding="7dp"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:decimal="0"
+        app:currency="Ad."/>
 
-        <library.yugisoft.module.Utils.pBottomIntegrator.BottomIntegrator
-            android:id="@+id/pageIntegrator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </HorizontalScrollView>
-
-    <library.yugisoft.module.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
 </LinearLayout>

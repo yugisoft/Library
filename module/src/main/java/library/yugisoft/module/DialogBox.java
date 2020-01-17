@@ -1,11 +1,14 @@
 package library.yugisoft.module;
 
 import android.app.Activity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class DialogBox {
+public class DialogBox
+{
+    public static int layoutStyle = R.layout.dialog_result1;
 
     //region showOK
     public static void showOK(String mesaj,IDialogResult result) {showOK(yugi.activity,mesaj,"Uyarı",result);}
@@ -53,7 +56,17 @@ public class DialogBox {
         TextView dialogMesaj = ((TextView)dialog.view.findViewById(R.id.dialogMesaj));
         TextView dialogTitle = ((TextView)dialog.view.findViewById(R.id.dialogTitle));
         EditText dialogEditText = (EditText)dialog.view.findViewById(R.id.dialogEditText);
+        dialogEditText.setOnKeyListener((view, i, keyEvent) -> {
 
+            if (keyEvent.getAction() == KeyEvent.ACTION_UP && ( keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER || keyEvent.getKeyCode() == KeyEvent.KEYCODE_NUMPAD_ENTER ))
+            {
+                String sstr = dialogEditText.getText().toString();
+                if (result!=null)
+                    result.onResult(EDialogButtons.OK,sstr);
+                dialog.dialog.dismiss();
+            }
+            return false;
+        });
 
         dialogMesaj.setText(mesaj);
         dialogEditText.setText(mesaj);
@@ -118,16 +131,14 @@ public class DialogBox {
     }
     //endregion
 
-    public enum EDialogButtons
-    {
+    public enum EDialogButtons {
         OK,
         YES,
         NO,
         YESNO,
         RESULTTEXT
     }
-    public interface IDialogResult
-    {
+    public interface IDialogResult {
         void onResult(EDialogButtons buttons,String result);
     }
 
