@@ -56,6 +56,7 @@ public class DialogBox
         TextView dialogMesaj = ((TextView)dialog.view.findViewById(R.id.dialogMesaj));
         TextView dialogTitle = ((TextView)dialog.view.findViewById(R.id.dialogTitle));
         EditText dialogEditText = (EditText)dialog.view.findViewById(R.id.dialogEditText);
+
         dialogEditText.setOnKeyListener((view, i, keyEvent) -> {
 
             if (keyEvent.getAction() == KeyEvent.ACTION_UP && ( keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER || keyEvent.getKeyCode() == KeyEvent.KEYCODE_NUMPAD_ENTER ))
@@ -93,37 +94,40 @@ public class DialogBox
                 dialog.view.findViewById(R.id.lyNO).setVisibility(View.VISIBLE);
                 break;
             case RESULTTEXT:
+
                 dialog.view.findViewById(R.id.lyOK).setVisibility(View.VISIBLE);
                 dialogEditText.setVisibility(View.VISIBLE);
+                dialog.view.findViewById(R.id.btnCancel).setVisibility(View.VISIBLE);
                 break;
         }
 
 
-        dialog.view.findViewById(R.id.resultOK).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        dialog.view.findViewById(R.id.resultOK).setOnClickListener(view -> {
 
-                String sstr = dialogEditText.getText().toString();
-                if (result!=null)
-                    result.onResult(EDialogButtons.OK,sstr);
-                dialog.dialog.dismiss();
-            }
+            String sstr = dialogEditText.getText().toString();
+            if (result!=null)
+                result.onResult(EDialogButtons.OK,sstr);
+            dialog.dialog.dismiss();
+
         });
-        dialog.view.findViewById(R.id.resultNO).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (result!=null)
-                    result.onResult(EDialogButtons.NO,"");
-                dialog.dialog.dismiss();
-            }
+        dialog.view.findViewById(R.id.resultNO).setOnClickListener(view -> {
+            if (result!=null)
+                result.onResult(EDialogButtons.NO,"");
+            dialog.dialog.dismiss();
         });
-        dialog.view.findViewById(R.id.resultYES).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (result!=null)
-                    result.onResult(EDialogButtons.YES,"");
-                dialog.dialog.dismiss();
-            }
+        dialog.view.findViewById(R.id.resultYES).setOnClickListener(view -> {
+
+            if (result!=null)
+                result.onResult(EDialogButtons.YES,"");
+            dialog.dialog.dismiss();
+
+        });
+        dialog.view.findViewById(R.id.btnCancel).setOnClickListener(view -> {
+
+            if (result!=null)
+                result.onResult(EDialogButtons.Cancel,"");
+            dialog.dialog.dismiss();
+
         });
 
         dialog.dialog.show();
@@ -136,7 +140,8 @@ public class DialogBox
         YES,
         NO,
         YESNO,
-        RESULTTEXT
+        RESULTTEXT,
+        Cancel
     }
     public interface IDialogResult {
         void onResult(EDialogButtons buttons,String result);
