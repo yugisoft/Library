@@ -157,7 +157,10 @@ public class ItemLooper<T> {
         return drawItemsCount;
     }
 
-    public LoopView getLoopView() {
+    public LoopView getLoopView()
+    {
+        if (loopView == null)
+            createLoopView();
         return loopView;
     }
 
