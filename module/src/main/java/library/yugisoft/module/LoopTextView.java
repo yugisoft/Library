@@ -67,7 +67,7 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
     {
         if (getItemLooper().getList().size()==0)
             return;
-        
+
         switch (getLoopDisplayType())
         {
 
