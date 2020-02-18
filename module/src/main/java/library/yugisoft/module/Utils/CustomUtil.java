@@ -454,7 +454,7 @@ public class CustomUtil
             if (view.getParent() != null)
             {
                 ViewGroup vg = (ViewGroup) view .getParent();
-                vg.removeView(view);
+                vg.removeAllViews();
             }
 
         });
