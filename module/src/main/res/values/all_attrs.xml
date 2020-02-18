@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="detailViewID" format="reference" />
+    <attr name="emptyViewID" format="reference" />
+    <attr name="emtyParentID" format="reference" />
+    <attr name="emptyRowCount" format="integer|reference" />
+    <attr name="showDivider" format="boolean" />
+    <attr name="rowColors"  format="boolean" />
+    <attr name="autoHeightOnChild" format="boolean" />
+    <attr name="emptyRowWithDetailView" format="boolean" />
+    <attr name="selectable" format="boolean" />
+    <attr name="IdTag" format="string" />
+
+    <attr name="numColumns" format="integer" />
+    <attr name="pageViewCount" format="integer" />
+    <attr name="pageMoreCount" format="integer" />
+    <attr name="rowBackColor" format="color|integer|reference" />
+    <attr name="swipeEnable" format="boolean" />
+
+</resources>

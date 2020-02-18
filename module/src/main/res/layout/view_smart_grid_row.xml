@@ -23,4 +23,13 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/row_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="3dp"
+        android:background="@color/color_listview_devider"
+        android:orientation="vertical"
+        android:visibility="gone"/>
+
 </LinearLayout>

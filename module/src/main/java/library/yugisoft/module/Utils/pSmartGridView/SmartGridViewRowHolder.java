@@ -29,6 +29,7 @@ public SmartGridViewRowHolder(View itemView) {
 
 public TextView txt_title;
 public LinearLayout row_detail;
+public LinearLayout row_divider;
 //endregion
 
 public void init()
@@ -36,6 +37,7 @@ public void init()
     
 txt_title = (TextView)itemView.findViewById(R.id.txt_title);
 row_detail = (LinearLayout)itemView.findViewById(R.id.row_detail);
+row_divider = (LinearLayout)itemView.findViewById(R.id.row_divider);
 
 
 }

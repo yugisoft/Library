@@ -8,22 +8,37 @@
     tools:context=".yugiTest">
 
 
-    <library.yugisoft.module.CurrencyTextView
-        android:id="@+id/txt_adet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="35dp"
-        android:minHeight="35dp"
-        android:gravity="center"
-        android:text="1"
-        android:background="@drawable/radius5"
-        android:backgroundTint="@color/color_new_green"
-        android:padding="7dp"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:decimal="0"
-        app:currency="Ad."/>
+
+  <android.support.v7.widget.Toolbar
+      android:backgroundTint="@color/colorAccent"
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/radius_bl_br"
+      android:minHeight="?attr/actionBarSize"
+      app:title="TEst"
+
+      app:subtitle="0 Sayfadan 1.Sayfa Gösteriliyor"
+
+      android:contentInsetLeft="0dp"
+      android:contentInsetStart="0dp"
+      app:contentInsetLeft="0dp"
+      app:contentInsetStart="0dp"
+      android:contentInsetRight="0dp"
+      android:contentInsetEnd="0dp"
+      app:contentInsetRight="0dp"
+      app:contentInsetEnd="0dp"
+
+      app:contentInsetStartWithNavigation="0dp"
+
+      android:elevation="1dp"/>
+
+  <library.yugisoft.module.Utils.pGoldGridView.GoldGridView
+      android:id="@+id/gridView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:numColumns="1"
+      app:showDivider="true"/>
 
 
 </LinearLayout>

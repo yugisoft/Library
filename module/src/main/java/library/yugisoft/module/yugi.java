@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -61,6 +62,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Semaphore;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -142,6 +144,31 @@ public class yugi
      */
     public static <T extends View> Collection<T> findViewsByClassReference(View rootView, Class<T> clazz) {
         return findViewsByClassReference(rootView, clazz, null);
+    }
+
+    public static void Run(Runnable run)
+    {
+        if (Looper.myLooper() == Looper.getMainLooper())
+            run.run();
+        else
+        {
+
+            final Semaphore mutex = new Semaphore(0);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    run.run();
+                    mutex.release();
+                }
+            });
+
+            try {
+                mutex.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
     //endregion
     //region APP

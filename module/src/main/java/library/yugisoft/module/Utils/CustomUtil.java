@@ -1,7 +1,9 @@
 package library.yugisoft.module.Utils;
 
 import android.os.Build;
+import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -443,4 +445,24 @@ public class CustomUtil
 
         return retrievedListener;
     }
+
+    public static View RemoveParentInView(View view)
+    {
+
+        yugi.Run(()->{
+
+            if (view.getParent() != null)
+            {
+                ViewGroup vg = (ViewGroup) view .getParent();
+                vg.removeView(view);
+            }
+
+        });
+
+
+
+        return  view;
+    }
+
+
 }

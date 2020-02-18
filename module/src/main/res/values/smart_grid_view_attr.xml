@@ -25,10 +25,8 @@
     </style>
 
 
-    <attr name="numColumns" format="integer" />
-    <attr name="pageViewCount" format="integer" />
-    <attr name="pageMoreCount" format="integer" />
-    <attr name="rowBackColor" format="color|integer|reference" />
+
+
 
     <declare-styleable name="SmartGridView">
         <attr name="detailViewID" />
@@ -36,6 +34,16 @@
         <attr name="pageViewCount" />
         <attr name="pageMoreCount" />
         <attr name="rowBackColor"/>
+    </declare-styleable>
+
+    <declare-styleable name="GoldGridView">
+        <attr name="detailViewID" />
+        <attr name="numColumns" />
+        <attr name="pageViewCount" />
+        <attr name="pageMoreCount" />
+        <attr name="rowBackColor"/>
+        <attr name="showDivider" />
+        <attr name="swipeEnable" />
     </declare-styleable>
 
 </resources>
