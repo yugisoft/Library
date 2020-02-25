@@ -16,6 +16,7 @@ import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -311,7 +312,11 @@ public class http
         return response;
     }
 
-    public static Response httpExecute(HttpRequestBase httpGet,String log) {
+    public static Response httpExecute(HttpRequestBase httpGet,String log)
+    {
+        return  httpExecute(httpGet,log,"");
+    }
+    public static Response httpExecute(HttpRequestBase httpGet,String log,String filePath) {
         String LOG ="httpExecuteResponse \n";
         Response response =null;
         try
@@ -336,12 +341,25 @@ public class http
                 inputStream = httpResponse.getEntity().getContent();
                 if (inputStream != null)
                 {
-                    response.Data = convertInputStreamToString(inputStream);
-                    //if (st.getStatusCode() == 400) {}
-                    DataTable dt = new DataTable(response.Data);
-                    String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
-                    error = error.length()==0 ? dt.get(0, "error") : error;
-                    response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
+
+                    if (filePath.length()>0)
+                    {
+                        FileOutputStream fos = new FileOutputStream(new File(filePath));
+                        int inByte;
+                        while((inByte = inputStream.read()) != -1)
+                            fos.write(inByte);
+                        inputStream.close();
+                        fos.close();
+                    }
+                    else
+                    {
+                        response.Data = convertInputStreamToString(inputStream);
+                        //if (st.getStatusCode() == 400) {}
+                        DataTable dt = new DataTable(response.Data);
+                        String error = (dt.get(0, "Message").equals("") ? dt.get(0, "error_description") : dt.get(0, "Message"));
+                        error = error.length()==0 ? dt.get(0, "error") : error;
+                        response.HataAciklama = error.length()>0 ?error : response.HataAciklama;
+                    }
                 }
                 else
                 {
@@ -804,6 +822,7 @@ public class http
         private String sbody="";
         private boolean Json = false;
         private String Log = "";
+        private String fileName;
         private int timeOut = 0;
         public static int defaultTimeOut = 0;
         HttpRequestBase httpRequest;
@@ -927,6 +946,10 @@ public class http
         }
         public Request setTimeOutSecond(int timeOut) {
             this.timeOut = timeOut * 1000;
+            return  this;
+        }
+        public Request setFileName(String fileName) {
+            this.fileName = fileName;
             return  this;
         }
 
