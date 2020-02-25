@@ -15,6 +15,8 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,6 +39,7 @@ public class http
         public int HataKodu;
         public String HataAciklama = "", Data= "";
         public boolean isException;
+        public InputStream inputStream= null;
 
         @Override
         public String toString() {
@@ -341,6 +344,24 @@ public class http
                 inputStream = httpResponse.getEntity().getContent();
                 if (inputStream != null)
                 {
+                   try
+                   {
+                       ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                       byte[] buffer = new byte[1024];
+                       int len;
+                       while ((len = inputStream.read(buffer)) > -1 ) {
+                           baos.write(buffer, 0, len);
+                       }
+                       baos.flush();
+                       inputStream = new ByteArrayInputStream(baos.toByteArray());
+                       response.inputStream = new ByteArrayInputStream(baos.toByteArray());
+
+                   }
+                   catch ( Exception ex)
+                   {
+
+                   }
+
 
                     if (filePath.length()>0)
                     {
@@ -902,6 +923,11 @@ public class http
         public String getSbody() {
             return sbody;
         }
+
+        public String getFileName() {
+            return fileName;
+        }
+
         //endregion
         //region SETTER
         public Request setOnHttpResponse(OnHttpResponse onHttpResponse) {
@@ -1138,7 +1164,7 @@ public class http
         //        //endregion
 
         @Override protected Response    doInBackground(String... strings) {
-            return httpExecute(httpRequest,Log);
+            return httpExecute(httpRequest,Log,fileName);
         }
         @Override protected void   onPostExecute(Response response) {
             super.onPostExecute(response);
