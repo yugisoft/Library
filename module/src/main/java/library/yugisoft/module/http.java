@@ -843,7 +843,7 @@ public class http
         private String sbody="";
         private boolean Json = false;
         private String Log = "";
-        private String fileName;
+        private String fileName = "";
         private int timeOut = 0;
         public static int defaultTimeOut = 0;
         HttpRequestBase httpRequest;
