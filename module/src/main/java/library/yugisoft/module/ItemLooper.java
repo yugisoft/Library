@@ -600,17 +600,13 @@ public void show() {
  }
  
  interface IItemLooper {
-default String toLooperString() {
+    default String toLooperString() {
         return this.toString();
 }
-
-;
-
-default int toLooperInt() {
+    default int toLooperInt() {
         return 0;
 }
-
-default long toLooperLong() {
+    default long toLooperLong() {
         return 0;
 }
  }

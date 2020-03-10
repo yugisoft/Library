@@ -207,12 +207,12 @@ public class vList<E>  implements List<E>{
         } else {
 
             for (int i = 0; i < list.size(); i++)
-                   try
-                   {
-                       if (list.get(i).equals(filter))
-                       vlist.list.add(list.get(i));
-                   }
-                   catch (Exception ex) { }
+                try
+                {
+                    if (list.get(i).equals(filter))
+                        vlist.list.add(list.get(i));
+                }
+                catch (Exception ex) { }
         }
         return vlist;
     }
@@ -320,9 +320,9 @@ public class vList<E>  implements List<E>{
 
         }
         else
-            {
-                try{item.item = list.get(0);}catch (Exception ex){}
-                item.value = 0;
+        {
+            try{item.item = list.get(0);}catch (Exception ex){}
+            item.value = 0;
             for (int i = 0; i < list.size(); i++)
                 if (pre.get(list.get(i)) > item.value) {
                     item.value = pre.get(list.get(i));
@@ -504,7 +504,7 @@ public class vList<E>  implements List<E>{
             for (T element : lists) {
                 if (!newList.contains(element)) {
 
-                newList.add(element);
+                    newList.add(element);
                 }
             }
 

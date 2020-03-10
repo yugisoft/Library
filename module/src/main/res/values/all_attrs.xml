@@ -18,4 +18,28 @@
     <attr name="rowBackColor" format="color|integer|reference" />
     <attr name="swipeEnable" format="boolean" />
 
+    <attr name="decimal" format="integer"/>
+    <attr name="currency" format="string"/>
+
+    <attr name="openShowing" format="boolean" />
+    <attr name="_touchOnSlide" format="boolean"/>
+    <attr name="_horizantal" format="boolean"/>
+
+    <attr name="_State" format="enum">
+        <enum name="Hidden" value="0" />
+        <enum name="Visible" value="1" />
+    </attr>
+    <attr name="_Title" format="string"/>
+    <attr name="_Image" format="reference" />
+    <attr name="_Backgorund" format="color"/>
+    <attr name="contentViewID" format="integer|reference" />
+    <attr name="LoopDisplayType" format="enum">
+        <enum name="Popop" value="0" />
+        <enum name="ListPopup" value="1" />
+        <enum name="Dialog" value="2" />
+        <enum name="FullScreenDialog" value="3" />
+        <enum name="ListDialog" value="4" />
+        <enum name="FullScreenListDialog" value="5" />
+    </attr>
+
 </resources>

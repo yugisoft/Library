@@ -36,8 +36,7 @@ public class CustomUtil
     }
 
 
-    public  static boolean isPrimite(Object value,Field field)
-    {
+    public  static boolean isPrimite(Object value,Field field) {
        try
        {
            return isPrimite(field.get(value));
@@ -446,8 +445,7 @@ public class CustomUtil
         return retrievedListener;
     }
 
-    public static View RemoveParentInView(View view)
-    {
+    public static View RemoveParentInView(View view) {
 
         yugi.Run(()->{
 
@@ -458,8 +456,6 @@ public class CustomUtil
             }
 
         });
-
-
 
         return  view;
     }

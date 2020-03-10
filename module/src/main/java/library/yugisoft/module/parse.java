@@ -23,6 +23,7 @@ import java.util.List;
 import library.yugisoft.module.Interfaces.ASerializable;
 import library.yugisoft.module.Interfaces.ISerializable;
 import library.yugisoft.module.Utils.CustomUtil;
+import library.yugisoft.module.Utils.JsonConverter;
 
 import static android.util.DisplayMetrics.DENSITY_DEFAULT;
 
@@ -123,6 +124,7 @@ public class parse {
 
     public static String toJson(Object item)
     {
+
         Class cls = item.getClass();
         String name = cls.getSimpleName().toLowerCase();
         String type = cls.getName().toLowerCase();
@@ -595,52 +597,38 @@ public class parse {
 
 
     private static int defaultInt = 0;
+    private static double defaultDouble = 0;
+    private static float defaultFloat = 0f;
+    private static boolean defaultBoolean = false;
+    private static long defaultLong = 0;
 
     public static int getDefaultInt() {
         return defaultInt;
     }
-
     public static void setDefaultInt(int defaultInt) {
         defaultInt = defaultInt;
     }
-
-    private static double defaultDouble = 0;
-
     public static double getDefaultDouble() {
         return defaultDouble;
     }
-
     public static void setDefaultDouble(double defaultDouble) {
         defaultDouble = defaultDouble;
     }
-
-    private static float defaultFloat = 0f;
-
-    private static boolean defaultBoolean = false;
-
     public static boolean getDefaultBoolean() {
         return defaultBoolean;
     }
-
     public static void setDefaultBoolean(boolean defaultBoolean) {
         defaultBoolean = defaultBoolean;
     }
-
-    private static long defaultLong = 0;
-
     public static long getDefaultLong() {
         return defaultLong;
     }
-
     public static void setDefaultLong(long defaultLong) {
         defaultLong = defaultLong;
     }
-
-
     public static float getDefaultFloat() {
         return defaultFloat;
     }
-
     public static void toLayoutParams(View view, int Wi, int He, int We) {
         Object params = view.getLayoutParams();
         if (params.getClass().equals(LinearLayout.LayoutParams.class))

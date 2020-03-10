@@ -3,10 +3,14 @@
 
     <attr name="contentView" format="reference" />
     
-    <declare-styleable name="MaskedEditText"><attr format="string" name="mask"/><attr format="string" name="allowed_chars"/><attr format="string" name="denied_chars"/><attr format="string" name="char_representation"/><attr format="boolean" name="keep_hint"/></declare-styleable>
+    <declare-styleable name="MaskedEditText">
+        <attr format="string" name="mask"/>
+        <attr format="string" name="allowed_chars"/>
+        <attr format="string" name="denied_chars"/>
+        <attr format="string" name="char_representation"/>
+        <attr format="boolean" name="keep_hint"/>
+    </declare-styleable>
     <declare-styleable name="myViews">
-
-
         <attr name="baslik" format="string" />
         <attr name="fontsize" format="dimension" />
         <attr name="image_w" format="integer" />
@@ -31,63 +35,26 @@
     <declare-styleable name="CirclePageIndicator">
         <attr name="indicator_spacing" format="dimension" />
     </declare-styleable>
-    
-    
-    
-    <attr name="decimal" format="integer"/>
-    <attr name="currency" format="string"/>
-
     <declare-styleable name="CurrencyTextView">
         <attr name="decimal" />
         <attr name="currency" />
     </declare-styleable>
-
-    <attr name="openShowing" format="boolean" />
-    <attr name="_touchOnSlide" format="boolean"/>
-    <attr name="_horizantal" format="boolean"/>
-
-    <attr name="_State" format="enum">
-        <enum name="Hidden" value="0" />
-        <enum name="Visible" value="1" />
-    </attr>
-    <attr name="_Title" format="string"/>
-    <attr name="_Image" format="reference" />
-    <attr name="_Backgorund" format="color"/>
-
     <declare-styleable name="ResizeLayout">
         <attr name="openShowing" />
         <attr name="_State"/>
         <attr name="_touchOnSlide" />
         <attr name="_horizantal" />
     </declare-styleable>
-
     <declare-styleable name="ResizeButton">
         <attr name="_Title" />
         <attr name="_Image" />
         <attr name="_Backgorund" />
     </declare-styleable>
-
-
-    <attr name="contentViewID" format="integer|reference" />
-
-
     <declare-styleable name="BaseCustomLayout">
 
         <attr name="contentViewID" />
 
     </declare-styleable>
-
-
-
-    <attr name="LoopDisplayType" format="enum">
-        <enum name="Popop" value="0" />
-        <enum name="ListPopup" value="1" />
-        <enum name="Dialog" value="2" />
-        <enum name="FullScreenDialog" value="3" />
-        <enum name="ListDialog" value="4" />
-        <enum name="FullScreenListDialog" value="5" />
-    </attr>
-
     <declare-styleable name="LoopTextView">
 
         <attr name="contentViewID" />

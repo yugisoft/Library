@@ -316,9 +316,9 @@ public class http
     }
 
     public static Response httpExecute(HttpRequestBase httpGet,String log)
-    {
-        return  httpExecute(httpGet,log,"");
-    }
+{
+    return  httpExecute(httpGet,log,"");
+}
     public static Response httpExecute(HttpRequestBase httpGet,String log,String filePath) {
         String LOG ="httpExecuteResponse \n";
         Response response =null;
@@ -847,7 +847,6 @@ public class http
         private int timeOut = 0;
         public static int defaultTimeOut = 0;
         HttpRequestBase httpRequest;
-
         protected boolean isFilePost = false;
 
         public static String UrlFormatter(String url) {

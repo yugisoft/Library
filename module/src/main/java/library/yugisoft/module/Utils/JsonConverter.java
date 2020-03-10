@@ -21,8 +21,8 @@ import library.yugisoft.module.yugi;
 
 public class JsonConverter<T> {
     public JsonConverter() {
-    }
 
+    }
     public JsonConverter(String jsonData, Class<T> tClass) {
         setJsonData(jsonData);
         settClass(tClass);
@@ -323,7 +323,6 @@ public class JsonConverter<T> {
         }
         return item;
     }
-
     public static <E> E convertJsonToModel(String jsonData, String key, Class<E> eClass) {
         E item = null;
         try {
@@ -335,7 +334,6 @@ public class JsonConverter<T> {
         }
         return item;
     }
-
     public static <E> E convertJsonToModel(String jsonData, String key, int index, Class<E> eClass) {
         E item = null;
         try {
@@ -348,7 +346,6 @@ public class JsonConverter<T> {
         }
         return item;
     }
-
     public static <E> E convertJsonToModel(String jsonData, int index, Class<E> eClass) {
         E item = null;
         try {
@@ -361,31 +358,47 @@ public class JsonConverter<T> {
         return item;
     }
 
-
     public static <E> List<E> convertJsonToList(String jsonData, Class<E> eClass) {
         JsonConverter<E> jsonConverter = new JsonConverter<>(jsonData, eClass);
         return jsonConverter.convertToClassList();
     }
-
     public static <E> List<E> convertJsonToList(String jsonData, String key, Class<E> eClass) {
         JsonConverter<E> jsonConverter = new JsonConverter<>(jsonData, eClass);
         jsonConverter.setKey(key);
         return jsonConverter.convertToClassList();
     }
-
     public static <E> List<E> convertJsonToList(String jsonData, String key, int index, Class<E> eClass) {
         JsonConverter<E> jsonConverter = new JsonConverter<>(jsonData, eClass);
         jsonConverter.setKey(key);
         jsonConverter.setIndex(index);
         return jsonConverter.convertToClassList();
     }
-
     public static <E> List<E> convertJsonToList(String jsonData, int index, Class<E> eClass) {
         JsonConverter<E> jsonConverter = new JsonConverter<>(jsonData, eClass);
         jsonConverter.setIndex(index);
         return jsonConverter.convertToClassList();
     }
 
+    public static <E> vList<E> convertJsonTovList(String jsonData, Class<E> eClass) {
+        vList<E> list = new vList<E>();
+        list.list = convertJsonToList(jsonData,eClass);
+        return list;
+    }
+    public static <E> vList<E> convertJsonTovList(String jsonData, String key, Class<E> eClass) {
+        vList<E> list = new vList<E>();
+        list.list = convertJsonToList(jsonData,key,eClass);
+        return list;
+    }
+    public static <E> vList<E> convertJsonTovList(String jsonData, String key, int index, Class<E> eClass) {
+        vList<E> list = new vList<E>();
+        list.list = convertJsonToList(jsonData,key,index,eClass);
+        return list;
+    }
+    public static <E> vList<E> convertJsonTovList(String jsonData, int index, Class<E> eClass) {
+        vList<E> list = new vList<E>();
+        list.list = convertJsonToList(jsonData,index,eClass);
+        return list;
+    }
 
     public static <E> E convertJsonToModel(Object object,String jsonData ) {
         E item = null;
@@ -399,7 +412,6 @@ public class JsonConverter<T> {
         }
         return item;
     }
-
     public static <E> E convertJsonToModel(Object object,String jsonData, String key ) {
         E item = null;
         try {
@@ -413,7 +425,6 @@ public class JsonConverter<T> {
         }
         return item;
     }
-
     public static <E> E convertJsonToModel(Object object,String jsonData, String key, int index ) {
         E item = null;
         try {
@@ -428,7 +439,6 @@ public class JsonConverter<T> {
         }
         return item;
     }
-
     public static <E> E convertJsonToModel(Object object,String jsonData, int index ) {
         E item = null;
         try {
@@ -443,20 +453,17 @@ public class JsonConverter<T> {
         return item;
     }
 
-
     public static <E> List<E> convertJsonToList(Object object,String jsonData, Class<E> eClass) {
         JsonConverter<E> jsonConverter = new JsonConverter<>(jsonData,eClass);
         jsonConverter.setTargetObject(object);
         return jsonConverter.convertToClassList();
     }
-
     public static <E> List<E> convertJsonToList(Object object,String jsonData, String key, Class<E> eClass) {
         JsonConverter<E> jsonConverter = new JsonConverter<>(jsonData,eClass);
         jsonConverter.setTargetObject(object);
         jsonConverter.setKey(key);
         return jsonConverter.convertToClassList();
     }
-
     public static <E> List<E> convertJsonToList(Object object,String jsonData, String key, int index, Class<E> eClass) {
         JsonConverter<E> jsonConverter = new JsonConverter<>(jsonData,eClass);
         jsonConverter.setTargetObject(object);
@@ -464,12 +471,32 @@ public class JsonConverter<T> {
         jsonConverter.setIndex(index);
         return jsonConverter.convertToClassList();
     }
-
     public static <E> List<E> convertJsonToList(Object object,String jsonData, int index, Class<E> eClass) {
         JsonConverter<E> jsonConverter = new JsonConverter<>(jsonData,eClass);
         jsonConverter.setTargetObject(object);
         jsonConverter.setIndex(index);
         return jsonConverter.convertToClassList();
+    }
+
+    public static <E> vList<E> convertJsonTovList(Object object,String jsonData, Class<E> eClass) {
+        vList<E> list = new vList<E>();
+        list.list = convertJsonToList(object,jsonData,eClass);
+        return list;
+    }
+    public static <E> vList<E> convertJsonTovList(Object object,String jsonData, String key, Class<E> eClass) {
+        vList<E> list = new vList<E>();
+        list.list = convertJsonToList(object,jsonData,key,eClass);
+        return list;
+    }
+    public static <E> vList<E> convertJsonTovList(Object object,String jsonData, String key, int index, Class<E> eClass) {
+        vList<E> list = new vList<E>();
+        list.list = convertJsonToList(object,jsonData,key,index,eClass);
+        return list;
+    }
+    public static <E> vList<E> convertJsonTovList(Object object,String jsonData, int index, Class<E> eClass) {
+        vList<E> list = new vList<E>();
+        list.list = convertJsonToList(object,jsonData,index,eClass);
+        return list;
     }
 
     //endregion

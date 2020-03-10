@@ -1036,20 +1036,19 @@ public class yugi
     {
         return  GetSetup(activity,"Token");
     }
-    public static String GetSetup(Context context, Object Setup_name) {
-        return GetSetup(context,Setup_name,"");
-    }
 
     private static String setupTag = "HobiSatis";
-
     public static void setSetupTag(String setupTag) {
         yugi.setupTag = setupTag;
     }
-
     public static String getSetupTag() {
         return setupTag;
     }
 
+
+    public static String GetSetup(Context context, Object Setup_name) {
+        return GetSetup(context,Setup_name,"");
+    }
     public static String GetSetup(String Setup_name, String Defult) {  return GetSetup(yugi.activity,Setup_name,Defult); }
     public static String GetSetup(Context context, Object Setup_name,String Defult) {
         try {
