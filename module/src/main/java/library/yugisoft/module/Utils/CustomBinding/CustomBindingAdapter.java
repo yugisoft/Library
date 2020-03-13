@@ -3,6 +3,7 @@ package library.yugisoft.module.Utils.CustomBinding;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -22,6 +23,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import library.yugisoft.module.CurrencyTextView;
+import library.yugisoft.module.DataTable;
 import library.yugisoft.module.DateTextView;
 import library.yugisoft.module.DateTime;
 import library.yugisoft.module.LoopTextView;
@@ -43,11 +45,13 @@ public class CustomBindingAdapter {
 
     public interface OnCustomBindingAdapterSetView {
         void SetViewValue(CustomBindingAdapter adapter, Field field, View view, Object pValue, Object fValue, String sValue);
+        default  void SetViewValue(CustomBindingAdapter adapter, DataTable.DataColumn field, View view, Object pValue, Object fValue, String sValue){};
     }
 
     private static OnCustomBindingAdapterSetView onCustomBindingAdapterSetView;
 
     Hashtable<Integer, Field> IDs;
+    Hashtable<Integer, DataTable.DataColumn> IDs2;
     List<View> viewList;
     private Hashtable<String, OnViewDrawing> onViewDrawings = new Hashtable<>();
     private OnRowDrawing onRowDrawing;
@@ -108,21 +112,40 @@ public class CustomBindingAdapter {
 
     public CustomBindingAdapter setBindingObject(Object bindingObject) {
 
-        if (bindingObject != null && getBindingView() != null) {
-            if (this.bindingObject == null || this.bindingObject.getClass().equals(bindingObject.getClass()))
-                IDs = null;
-            if (IDs == null) {
-                IDs = new Hashtable<>();
-                for (Field field : CustomUtil.getFields(bindingObject)) {
-                    field.setAccessible(true);
-                    BindProperty property = CustomUtil.getFieldProperty(field);
-                    String viewIdName = property.DisplayIdName().length() > 0 ? property.DisplayIdName() : (getIdTag() + field.getName());
-                    int ID = context.getResources().getIdentifier(viewIdName, "id", context.getPackageName());
+        if (bindingObject != null && getBindingView() != null)
+        {
+            if (bindingObject.getClass().equals(DataTable.DataRow.class))
+            {
+                DataTable.DataRow dt = (DataTable.DataRow) bindingObject;
+                IDs2 = new Hashtable<>();
+
+                for (DataTable.DataColumn dc : dt.Cells)
+                {
+                    int ID = context.getResources().getIdentifier(dc.Name, "id", context.getPackageName());
                     View itemView = bindingView.findViewById(ID);
                     if (itemView != null) {
-                        IDs.put(ID, field);
+                        IDs2.put(ID, dc);
                     }
-                    field.setAccessible(false);
+                }
+
+            }
+            else
+            {
+                if (this.bindingObject == null || this.bindingObject.getClass().equals(bindingObject.getClass()))
+                    IDs = null;
+                if (IDs == null) {
+                    IDs = new Hashtable<>();
+                    for (Field field : CustomUtil.getFields(bindingObject)) {
+                        field.setAccessible(true);
+                        BindProperty property = CustomUtil.getFieldProperty(field);
+                        String viewIdName = property.DisplayIdName().length() > 0 ? property.DisplayIdName() : (getIdTag() + field.getName());
+                        int ID = context.getResources().getIdentifier(viewIdName, "id", context.getPackageName());
+                        View itemView = bindingView.findViewById(ID);
+                        if (itemView != null) {
+                            IDs.put(ID, field);
+                        }
+                        field.setAccessible(false);
+                    }
                 }
             }
         } else {
@@ -255,6 +278,18 @@ public class CustomBindingAdapter {
                         return;
                     }
 
+                }
+            }
+            else if (getBindingObject().getClass().equals(DataTable.DataRow.class))
+            {
+                viewList = new ArrayList<>();
+                if (IDs.size()>0)
+                {
+                    for (int id : IDs.keySet())
+                    {
+                        viewList.add(getBindingView().findViewById(id));
+                        setViewValue(getBindingView().findViewById(id), IDs2.get(id));
+                    }
                 }
             }
             else
@@ -479,6 +514,78 @@ public class CustomBindingAdapter {
             onViewDrawings.get(fieldName).onDraw(getRow(), view, fieldName, pValue);
     }
 
+    void setViewValue(View view, DataTable.DataColumn field) {
+        String fieldName = field.Name;
+        if (getLayoutController() != null) {
+            View layoutView = getLayoutController().findViewById(view.getId());
+            if (layoutView != null) {
+                new Handler().postDelayed(() ->
+                {
+                    view.getLayoutParams().width = layoutView.getWidth();
+                }, 500);
+                //view.getLayoutParams().height = layoutView.getHeight();
+            }
+
+        }
+        Object pValue = null, fValue = null;
+        if (getBindingObject() != null) {
+            pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel) getBindingObject()).getValue(fieldName) : CustomUtil.getValue(getBindingObject(), fieldName);
+            fValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel) getBindingObject()).getValue(fieldName) : CustomUtil.getFieldValue(getBindingObject(), fieldName);
+        }
+        String sValue = pValue == null ? "" : String.valueOf(pValue);
+        bindTextView(field, view, pValue, fValue, sValue);
+        if (view instanceof Checkable) {
+            Checkable cView = (Checkable) view;
+
+            if (getBindingObject() instanceof Checkable)
+                cView.setChecked(((Checkable) getBindingObject()).isChecked());
+            else
+                cView.setChecked(parse.toBoolean(pValue));
+
+            if (view instanceof CompoundButton)
+                ((CompoundButton) view).setOnCheckedChangeListener((buttonView, isChecked) ->
+                        {
+                            if (getBindingObject() instanceof Checkable)
+                                ((Checkable) getBindingObject()).setChecked(((Checkable) view).isChecked());
+
+                            reverse();
+                        }
+                );
+
+        }
+        if (view instanceof ImageView) {
+            if (pValue != null) {
+                ImageView iView = (ImageView) view;
+                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        iView.setImageDrawable(null);
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
+                            iView.setImageDrawable(null);
+                    }
+                });
+            }
+        }
+        if (getOnCustomBindingAdapterSetView() != null)
+            getOnCustomBindingAdapterSetView().SetViewValue(this, field, view, pValue, fValue, sValue);
+        if (onViewDrawings.get(fieldName) != null)
+            onViewDrawings.get(fieldName).onDraw(getRow(), view, fieldName, pValue);
+    }
+
 
     //region Views
 
@@ -504,6 +611,28 @@ public class CustomBindingAdapter {
 
             }
             field.setAccessible(false);
+
+            List list = lView.getItemLooper().getList();
+            if (list.size() > 0) {
+                Object it = list.get(0);
+                if (it instanceof IBindingItemLooper) {
+                    try {
+                        Object li = vList.Filter(list, l -> {
+                            return ((IBindingItemLooper) l).Compare(fValue);
+                        }).get(0);
+                        lView.getItemLooper().setSelectedITem(li);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+
+        }
+    }
+    public void bindLoopTextView(DataTable.DataColumn field, View view, Object pValue, Object fValue, String sValue) {
+        if (view instanceof LoopTextView)
+        {
+            LoopTextView lView = ((LoopTextView) view);
+            lView.getItemLooper().setList(new ArrayList());
 
             List list = lView.getItemLooper().getList();
             if (list.size() > 0) {
@@ -565,6 +694,44 @@ public class CustomBindingAdapter {
 
         }
     }
+
+    public void bindTextView(DataTable.DataColumn field, View view, Object pValue, Object fValue, String sValue) {
+
+
+        if (view instanceof LoopTextView)
+            bindLoopTextView(field, view, pValue, fValue, sValue);
+        else if (view instanceof TextView)
+        {
+            TextView tView = (TextView) view;
+
+            if (view instanceof CurrencyTextView)
+            {
+                CurrencyTextView dView = (CurrencyTextView) view;
+                dView.setTutar(parse.toDouble(fValue));
+
+            } else if (view instanceof DateTextView)
+            {
+                DateTextView dView = (DateTextView) view;
+                dView.setDateTime(DateTime.fromDateTime(fValue.toString().replace("Z","+00:00:00")));
+            }
+            else
+            {
+
+                String format = tView.getContentDescription() != null ? tView.getContentDescription().toString() : "";
+                if (format.length() > 0) {
+                    try {
+                        sValue = parse.Formatter.get(format, getBindingObject());
+                    } catch (Exception ignored) {
+                    }
+                }
+                tView.setText(sValue);
+            }
+
+                tView.setVisibility(View.VISIBLE);
+
+        }
+    }
+
 
     //endregion
 }
