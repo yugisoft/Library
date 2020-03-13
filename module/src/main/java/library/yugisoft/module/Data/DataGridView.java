@@ -424,6 +424,16 @@ public class DataGridView extends LinearLayout implements INTERFACES.OnAdapterDa
         this.requestLayout();
     }
 
+    public void setIgnoredStartWidth(String startWidth) {
+
+        // getDataGridAdapter().setParentWidth(0);
+        getDataGridAdapter().setIgnoredStartwidth(startWidth);
+
+    }
+    public String getIgnoredStartwidth() {
+        return getDataGridAdapter().getIgnoredStartwidth();
+    }
+
     public DataTable getData() {
         return getDataGridAdapter().getData();
     }

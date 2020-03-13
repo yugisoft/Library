@@ -40,6 +40,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
     private DataGridView dataGridView;
     private int height=0;
     private int rowColor = 0;
+    private String ignoredStartwidth;
 
 
     public DataGridAdapter2(Context context,DataGridView dataGridView) {
@@ -99,6 +100,7 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
       columLenght.clear();
       filters = new String[getColumns().size()];
       list=data.Rows;
+
       calculateColumnHeight();
       notifyDataSetChanged();
     }
@@ -414,16 +416,28 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
         layout.setBackground(null);
         layout.setGravity(Gravity.CENTER_VERTICAL);
         layout.removeAllViews();
-        for (int k = 0; k < getColumns().size(); k++) { layout.addView(getHeaderTextView(-1, k,new DataGridTextView(context))); }
+        for (int k = 0; k < getColumns().size(); k++)
+        {
+            if (getIgnoredStartwidth()!= null && getIgnoredStartwidth().length()>0 && getColumns().get(k).startsWith(getIgnoredStartwidth()))
+                continue;
+            layout.addView(getHeaderTextView(-1, k,new DataGridTextView(context)));
+        }
         viewGroup.addView(layout);
         return layout;
     }
-    public View getFilterView(LinearLayout viewGroup) {
+    public View getFilterView(LinearLayout viewGroup)
+    {
         LinearLayout layout = getLayout();
         layout.setBackground(null);
         layout.setGravity(Gravity.CENTER_VERTICAL);
         layout.removeAllViews();
-        for (int k = 0; k < getColumns().size(); k++) { layout.addView(getFilterEditTextView(-1, k)); }
+        for (int k = 0; k < getColumns().size(); k++)
+        {
+            if (getIgnoredStartwidth()!= null && getIgnoredStartwidth().length()>0 && getColumns().get(k).startsWith(getIgnoredStartwidth()))
+                continue;
+
+            layout.addView(getFilterEditTextView(-1, k));
+        }
         viewGroup.addView(layout);
         return layout;
     }
@@ -496,7 +510,10 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
     }
 
     public void setColumns(List<String> columns) {
-        this.columns = columns;
+        if (getIgnoredStartwidth() != null && getIgnoredStartwidth().length() > 0 )
+            this.columns = vList.Filter(columns,c-> !c.startsWith(ignoredStartwidth));
+        else
+            this.columns = columns;
     }
 
     public void UpdateHeaderView(LinearLayout header)
@@ -713,6 +730,14 @@ public class DataGridAdapter2 extends ItemAdapter<DataTable.DataRow> implements 
        //     //endregion
        // }
         //endregion
+    }
+
+    public String getIgnoredStartwidth() {
+        return ignoredStartwidth;
+    }
+
+    public void setIgnoredStartwidth(String ignoredStartwidth) {
+        this.ignoredStartwidth = ignoredStartwidth;
     }
     //endregion
 }
