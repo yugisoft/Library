@@ -528,9 +528,10 @@ public class CustomBindingAdapter {
 
         }
         Object pValue = null, fValue = null;
-        if (getBindingObject() != null) {
-            pValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel) getBindingObject()).getValue(fieldName) : CustomUtil.getValue(getBindingObject(), fieldName);
-            fValue = getBindingObject() instanceof IBindableModel ? ((IBindableModel) getBindingObject()).getValue(fieldName) : CustomUtil.getFieldValue(getBindingObject(), fieldName);
+        if (getBindingObject() != null)
+        {
+            pValue = field.objectValue;
+            fValue = field.Value;
         }
         String sValue = pValue == null ? "" : String.valueOf(pValue);
         bindTextView(field, view, pValue, fValue, sValue);
