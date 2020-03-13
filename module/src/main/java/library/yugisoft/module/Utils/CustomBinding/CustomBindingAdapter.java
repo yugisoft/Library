@@ -50,8 +50,8 @@ public class CustomBindingAdapter {
 
     private static OnCustomBindingAdapterSetView onCustomBindingAdapterSetView;
 
-    Hashtable<Integer, Field> IDs;
-    Hashtable<Integer, DataTable.DataColumn> IDs2;
+    Hashtable<Integer, Field> IDs= new Hashtable<>();
+    Hashtable<Integer, DataTable.DataColumn> IDs2 = new Hashtable<>();
     List<View> viewList;
     private Hashtable<String, OnViewDrawing> onViewDrawings = new Hashtable<>();
     private OnRowDrawing onRowDrawing;
@@ -283,9 +283,9 @@ public class CustomBindingAdapter {
             else if (getBindingObject().getClass().equals(DataTable.DataRow.class))
             {
                 viewList = new ArrayList<>();
-                if (IDs.size()>0)
+                if (IDs2.size()>0)
                 {
-                    for (int id : IDs.keySet())
+                    for (int id : IDs2.keySet())
                     {
                         viewList.add(getBindingView().findViewById(id));
                         setViewValue(getBindingView().findViewById(id), IDs2.get(id));
