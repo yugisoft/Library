@@ -365,6 +365,7 @@ public class ItemLooper<T> {
         listDialog.btn_confirm.setVisibility(isShowConfirm() ? View.VISIBLE : View.GONE);
         if (bindingGridView == null)
             bindingGridView = new BindingGridView(getContext());
+        bindingGridView.setIdTag(getIdTag());
         bindingGridView.setDetailViewID(getDetailViewID());
         bindingGridView.setData(getList());
         bindingGridView.setOnRowDrawing(getOnRowDrawing());
