@@ -77,7 +77,6 @@ public class BindingGridView extends GridView
 
 
     //endregion
-
     //region Setter
 
     public BindingGridView setEmptyRowWithDetailView(boolean emptyRowWithDetailView) {
@@ -186,7 +185,6 @@ public class BindingGridView extends GridView
         setAdapter(getAdapter());
     }
     //endregion
-
     //region Getter
     public boolean isEmptyRowWithDetailView() {
         return emptyRowWithDetailView;
@@ -282,7 +280,8 @@ public class BindingGridView extends GridView
 
     public void setIdTag(String idTag)
     {
-        if (this.idTag == null && (idTag== null || idTag.length() == 0))
+ 
+        if (idTag== null)
             idTag ="v";
         this.idTag = idTag;
     }
