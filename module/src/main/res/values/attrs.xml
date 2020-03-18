@@ -59,6 +59,7 @@
 
         <attr name="contentViewID" />
         <attr name="LoopDisplayType" />
+        <attr name="IdTag" />
 
     </declare-styleable>
 

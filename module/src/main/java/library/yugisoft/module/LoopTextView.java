@@ -18,6 +18,9 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
     public TypedArray getTypedArray(int[] style) { return  getContext().obtainStyledAttributes(attrs, style, defStyle, 0); }
 
     private ItemLooper itemLooper;
+
+    private String idTag = null;
+
     private int index = -1;
     public <T> T getSelectedObject() {
         if (index < 0)
@@ -58,6 +61,7 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
         {
             contentViewID = typeArray.getResourceId(R.styleable.LoopTextView_contentViewID,R.layout.list_item_text);
             setLoopDisplayType(LoopDisplayType.GetValue(typeArray.getInt(R.styleable.LoopTextView_LoopDisplayType,0)));
+            idTag = typeArray.getString(R.styleable.LoopTextView_IdTag);
         }
 
         setOnClickListener(p->loop());
@@ -98,6 +102,7 @@ public class LoopTextView extends android.support.v7.widget.AppCompatTextView {
         if (itemLooper == null)
         {
             itemLooper = new ItemLooper();
+            itemLooper.setIdTag(idTag);
             itemLooper.setOnItemLooperSelected(new ItemLooper.OnItemLooperSelected() {
                 @Override
                 public void onSelected(int index, Object Item) {

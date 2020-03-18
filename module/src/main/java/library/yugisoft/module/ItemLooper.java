@@ -31,6 +31,7 @@ package library.yugisoft.module;
 public class ItemLooper<T> {
 
     private int detailViewID;
+    private String idTag;
 
     public ItemLooper() {
         this(yugi.activity);
@@ -334,6 +335,7 @@ public class ItemLooper<T> {
 
         if (bindingGridView == null)
             bindingGridView = new BindingGridView(getContext());
+        bindingGridView.setIdTag(getIdTag());
         bindingGridView.setDetailViewID(getDetailViewID());
         bindingGridView.setData(getList());
         bindingGridView.setOnRowDrawing(getOnRowDrawing());
@@ -404,7 +406,17 @@ public class ItemLooper<T> {
         getOnItemLooperSelected().onSelected(getList().indexOf(selectedITem), selectedITem);
     }
 
-//endregion
+    public void setIdTag(String idTag) {
+        this.idTag = idTag == null ? "v" : idTag;
+        if (bindingGridView != null)
+            bindingGridView.setIdTag(getIdTag());
+    }
+
+    public String getIdTag() {
+        return idTag;
+    }
+
+    //endregion
 
     public interface OnItemLooperSelected<T> {
         void onSelected(int index, T Item);
