@@ -219,6 +219,9 @@ public class DateTime extends Date {
     }
 
     private DatePickerPopWin.OnDatePickedListener onDatePickedListener;
+    private TimePickerPopWin.OnTimePickListener onTimePickListener;
+
+
 
     public void showDateTimePoup(Activity context)
     {
@@ -265,8 +268,10 @@ public class DateTime extends Date {
             public void onTimePickCompleted(int hour, int minute, String time) {
                 DateTime.this.setHours(hour);
                 DateTime.this.setMinutes(minute);
-                if (onDatePickedListener!=null)
-                    onDatePickedListener.onDatePickCompleted(DateTime.this.getYear(),DateTime.this.getMonth(),DateTime.this.getDay(),DateTime.this.toShortDateTimeString());
+                if (getOnTimePickListener()!=null)
+                    getOnTimePickListener().onTimePickCompleted(hour, minute, time);
+                else if(getOnDatePickedListener()!=null)
+                    getOnDatePickedListener().onDatePickCompleted(DateTime.this.getYear(),DateTime.this.getMonth(),DateTime.this.getDay(),DateTime.this.toShortDateTimeString());
             }
         });
     }
@@ -281,7 +286,7 @@ public class DateTime extends Date {
 
     public int[] getTimes()
     {
-        String[] sTime = this.toLongDateTimeString().split(":");
+        String[] sTime = this.toLongTimeString().split(":");
         int[] time = { Integer.parseInt(sTime[0]),Integer.parseInt(sTime[1]),Integer.parseInt(sTime[2]) };
         return  time;
     }
@@ -383,5 +388,13 @@ public class DateTime extends Date {
 
 
         return time;
+    }
+
+    public TimePickerPopWin.OnTimePickListener getOnTimePickListener() {
+        return onTimePickListener;
+    }
+
+    public void setOnTimePickListener(TimePickerPopWin.OnTimePickListener onTimePickListener) {
+        this.onTimePickListener = onTimePickListener;
     }
 }
