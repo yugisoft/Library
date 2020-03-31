@@ -91,21 +91,16 @@ public class DateTime extends Date {
         return fromDateTime(dateStr,getShortDateTimeFormat());
     }
     public static DateTime fromDateTime(String dateStr,String Format) {
-        DateTime dateTime = new DateTime();
-
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat(Format);
-        df.setTimeZone(tz);
-        try
-        {
-            dateTime.setDateTime(df.parse(dateStr));
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dateTime;
+        return fromDateTime(dateStr,Format,Format);
     }
     public static DateTime fromDateTime(String dateStr,String Format,String Format2) {
+
+        if ((Format.endsWith("z") ||Format.endsWith("Z")) && Format.indexOf("+0000") < 0)
+            Format = Format.substring(0,Format.length()-1);
+
+        if ((Format2.endsWith("z") ||Format2.endsWith("Z")) && Format2.indexOf("+0000") < 0)
+            Format2 = Format2.substring(0,Format2.length()-1);
+
         DateTime dateTime = new DateTime();
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat(Format);
