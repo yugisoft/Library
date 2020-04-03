@@ -6,6 +6,7 @@ import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Checkable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -540,6 +541,18 @@ public class DataTable
         return str;
     }
 
+    public String getCheckedJsonData() {
+        String str = "[\n";
+        String str2 = "[\n";
+        for (int i = 0; i < this.Rows.size(); i++) {
+            if (!str.equals(str2)) str += ",";
+            if (this.Rows.get(i).isChecked())
+                str += getJsonData(i);
+        }
+        str += "\n]";
+        return str;
+    }
+
     public String getJsonData(int RowIndex) {
         String str = "";
         str += "{\n";
@@ -599,7 +612,7 @@ public class DataTable
     //endregion
     //endregion
     //region Alt Class
-    public class DataRow {
+    public class DataRow implements Checkable {
 
 
 
@@ -821,6 +834,23 @@ public class DataTable
         @Override
         public String toString() {
             return (Columns.size()>0 ? get(PrimaryCell) : "");
+        }
+
+
+        private  boolean checked;
+        @Override
+        public void setChecked(boolean b) {
+            checked = b;
+        }
+
+        @Override
+        public boolean isChecked() {
+            return checked;
+        }
+
+        @Override
+        public void toggle() {
+            setChecked(!isChecked());
         }
     }
 
