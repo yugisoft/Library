@@ -820,6 +820,7 @@ public class DataTable
             while (k < Cells.size()) {
                 if (Cells.get(k).Name.equals(Key.toString())) {
                     try {
+                        Cells.get(k).objectValue=Value;
                         Cells.get(k).Value=Value.toString();
                     }
                     catch (Exception ex) {
@@ -882,6 +883,7 @@ public class DataTable
         while(k<Columns.size()) {
             if (Columns.get(k).equals(ColumnName))
             {
+                Rows.get(RowIndex).Cells.get(k).objectValue= Value;
                 Rows.get(RowIndex).Cells.get(k).Value= ""+Value;
                 k=9999;
                 return true;
