@@ -18,6 +18,7 @@ import library.yugisoft.module.popwindow.TimePickerPopWin;
 
 public class DateTime extends Date {
 
+    public static boolean useFormatWithLocale = false;
     private static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     private static String
@@ -187,7 +188,14 @@ public class DateTime extends Date {
 
     public String getFormat(String Format) {
         tz = TimeZone.getTimeZone("UTC");
-        DateFormat dateFormat = new SimpleDateFormat(Format, Locale.getDefault());
+
+        DateFormat dateFormat ;
+
+        if (useFormatWithLocale)
+            dateFormat = new SimpleDateFormat(Format, Locale.getDefault());
+        else
+            dateFormat = new SimpleDateFormat(Format);
+
         dateFormat.setTimeZone(tz);
         String nowAsISO = dateFormat.format(this);
         return nowAsISO;
