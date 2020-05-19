@@ -186,7 +186,7 @@ public class DateTime extends Date {
         String formatted = new SimpleDateFormat(ISO8601)
                 .format(this);
         return (formatted.substring(0, 22) + ":" + formatted.substring(22)).replace("+00:00","Z");
-        
+
     }
 
     public String getFormat(String Format) {

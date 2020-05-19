@@ -432,79 +432,83 @@ public class CustomBindingAdapter {
         if (view instanceof ImageView) {
             if (pValue != null) {
                 ImageView iView = (ImageView) view;
-                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) {
-                    }
+                yugi.Run(() -> {
 
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        if (field.isAnnotationPresent(BindingImage.class)) {
-                            BindingImage im = field.getAnnotation(BindingImage.class);
-                            if (im.defaultResource() != 0)
-                                iView.setImageDrawable(view.getContext().getResources().getDrawable(im.defaultResource()));
-                            else
-                                yugi.imageLoader.displayImage(im.defaultUrl(), iView, yugi.options, new ImageLoadingListener() {
-                                    @Override
-                                    public void onLoadingStarted(String imageUri, View view) {
+                    yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+                        }
 
-                                    }
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            if (field.isAnnotationPresent(BindingImage.class)) {
+                                BindingImage im = field.getAnnotation(BindingImage.class);
+                                if (im.defaultResource() != 0)
+                                    iView.setImageDrawable(view.getContext().getResources().getDrawable(im.defaultResource()));
+                                else
+                                    yugi.imageLoader.displayImage(im.defaultUrl(), iView, yugi.options, new ImageLoadingListener() {
+                                        @Override
+                                        public void onLoadingStarted(String imageUri, View view) {
 
-                                    @Override
-                                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                        iView.setImageDrawable(null);
-                                    }
+                                        }
 
-                                    @Override
-                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                        @Override
+                                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                            iView.setImageDrawable(null);
+                                        }
 
-                                    }
+                                        @Override
+                                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                                    @Override
-                                    public void onLoadingCancelled(String imageUri, View view) {
-                                        iView.setImageDrawable(null);
-                                    }
-                                });
-                        } else
-                            iView.setImageDrawable(null);
-                    }
+                                        }
 
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                        @Override
+                                        public void onLoadingCancelled(String imageUri, View view) {
+                                            iView.setImageDrawable(null);
+                                        }
+                                    });
+                            } else
+                                iView.setImageDrawable(null);
+                        }
 
-                    }
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-                        if (field.isAnnotationPresent(BindingImage.class)) {
-                            BindingImage im = field.getAnnotation(BindingImage.class);
-                            if (im.defaultResource() != 0)
-                                iView.setImageDrawable(view.getContext().getResources().getDrawable(im.defaultResource()));
-                            else
-                                yugi.imageLoader.displayImage(im.defaultUrl(), iView, yugi.options, new ImageLoadingListener() {
-                                    @Override
-                                    public void onLoadingStarted(String imageUri, View view) {
+                        }
 
-                                    }
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+                            if (field.isAnnotationPresent(BindingImage.class)) {
+                                BindingImage im = field.getAnnotation(BindingImage.class);
+                                if (im.defaultResource() != 0)
+                                    iView.setImageDrawable(view.getContext().getResources().getDrawable(im.defaultResource()));
+                                else
+                                    yugi.imageLoader.displayImage(im.defaultUrl(), iView, yugi.options, new ImageLoadingListener() {
+                                        @Override
+                                        public void onLoadingStarted(String imageUri, View view) {
 
-                                    @Override
-                                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                        iView.setImageDrawable(null);
-                                    }
+                                        }
 
-                                    @Override
-                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                        @Override
+                                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                            iView.setImageDrawable(null);
+                                        }
 
-                                    }
+                                        @Override
+                                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                                    @Override
-                                    public void onLoadingCancelled(String imageUri, View view) {
-                                        iView.setImageDrawable(null);
-                                    }
-                                });
-                        } else
-                            iView.setImageDrawable(null);
-                    }
+                                        }
+
+                                        @Override
+                                        public void onLoadingCancelled(String imageUri, View view) {
+                                            iView.setImageDrawable(null);
+                                        }
+                                    });
+                            } else
+                                iView.setImageDrawable(null);
+                        }
+                    });
+
                 });
             }
         }
@@ -557,27 +561,30 @@ public class CustomBindingAdapter {
         if (view instanceof ImageView) {
             if (pValue != null) {
                 ImageView iView = (ImageView) view;
-                yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
-                    @Override
-                    public void onLoadingStarted(String imageUri, View view) {
-                    }
 
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        iView.setImageDrawable(null);
+                yugi.Run(() -> {
+                    yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+                        }
 
-                    }
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            iView.setImageDrawable(null);
 
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        }
 
-                    }
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
 
                             iView.setImageDrawable(null);
-                    }
+                        }
+                    });
                 });
             }
         }

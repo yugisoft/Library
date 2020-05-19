@@ -8,37 +8,27 @@
     tools:context=".yugiTest">
 
 
+    <EditText
+        android:id="@+id/txt_format"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Format"/>
 
-  <android.support.v7.widget.Toolbar
-      android:backgroundTint="@color/colorAccent"
-      android:id="@+id/toolbar"
+  <EditText
+      android:id="@+id/txt_date"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@drawable/radius_bl_br"
-      android:minHeight="?attr/actionBarSize"
-      app:title="TEst"
+      android:hint="ISO DateTime"/>
 
-      app:subtitle="0 Sayfadan 1.Sayfa Gösteriliyor"
-
-      android:contentInsetLeft="0dp"
-      android:contentInsetStart="0dp"
-      app:contentInsetLeft="0dp"
-      app:contentInsetStart="0dp"
-      android:contentInsetRight="0dp"
-      android:contentInsetEnd="0dp"
-      app:contentInsetRight="0dp"
-      app:contentInsetEnd="0dp"
-
-      app:contentInsetStartWithNavigation="0dp"
-
-      android:elevation="1dp"/>
-
-  <library.yugisoft.module.Utils.pGoldGridView.GoldGridView
-      android:id="@+id/gridView"
+  <Button
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      app:numColumns="1"
-      app:showDivider="true"/>
+      android:layout_height="wrap_content"
+      android:onClick="onClick"
+      android:text="Göster"/>
 
+  <TextView
+      android:id="@+id/txt_sonuc"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
 </LinearLayout>
