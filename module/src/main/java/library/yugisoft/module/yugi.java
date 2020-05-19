@@ -1468,7 +1468,7 @@ public class yugi
     public static String DeviceID(Context context) {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
-    }
+
 
     public static String DeviceNamee() {
         String manufacturer = Build.MANUFACTURER;

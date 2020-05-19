@@ -432,9 +432,10 @@ public class CustomBindingAdapter {
         if (view instanceof ImageView) {
             if (pValue != null) {
                 ImageView iView = (ImageView) view;
+                Object finalPValue = pValue;
                 yugi.Run(() -> {
 
-                    yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
+                    yugi.imageLoader.displayImage(finalPValue.toString(), iView, yugi.options, new ImageLoadingListener() {
                         @Override
                         public void onLoadingStarted(String imageUri, View view) {
                         }
@@ -562,8 +563,9 @@ public class CustomBindingAdapter {
             if (pValue != null) {
                 ImageView iView = (ImageView) view;
 
+                Object finalPValue = pValue;
                 yugi.Run(() -> {
-                    yugi.imageLoader.displayImage(pValue.toString(), iView, yugi.options, new ImageLoadingListener() {
+                    yugi.imageLoader.displayImage(finalPValue.toString(), iView, yugi.options, new ImageLoadingListener() {
                         @Override
                         public void onLoadingStarted(String imageUri, View view) {
                         }
