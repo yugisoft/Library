@@ -16,14 +16,16 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class vList<E>  implements List<E>{
+public class vList<E>  implements List<E> {
 
 
     public vList() {
         list = new ArrayList<>();
     }
+
     //region LIST
     public List<E> list;
+
     @Override
     public int size() {
         return list.size();
@@ -79,7 +81,7 @@ public class vList<E>  implements List<E>{
 
     @Override
     public boolean addAll(int index, @NonNull Collection<? extends E> c) {
-        return list.addAll(index,c);
+        return list.addAll(index, c);
     }
 
     @Override
@@ -104,12 +106,12 @@ public class vList<E>  implements List<E>{
 
     @Override
     public E set(int index, E element) {
-        return list.set(index,element);
+        return list.set(index, element);
     }
 
     @Override
     public void add(int index, E element) {
-        list.add(index,element);
+        list.add(index, element);
     }
 
     @Override
@@ -142,56 +144,60 @@ public class vList<E>  implements List<E>{
     @NonNull
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return list.subList(fromIndex,toIndex);
+        return list.subList(fromIndex, toIndex);
     }
     //endregion
+
     //region Stream
 
     //region Local
     public interface Pre<T, R> {
         R get(T item);
     }
+
     public interface PreTwice<T, R> {
-        R get(T t1,T t2);
+        R get(T t1, T t2);
     }
 
-    public vList<E> Filter(Pre<E,Boolean> filter) {
+    public vList<E> Filter(Pre<E, Boolean> filter) {
         return Filter(this.list, filter);
     }
 
 
     //region INT
-    public int Sum(Pre<E,Integer> pre) {
+    public int Sum(Pre<E, Integer> pre) {
 
-        return Sum(list,pre);
+        return Sum(list, pre);
     }
-    public vListItem<E,Integer> Max(SmartList.Pre<E,Integer> pre) {
+
+    public vListItem<E, Integer> Max(SmartList.Pre<E, Integer> pre) {
 
 
-        return Max(list,pre);
+        return Max(list, pre);
     }
-    public vListItem<E,Integer> Min(SmartList.Pre<E,Integer> pre) {
 
-        return Min(list,pre);
+    public vListItem<E, Integer> Min(SmartList.Pre<E, Integer> pre) {
+
+        return Min(list, pre);
     }
     //endregion
 
     //region Double
-    public  double SumDouble(Pre<E,Double> pre) {
+    public double SumDouble(Pre<E, Double> pre) {
 
-        return  SumDouble(list,pre);
+        return SumDouble(list, pre);
     }
 
-    public vListItem<E,Double> MaxDouble(SmartList.Pre<E,Double> pre) {
+    public vListItem<E, Double> MaxDouble(SmartList.Pre<E, Double> pre) {
 
-        return  MaxDouble(list,pre);
+        return MaxDouble(list, pre);
 
     }
-    public  vListItem<E,Double> MinDouble(SmartList.Pre<E,Double> pre) {
 
-        return  MinDouble(list,pre);
+    public vListItem<E, Double> MinDouble(SmartList.Pre<E, Double> pre) {
+
+        return MinDouble(list, pre);
     }
-
 
 
     //endregion
@@ -207,28 +213,27 @@ public class vList<E>  implements List<E>{
         } else {
 
             for (int i = 0; i < list.size(); i++)
-                try
-                {
+                try {
                     if (list.get(i).equals(filter))
                         vlist.list.add(list.get(i));
+                } catch (Exception ex) {
                 }
-                catch (Exception ex) { }
         }
         return vlist;
     }
-    public static <T> vList<T> Filter(List<T> list, Pre<T,Boolean> filter) {
+
+    public static <T> vList<T> Filter(List<T> list, Pre<T, Boolean> filter) {
         vList<T> vlist = new vList<T>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             vlist.list = list.stream().filter(p -> filter.get(p)).collect(Collectors.toList());
         } else {
 
             for (int i = 0; i < list.size(); i++)
-                try
-                {
+                try {
                     if (filter.get(list.get(i)))
                         vlist.list.add(list.get(i));
+                } catch (Exception ex) {
                 }
-                catch (Exception ex){}
         }
         return vlist;
     }
@@ -247,14 +252,13 @@ public class vList<E>  implements List<E>{
         }
     }
 
-    public static vListItem<Integer,Integer> Max(List<Integer> list) {
+    public static vListItem<Integer, Integer> Max(List<Integer> list) {
 
-        vListItem<Integer,Integer> item = new vListItem<Integer,Integer>();
+        vListItem<Integer, Integer> item = new vListItem<Integer, Integer>();
 
         if (list.size() == 0) return item;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             item.item = list.stream().mapToInt(p -> p).max().getAsInt();
             item.value = item.item;
         } else {
@@ -262,16 +266,17 @@ public class vList<E>  implements List<E>{
             item.value = 0;
             for (int i = 0; i < list.size(); i++)
                 if (list.get(i) > item.value) {
-                    item.value= list.get(i);
+                    item.value = list.get(i);
                     item.item = item.value;
                 }
 
         }
         return item;
     }
-    public static vListItem<Integer,Integer> Min(List<Integer> list) {
 
-        vListItem<Integer,Integer> item = new vListItem<Integer,Integer>();
+    public static vListItem<Integer, Integer> Min(List<Integer> list) {
+
+        vListItem<Integer, Integer> item = new vListItem<Integer, Integer>();
 
         if (list.size() == 0) return item;
 
@@ -283,8 +288,7 @@ public class vList<E>  implements List<E>{
             item.value = list.get(0);
             item.item = item.value;
             for (int i = 0; i < list.size(); i++)
-                if (list.get(i) < item.value)
-                {
+                if (list.get(i) < item.value) {
                     item.value = list.get(i);
                     item.item = item.value;
 
@@ -295,7 +299,7 @@ public class vList<E>  implements List<E>{
     }
 
 
-    public static  <T> int Sum(List<T> list,Pre<T,Integer> pre) {
+    public static <T> int Sum(List<T> list, Pre<T, Integer> pre) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return list.stream().mapToInt(p -> pre.get(p)).sum();
@@ -307,21 +311,21 @@ public class vList<E>  implements List<E>{
         }
     }
 
-    public static  <T> vListItem<T,Integer> Max(List<T> list,SmartList.Pre<T,Integer> pre) {
+    public static <T> vListItem<T, Integer> Max(List<T> list, SmartList.Pre<T, Integer> pre) {
 
-        vListItem<T,Integer> item = new vListItem<T,Integer>();
+        vListItem<T, Integer> item = new vListItem<T, Integer>();
         final Comparator<T> comp = (p1, p2) -> Integer.compare(pre.get(p1), pre.get(p2));
         if (list.size() == 0) return item;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
-            item.item  = list.stream().max(comp).get();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            item.item = list.stream().max(comp).get();
             item.value = pre.get(item.item);
 
-        }
-        else
-        {
-            try{item.item = list.get(0);}catch (Exception ex){}
+        } else {
+            try {
+                item.item = list.get(0);
+            } catch (Exception ex) {
+            }
             item.value = 0;
             for (int i = 0; i < list.size(); i++)
                 if (pre.get(list.get(i)) > item.value) {
@@ -333,15 +337,15 @@ public class vList<E>  implements List<E>{
         }
         return item;
     }
-    public static  <T> vListItem<T,Integer> Min(List<T> list,SmartList.Pre<T,Integer> pre) {
 
-        vListItem<T,Integer> item = new vListItem<T,Integer>();
+    public static <T> vListItem<T, Integer> Min(List<T> list, SmartList.Pre<T, Integer> pre) {
+
+        vListItem<T, Integer> item = new vListItem<T, Integer>();
         final Comparator<T> comp = (p1, p2) -> Integer.compare(pre.get(p1), pre.get(p2));
         if (list.size() == 0) return item;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
-            item.item  = list.stream().min(comp).get();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            item.item = list.stream().min(comp).get();
             item.value = pre.get(item.item);
 
         } else {
@@ -351,7 +355,7 @@ public class vList<E>  implements List<E>{
             item.value = pre.get(list.get(0));
             for (int i = 0; i < list.size(); i++)
                 if (pre.get(list.get(i)) < item.value) {
-                    item.value= pre.get(list.get(i));
+                    item.value = pre.get(list.get(i));
                     item.item = list.get(i);
 
                 }
@@ -375,14 +379,13 @@ public class vList<E>  implements List<E>{
         }
     }
 
-    public static vListItem<Double,Double> MaxDouble(List<Double> list) {
+    public static vListItem<Double, Double> MaxDouble(List<Double> list) {
 
-        vListItem<Double,Double> item = new vListItem<Double,Double>();
+        vListItem<Double, Double> item = new vListItem<Double, Double>();
 
         if (list.size() == 0) return item;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             item.item = list.stream().mapToDouble(p -> p).max().getAsDouble();
             item.value = item.item;
         } else {
@@ -390,16 +393,17 @@ public class vList<E>  implements List<E>{
             item.value = 0.0;
             for (int i = 0; i < list.size(); i++)
                 if (list.get(i) > item.value) {
-                    item.value= list.get(i);
+                    item.value = list.get(i);
                     item.item = item.value;
                 }
 
         }
         return item;
     }
-    public static vListItem<Double,Double> MinDouble(List<Double> list) {
 
-        vListItem<Double,Double> item = new vListItem<Double,Double>();
+    public static vListItem<Double, Double> MinDouble(List<Double> list) {
+
+        vListItem<Double, Double> item = new vListItem<Double, Double>();
 
         if (list.size() == 0) return item;
 
@@ -411,9 +415,8 @@ public class vList<E>  implements List<E>{
             item.value = list.get(0);
             item.item = item.value;
             for (int i = 0; i < list.size(); i++)
-                if (list.get(i) < item.value)
-                {
-                    item.value= list.get(i);
+                if (list.get(i) < item.value) {
+                    item.value = list.get(i);
                     item.item = item.value;
                 }
 
@@ -421,7 +424,7 @@ public class vList<E>  implements List<E>{
         return item;
     }
 
-    public static  <T> double SumDouble(List<T> list,Pre<T,Double> pre) {
+    public static <T> double SumDouble(List<T> list, Pre<T, Double> pre) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return list.stream().mapToDouble(p -> pre.get(p)).sum();
@@ -433,15 +436,14 @@ public class vList<E>  implements List<E>{
         }
     }
 
-    public static  <T> vListItem<T,Double> MaxDouble(List<T> list,SmartList.Pre<T,Double> pre) {
+    public static <T> vListItem<T, Double> MaxDouble(List<T> list, SmartList.Pre<T, Double> pre) {
 
-        vListItem<T,Double> item = new vListItem<T,Double>();
+        vListItem<T, Double> item = new vListItem<T, Double>();
         final Comparator<T> comp = (p1, p2) -> Double.compare(pre.get(p1), pre.get(p2));
         if (list.size() == 0) return item;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
-            item.item  = list.stream().max(comp).get();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            item.item = list.stream().max(comp).get();
             item.value = pre.get(item.item);
 
         } else {
@@ -449,22 +451,22 @@ public class vList<E>  implements List<E>{
             item.item = list.get(0);
             for (int i = 0; i < list.size(); i++)
                 if (pre.get(list.get(i)) > item.value) {
-                    item.value= pre.get(list.get(i));
+                    item.value = pre.get(list.get(i));
                     item.item = list.get(i);
                 }
 
         }
         return item;
     }
-    public static  <T> vListItem<T,Double> MinDouble(List<T> list,SmartList.Pre<T,Double> pre) {
 
-        vListItem<T,Double> item = new vListItem<T,Double>();
+    public static <T> vListItem<T, Double> MinDouble(List<T> list, SmartList.Pre<T, Double> pre) {
+
+        vListItem<T, Double> item = new vListItem<T, Double>();
         final Comparator<T> comp = (p1, p2) -> Double.compare(pre.get(p1), pre.get(p2));
         if (list.size() == 0) return item;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
-            item.item  = list.stream().max(comp).get();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            item.item = list.stream().max(comp).get();
             item.value = pre.get(item.item);
 
         } else {
@@ -472,7 +474,7 @@ public class vList<E>  implements List<E>{
             item.item = list.get(0);
             for (int i = 0; i < list.size(); i++)
                 if (pre.get(list.get(i)) < item.value) {
-                    item.value= pre.get(list.get(i));
+                    item.value = pre.get(list.get(i));
                     item.item = list.get(i);
                 }
 
@@ -481,26 +483,24 @@ public class vList<E>  implements List<E>{
     }
 
 
+    //endregion
+
 
     //endregion
 
 
-
-    //endregion
-
-
-    public static <T> List<T>  Sort(List<T> list , PreTwice<T,Integer> preTwice)
-    {
-        Collections.sort(list,(p1,p2)-> preTwice.get(p1,p2));
+    public static <T> List<T> Sort(List<T> list, PreTwice<T, Integer> preTwice) {
+        Collections.sort(list, (p1, p2) -> preTwice.get(p1, p2));
         return list;
     }
 
 
     //endregion
+
     public static <T> vList<T> Merge(List<T>... list) {
         vList newList = new vList<T>();
 
-        for (List<T> lists:list)
+        for (List<T> lists : list)
             for (T element : lists) {
                 if (!newList.contains(element)) {
 
@@ -510,8 +510,19 @@ public class vList<E>  implements List<E>{
 
         return newList;
     }
-    public static class vListItem<V,VT> {
+    public static class vListItem<V, VT> {
         public V item = null;
         public VT value = null;
+    }
+
+    public E FirstOrDefault() {
+        if (list.size() > 0)
+            return list.get(0);
+        return null;
+    }
+    public E LastOrDefault() {
+        if (list.size() > 0)
+            return list.get(list.size() - 1);
+        return null;
     }
 }
