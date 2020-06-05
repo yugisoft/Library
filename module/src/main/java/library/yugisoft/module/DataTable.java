@@ -853,6 +853,25 @@ public class DataTable
         public void toggle() {
             setChecked(!isChecked());
         }
+
+        public String getJsonData() {
+            String str = "";
+            str += "{\n";
+            try {
+                for (int k = 0; k < this.Cells.size(); k++)
+                {
+                    if (k != 0) str += "\n,";
+                    String cel = this.Cells.get(k).Value;
+                    if(cel.length()>0)
+                        str += "\"" + this.Cells.get(k).Name + "\" : " + (cel.substring(0, 1).equals("{") ? cel : (cel.substring(0, 1).equals("[") ? cel : "\"" + cel + "\""));
+                    else
+                        str += "\"" + this.Cells.get(k).Name + "\" : \"\" ";
+                }
+            } catch (Exception e) {
+            }
+            str += "\n}";
+            return str;
+        }
     }
 
     public static class DataColumn
